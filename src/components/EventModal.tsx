@@ -1,0 +1,120 @@
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import FileField from './FileField';
+
+interface Props {
+  open: boolean;
+  format: string;
+  onClose: () => void;
+}
+
+const inputCls = 'w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite';
+const labelCls = 'text-xs text-muted uppercase tracking-[0.2em] mb-2 block';
+
+export default function EventModal({ open, format, onClose }: Props) {
+  const [form, setForm] = useState({ name: '', phone: '', format: '', date: '', guests: '', wishes: '' });
+  const [fileName, setFileName] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setForm((f) => ({ ...f, format: format }));
+      setFileName('');
+      setSubmitted(false);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [open, format]);
+
+  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => { setSubmitted(false); onClose(); }, 3000);
+  };
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto bg-cream p-8 lg:p-12"
+          >
+            <button onClick={onClose} className="absolute top-6 right-6 text-graphite hover:text-terra transition-colors" aria-label="Закрыть">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+              </svg>
+            </button>
+
+            <p className="text-terra text-xs tracking-[0.3em] uppercase mb-4 font-medium">Мероприятия и кейтеринг</p>
+            <h2 className="font-serif text-3xl lg:text-4xl font-medium text-graphite mb-3 leading-tight">Заявка: {form.format}</h2>
+            <p className="text-muted font-light mb-8 text-sm">Расскажите о событии и прикрепите примеры — так мы предложим точнее.</p>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label className={labelCls}>Имя *</label>
+                  <input type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>Телефон *</label>
+                  <input type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} />
+                </div>
+              </div>
+              <div>
+                <label className={labelCls}>Формат</label>
+                <select value={form.format} onChange={(e) => set('format', e.target.value)} className={inputCls}>
+                  <option>Выездной банкет</option>
+                  <option>Кейтеринг</option>
+                  <option>Праздники под ключ</option>
+                  <option>Спонсорство и благотворительность</option>
+                  <option>Другое</option>
+                </select>
+              </div>
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label className={labelCls}>Дата и площадка</label>
+                  <input type="text" value={form.date} onChange={(e) => set('date', e.target.value)} placeholder="Например: 15 августа, пляж" className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>Количество гостей</label>
+                  <input type="text" value={form.guests} onChange={(e) => set('guests', e.target.value)} placeholder="≈ 50" className={inputCls} />
+                </div>
+              </div>
+              <div>
+                <label className={labelCls}>Пожелания</label>
+                <textarea rows={3} value={form.wishes} onChange={(e) => set('wishes', e.target.value)} placeholder="Повод, стиль, любимые блюда гостей — всё, что важно" className={inputCls + ' resize-none'} />
+              </div>
+              <FileField
+                label="Фото и примеры (как вы хотите видеть)"
+                accept=".jpg,.jpeg,.png,.heic,.webp,.pdf"
+                fileName={fileName}
+                onFile={setFileName}
+                hint="Примеры сервировки, площадки, меню из Pinterest — всё подойдёт"
+              />
+              <label className="flex items-start gap-3 text-xs text-muted cursor-pointer">
+                <input type="checkbox" required className="mt-0.5 accent-terra" />
+                Согласен на обработку персональных данных
+              </label>
+              <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">
+                {submitted ? '✓ Заявка отправлена!' : 'Отправить заявку'}
+              </button>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

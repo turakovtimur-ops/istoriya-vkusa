@@ -1,0 +1,198 @@
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { restaurants, vacancies } from '../data/holding';
+import FileField from './FileField';
+
+interface Props { vacancy: string | null; onClose: () => void; }
+
+const inputCls = 'w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite';
+const labelCls = 'text-xs text-muted uppercase tracking-[0.2em] mb-2 block';
+
+export default function VacancyModal({ vacancy, onClose }: Props) {
+  const [mode, setMode] = useState<'form' | 'file'>('form');
+  const [form, setForm] = useState({
+    name: '', phone: '', email: '', position: '', place: 'Любой',
+    experience: 'Не требуется', employment: 'Полная занятость',
+    medbook: 'Нет', start: '', about: '',
+  });
+  const [fileName, setFileName] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (vacancy) {
+      setForm((f) => ({ ...f, position: vacancy }));
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [vacancy]);
+
+  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => { setSubmitted(false); onClose(); }, 3000);
+  };
+
+  if (!vacancy) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-cream p-8 lg:p-12"
+        >
+          <button onClick={onClose} className="absolute top-6 right-6 text-graphite hover:text-terra transition-colors z-10" aria-label="Закрыть">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+          </button>
+
+          <p className="text-terra text-xs tracking-[0.3em] uppercase mb-4 font-medium">Анкета соискателя</p>
+          <h2 className="font-serif text-3xl lg:text-4xl font-medium text-graphite mb-6 leading-tight">Присоединяйтесь к команде</h2>
+
+          {/* Выбор способа */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+            <button
+              type="button"
+              onClick={() => setMode('form')}
+              className={'px-5 py-4 border text-left text-sm transition-all ' + (mode === 'form' ? 'border-terra bg-terra/10 text-graphite font-medium' : 'border-graphite/20 text-muted hover:border-graphite/50')}
+            >
+              ✍️ Заполнить анкету
+              <span className="block text-xs font-light mt-1 opacity-70">10 коротких вопросов</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('file')}
+              className={'px-5 py-4 border text-left text-sm transition-all ' + (mode === 'file' ? 'border-terra bg-terra/10 text-graphite font-medium' : 'border-graphite/20 text-muted hover:border-graphite/50')}
+            >
+              📎 Приложить готовую анкету
+              <span className="block text-xs font-light mt-1 opacity-70">Фото, резюме или файл анкеты</span>
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid md:grid-cols-2 gap-5">
+              <div>
+                <label className={labelCls}>ФИО *</label>
+                <input type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Телефон *</label>
+                <input type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-5">
+              <div>
+                <label className={labelCls}>Должность *</label>
+                <select required value={form.position} onChange={(e) => set('position', e.target.value)} className={inputCls}>
+                  {vacancies.map((v) => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Заведение</label>
+                <select value={form.place} onChange={(e) => set('place', e.target.value)} className={inputCls}>
+                  <option>Любой</option>
+                  {restaurants.map((r) => (
+                    <option key={r.id}>{r.name}</option>
+                  ))}
+                  <option>Природа (загородный комплекс)</option>
+                </select>
+              </div>
+            </div>
+
+            {mode === 'form' ? (
+              <>
+                <div className="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelCls}>Email</label>
+                    <input type="email" value={form.email} onChange={(e) => set('email', e.target.value)} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Опыт работы</label>
+                    <select value={form.experience} onChange={(e) => set('experience', e.target.value)} className={inputCls}>
+                      <option>Не требуется</option>
+                      <option>До 1 года</option>
+                      <option>1–3 года</option>
+                      <option>Более 3 лет</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelCls}>Занятость</label>
+                    <select value={form.employment} onChange={(e) => set('employment', e.target.value)} className={inputCls}>
+                      <option>Полная занятость</option>
+                      <option>Частичная занятость</option>
+                      <option>Сменный график</option>
+                      <option>Подработка</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Медкнижка</label>
+                    <select value={form.medbook} onChange={(e) => set('medbook', e.target.value)} className={inputCls}>
+                      <option>Нет</option>
+                      <option>Есть</option>
+                      <option>В процессе оформления</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>Когда готовы приступить</label>
+                  <input type="text" value={form.start} onChange={(e) => set('start', e.target.value)} placeholder="Например: с 1 числа следующего месяца" className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>О себе</label>
+                  <textarea rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Пара слов о себе и почему вам у нас понравится" className={inputCls + ' resize-none'} />
+                </div>
+                <FileField
+                  label="Фото или резюме (необязательно)"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic"
+                  fileName={fileName}
+                  onFile={setFileName}
+                />
+              </>
+            ) : (
+              <>
+                <FileField
+                  label="Готовая анкета, резюме или фото"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.heic"
+                  required
+                  fileName={fileName}
+                  onFile={setFileName}
+                  hint="Прикрепите файл — и мы сами всё прочитаем"
+                />
+                <div>
+                  <label className={labelCls}>Пара слов о себе</label>
+                  <textarea rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Кем работали, что умеете — одной строкой" className={inputCls + ' resize-none'} />
+                </div>
+              </>
+            )}
+
+            <label className="flex items-start gap-3 text-xs text-muted cursor-pointer">
+              <input type="checkbox" required className="mt-0.5 accent-terra" />
+              Согласен на обработку персональных данных
+            </label>
+
+            <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">
+              {submitted ? '✓ Анкета отправлена!' : 'Отправить'}
+            </button>
+          </form>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}

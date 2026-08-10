@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-cream text-graphite font-sans overflow-x-hidden;
+  }
+  ::selection {
+    background: #C2A076;
+    color: #0E0D0B;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 bg-graphite text-cream
+           font-sans font-medium text-sm tracking-widest uppercase
+           hover:bg-forest transition-all duration-500 ease-out
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  /* Стеклянная кнопка-контур (для тёмных фонов) */
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-8 py-4 font-sans font-medium text-sm tracking-widest uppercase text-cream;
+    position: relative;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05));
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -8px 16px rgba(255,255,255,0.05), 0 8px 24px rgba(0,0,0,0.35);
+    transition: all 0.4s ease;
+  }
+  .btn-outline:hover {
+    background: linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0.1));
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 12px 30px rgba(0,0,0,0.45);
+  }
+  .btn-outline::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -70%;
+    width: 45%; height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+    pointer-events: none;
+  }
+  .btn-outline:hover::after { left: 130%; }
+  .btn-terra {
+    @apply inline-flex items-center justify-center px-8 py-4 bg-terra text-cream
+           font-sans font-medium text-sm tracking-widest uppercase
+           hover:bg-graphite transition-all duration-500 ease-out;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+  .reveal-delay-4 { transition-delay: 0.6s; }
+}
+
+/* ===== LIQUID GLASS ===== */
+.glass-bar {
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 12px 32px rgba(0,0,0,0.3);
+}
+.glass-bar.scrolled {
+  background: linear-gradient(180deg, rgba(14,13,11,0.72), rgba(14,13,11,0.55));
+}
+.glass-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -8px 16px rgba(255,255,255,0.05), 0 8px 24px rgba(0,0,0,0.35);
+  color: #F5F2EA;
+  transition: all 0.4s ease;
+}
+.glass-btn:hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0.26), rgba(255,255,255,0.12));
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 12px 30px rgba(0,0,0,0.45);
+}
+.glass-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -70%;
+  width: 45%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.glass-btn:hover::after { left: 130%; }
+.glass-chip {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 4px 14px rgba(0,0,0,0.3);
+  transition: all 0.35s ease;
+}
+.glass-chip:hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.08));
+  border-color: rgba(255,255,255,0.35);
+  transform: translateY(-1px);
+}
+
+/* Солнце-шар */
+.sun-glow {
+  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #F1F2F6 45%, #C6CAD5 100%);
+  filter: drop-shadow(0 34px 60px rgba(0, 0, 0, 0.65));
+  animation: sunPulse 6s ease-in-out infinite;
+}
+@keyframes sunPulse {
+  0%, 100% { box-shadow: 0 0 80px 20px rgba(194,160,118,0.4), 0 0 220px 70px rgba(194,160,118,0.15); }
+  50% { box-shadow: 0 0 110px 30px rgba(194,160,118,0.55), 0 0 260px 90px rgba(194,160,118,0.22); }
+}
+.sphere-shade {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.12) 30%, transparent 56%),
+    radial-gradient(circle at 50% 118%, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.18) 42%, transparent 72%);
+}
+.sphere-shade-sun {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.45) 24%, transparent 50%),
+    radial-gradient(circle at 50% 118%, rgba(120,90,40,0.35) 0%, rgba(120,90,40,0.14) 42%, transparent 68%),
+    radial-gradient(circle at 50% 50%, transparent 46%, rgba(35,48,71,0.16) 68%, rgba(35,48,71,0.38) 88%, rgba(35,48,71,0.55) 100%);
+}
+.star-twinkle { animation: twinkle 3.5s ease-in-out infinite; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+}
+.planet { will-change: transform; }
+
+/* Лента поставщиков */
+.marquee { overflow: hidden; }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0E0D0B; }
+::-webkit-scrollbar-thumb { background: #C2A076; }
+/* Парение пузырей-вакансий */
+.bubble-float { animation: bubbleFloat 5s ease-in-out infinite; }
+@keyframes bubbleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
