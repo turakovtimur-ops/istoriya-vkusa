@@ -57,7 +57,7 @@ export default function OrbitHero() {
     const tick = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
-      const target = pausedRef.current !== null ? SPEED * 0.25 : SPEED;
+      const target = pausedRef.current !== null ? SPEED * 0.25 : isMobile ? SPEED * 0.5 : SPEED;
       curSpeed.current += (target - curSpeed.current) * 0.06;
       setAngle((a) => (a + curSpeed.current * dt) % 360);
       raf = requestAnimationFrame(tick);
@@ -104,7 +104,7 @@ export default function OrbitHero() {
 
       {isMobile ? (
         <div className="relative z-10 flex-1 flex items-center justify-center py-6">
-          <div className="relative" style={{ width: mobileR * 2 + 90, height: mobileR * 2 * M_RY + 150 }}>
+          <div className="relative" style={{ width: mobileR * 2 + 90, maxWidth: "100%", height: mobileR * 2 * M_RY + 150 }}>
             {M_ORBITS.map((o, k) => (
               <div
                 key={k}
@@ -138,7 +138,7 @@ export default function OrbitHero() {
                   }}
                 >
                   <div className="flex flex-col items-center gap-1.5 w-20">
-                    <div className="relative w-14 h-14 rounded-full overflow-hidden" style={{ boxShadow: '0 0 26px ' + r.accent + '66' }}>
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden" style={{ boxShadow: '0 0 26px ' + r.accent + '66' }}>
                       <BrandImg src={r.roundLogo ? r.roundLogo : r.logo} alt={r.name} fallback={r.name} color={r.accent} fit={r.roundLogo ? 'cover' : 'contain'} className={r.roundLogo ? 'w-full h-full scale-[1.12]' : 'w-full h-full p-1.5'} />
                       <div className="absolute inset-0 rounded-full sphere-shade pointer-events-none" />
                     </div>
