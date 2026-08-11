@@ -119,6 +119,19 @@ function TeamMobileCard({ t }: { t: (typeof team)[number] }) {
   );
 }
 
+function TeamMobileCard({ t }: { t: (typeof team)[number] }) {
+  return (
+    <div className="text-center px-2">
+      <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-amber/60 bg-coal" style={{ boxShadow: '0 0 30px rgba(194,160,118,0.2)' }}>
+        <TeamAvatar src={t.photo} name={t.name} />
+      </div>
+      <p className="text-amber text-[9px] uppercase tracking-[0.3em] mb-1.5 font-medium">{t.role}</p>
+      <h3 className="text-xl font-semibold tracking-tight mb-2">{t.name}</h3>
+      <p className="text-cream/60 text-xs font-light leading-relaxed">{t.desc}</p>
+    </div>
+  );
+}
+
 function PartnerPhoto({ p }: { p: Partner }) {
   const [failed, setFailed] = useState(false);
   if (failed) {
@@ -203,11 +216,48 @@ function FloatingButtons() {
   );
 }
 
+function FloatingButtons() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const h = () => setShow(window.scrollY > 500);
+    window.addEventListener('scroll', h, { passive: true });
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+  return (
+    <>
+      <a
+        href="tel:88002015757"
+        aria-label="Позвонить"
+        className="glass-btn fixed bottom-5 left-4 z-40 w-13 h-13 flex items-center justify-center rounded-full"
+        style={{ width: 52, height: 52 }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+      </a>
+      {show && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Наверх"
+          className="glass-btn fixed bottom-5 right-4 z-40 flex items-center justify-center rounded-full"
+          style={{ width: 52, height: 52 }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5" />
+            <polyline points="5 12 12 5 19 12" />
+          </svg>
+        </button>
+      )}
+    </>
+  );
+}
+
 export default function Holding() {
   useScrollAnimation();
   const [promoFilter, setPromoFilter] = useState('all');
   const [vacancy, setVacancy] = useState<string | null>(null);
   const [partnerOpen, setPartnerOpen] = useState(false);
+  const [teamIdx, setTeamIdx] = useState(0);
   const [teamIdx, setTeamIdx] = useState(0);
   const [teamIdx, setTeamIdx] = useState(0);
   const filteredPromos =
@@ -508,6 +558,8 @@ export default function Holding() {
           <p className="text-cream/40 text-xs">© 2026 История Вкуса. Все права защищены.</p>
         </div>
       </footer>
+
+      <FloatingButtons />
 
       <FloatingButtons />
 
