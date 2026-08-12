@@ -5,13 +5,15 @@ import BrandImg from './BrandImg';
 
 interface Props { onPartner: () => void; }
 
-const RY = 0.26; // плоскость как на главной
+const RY = window.innerWidth < 1024 ? 1 : 0.34; // плоскость как на главной
 // Коэффициенты колец, скорости (знак = направление), фазы
 const RING_K = [1, 0.9, 0.8, 0.7, 0.6, 0.5];
 const SPEEDS = [5, -4, 6, -5, 7, -6];
 const PHASES = [20, 120, 220, 60, 170, 300];
 
-const sizeFor = (name: string) => Math.round(Math.min(128, Math.max(72, 50 + name.length * 2.6)));
+const sizeFor = (name: string) => window.innerWidth < 1024
+  ? Math.round(Math.min(54, Math.max(38, 26 + name.length * 1.1)))
+  : Math.round(Math.min(104, Math.max(64, 44 + name.length * 2.2)));
 
 export default function SuppliersOrbit({ onPartner }: Props) {
   const [t, setT] = useState(0);
@@ -56,7 +58,7 @@ export default function SuppliersOrbit({ onPartner }: Props) {
   }, []);
 
   const W = w;
-  const R1 = W / 2 - 70;
+  const R1 = W / 2 - (window.innerWidth < 1024 ? 24 : 70);
   const H = Math.round(R1 * RY * 2 + 140);
   const cx = W / 2;
   const cy = H / 2;

@@ -165,6 +165,8 @@ export default function Holding() {
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [teamIdx, setTeamIdx] = useState(0);
 
+  useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
+
   // Перезагрузка: всегда старт сверху
   useEffect(() => {
     if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
