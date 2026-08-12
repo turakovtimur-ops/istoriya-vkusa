@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import OrbitHero from '../components/OrbitHero';
 import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
@@ -57,21 +57,23 @@ function HoldingHeader() {
         </div>
       </header>
       {open && (
-        <div className="fixed inset-0 z-[70] bg-night/95 flex flex-col items-center justify-center gap-5" style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }} onClick={() => setOpen(false)}>
-          <button aria-label="Закрыть" className="absolute top-6 right-6 glass-chip w-11 h-11 flex items-center justify-center">
+        <div className="fixed inset-0 z-[70] bg-night/95 flex flex-col" style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }} onClick={() => setOpen(false)}>
+          <button aria-label="Закрыть" className="absolute top-7 right-7 glass-chip w-11 h-11 flex items-center justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round">
               <line x1="5" y1="5" x2="19" y2="19" />
               <line x1="19" y1="5" x2="5" y2="19" />
             </svg>
           </button>
-          {links.map(([href, label]) => (
-            <a key={href} href={href} onClick={() => setOpen(false)} className="text-2xl font-semibold tracking-tight text-cream/85 hover:text-amber transition-colors">
-              {label}
+          <div className="px-8 pt-28 flex flex-col items-end gap-5 text-right">
+            {links.map(([href, label]) => (
+              <a key={href} href={href} onClick={() => setOpen(false)} className="text-2xl font-semibold tracking-tight text-cream/85">
+                {label}
+              </a>
+            ))}
+            <a href="tel:88002015757" className="mt-3 text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1">
+              8 800 201-57-57
             </a>
-          ))}
-          <a href="tel:88002015757" className="mt-3 text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1">
-            8 800 201-57-57
-          </a>
+          </div>
         </div>
       )}
     </>
@@ -121,38 +123,20 @@ function PartnerPhoto({ p }: { p: Partner }) {
 }
 
 function FloatingButtons() {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    const h = () => setShow(window.scrollY > 500);
-    window.addEventListener('scroll', h, { passive: true });
-    return () => window.removeEventListener('scroll', h);
-  }, []);
   return (
-    <>
-      <a
-        href="tel:88002015757"
-        aria-label="Позвонить"
-        className="glass-btn fixed bottom-5 left-4 z-40 w-13 h-13 flex items-center justify-center rounded-full"
-        style={{ width: 52, height: 52 }}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <div className="fixed bottom-5 right-4 z-40 flex flex-col gap-3">
+      <a href="tel:88002015757" aria-label="Позвонить" className="glass-btn flex items-center justify-center rounded-full" style={{ width: 44, height: 44 }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
         </svg>
       </a>
-      {show && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          aria-label="Наверх"
-          className="glass-btn fixed bottom-5 right-4 z-40 flex items-center justify-center rounded-full"
-          style={{ width: 52, height: 52 }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="19" x2="12" y2="5" />
-            <polyline points="5 12 12 5 19 12" />
-          </svg>
-        </button>
-      )}
-    </>
+      <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Наверх" className="glass-btn flex items-center justify-center rounded-full" style={{ width: 44, height: 44 }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5" />
+          <polyline points="5 12 12 5 19 12" />
+        </svg>
+      </button>
+    </div>
   );
 }
 
@@ -164,6 +148,7 @@ export default function Holding() {
   const [vacancy, setVacancy] = useState<string | null>(null);
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [teamIdx, setTeamIdx] = useState(0);
+  const touchX = useRef<number | null>(null);
 
   useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
 
@@ -236,38 +221,36 @@ export default function Holding() {
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Команда</p>
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Люди, которые создают вкус</h2>
           </div>
-          <div className="md:hidden relative">
-            <div className="flex items-stretch justify-center">
-              <div className="w-[24%] -mr-5 opacity-40 scale-90 pointer-events-none">
-                <TeamMobileCard t={team[(teamIdx + team.length - 1) % team.length]} />
-              </div>
-              <div className="w-[60%] z-10">
-                <TeamMobileCard t={team[teamIdx]} />
-              </div>
-              <div className="w-[24%] -ml-5 opacity-40 scale-90 pointer-events-none">
-                <TeamMobileCard t={team[(teamIdx + 1) % team.length]} />
+          <div
+          className="md:hidden relative"
+          onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+          onTouchEnd={(e) => {
+            const dx = e.changedTouches[0].clientX - (touchX.current ?? 0);
+            if (dx < -40) setTeamIdx((teamIdx + 1) % team.length);
+            if (dx > 40) setTeamIdx((teamIdx + team.length - 1) % team.length);
+          }}
+        >
+          <div className="flex items-start justify-center">
+            <div className="w-32 -mr-6 opacity-50 pointer-events-none">
+              <div className="w-32 h-32 rounded-full overflow-hidden border border-amber/40 bg-coal">
+                <TeamAvatar src={team[(teamIdx + team.length - 1) % team.length].photo} name={team[(teamIdx + team.length - 1) % team.length].name} />
               </div>
             </div>
-            <button
-              onClick={() => setTeamIdx((teamIdx + team.length - 1) % team.length)}
-              aria-label="Назад"
-              className="glass-chip absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
-            </button>
-            <button
-              onClick={() => setTeamIdx((teamIdx + 1) % team.length)}
-              aria-label="Вперёд"
-              className="glass-chip absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5F2EA" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
-            </button>
-            <div className="flex justify-center gap-1.5 mt-6">
-              {team.map((t, i) => (
-                <button key={t.id} onClick={() => setTeamIdx(i)} className={'w-2 h-2 rounded-full transition-colors ' + (i === teamIdx ? 'bg-amber' : 'bg-cream/25')} aria-label={t.name} />
-              ))}
+            <div key={teamIdx} className="w-[62%] z-10 text-center px-2 team-anim">
+              <div className="relative w-36 h-36 mx-auto mb-4 rounded-full overflow-hidden border-2 border-amber/60 bg-coal" style={{ boxShadow: '0 0 30px rgba(194,160,118,0.2)' }}>
+                <TeamAvatar src={team[teamIdx].photo} name={team[teamIdx].name} />
+              </div>
+              <p className="text-amber text-[9px] uppercase tracking-[0.3em] mb-1.5 font-medium">{team[teamIdx].role}</p>
+              <h3 className="text-xl font-semibold tracking-tight mb-2">{team[teamIdx].name}</h3>
+              <p className="text-cream/60 text-xs font-light leading-relaxed">{team[teamIdx].desc}</p>
+            </div>
+            <div className="w-32 -ml-6 opacity-50 pointer-events-none">
+              <div className="w-32 h-32 rounded-full overflow-hidden border border-amber/40 bg-coal">
+                <TeamAvatar src={team[(teamIdx + 1) % team.length].photo} name={team[(teamIdx + 1) % team.length].name} />
+              </div>
             </div>
           </div>
+        </div>
           <div className="hidden md:grid md:grid-cols-3 gap-8">
             {team.map((t, i) => (
               <div key={t.id} className="reveal text-center" style={{ transitionDelay: (i * 0.1) + 's' }}>
@@ -422,7 +405,7 @@ export default function Holding() {
             <div className="hidden lg:block">
               <VacanciesOrbit onApply={setVacancy} />
             </div>
-            <div className="lg:hidden flex flex-wrap gap-3">
+            <div className="hidden lg:block lg:hidden flex flex-wrap gap-3">
               {vacancies.map((v) => (
                 <button
                   key={v}
