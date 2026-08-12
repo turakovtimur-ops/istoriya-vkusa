@@ -1,4 +1,15 @@
-import { useEffect, useRef } from 'react';
+const fs = require('fs');
+const path = require('path');
+
+const p = path.join(__dirname, 'src', 'components', 'ContactsSection.tsx');
+const old = fs.readFileSync(p, 'utf-8');
+
+// берём JSX-разметку как есть — она не меняется
+const retIdx = old.indexOf('  return (');
+if (retIdx === -1) { console.warn('⚠ return не найден'); process.exit(1); }
+const jsx = old.slice(retIdx);
+
+const head = `import { useEffect, useRef } from 'react';
 import { restaurants } from '../data/holding';
 
 const RESTAURANTS: Record<string, [number, number]> = {
@@ -107,76 +118,8 @@ export default function ContactsSection() {
     };
   }, []);
 
-  return () => {
-      cancelled = true;
-      if (map) map.remove();
-    };
-  }, []);
+`;
 
-  return (
-    <section id="contacts" className="py-14 lg:py-16 bg-coal">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="reveal mb-8">
-          <p className="text-amber text-xs tracking-[0.3em] uppercase mb-4 font-medium">Контакты</p>
-          <h2 className="text-3xl md:text-5xl font-semibold tracking-tighter">Мы на карте Геленджика</h2>
-        </div>
-        <div className="grid lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-5 reveal">
-            <p className="text-amber text-[10px] uppercase tracking-[0.3em] mb-4 font-medium">Рестораны</p>
-            <div className="space-y-2">
-              {restaurants.map((r, i) => (
-                <div
-                  key={r.id}
-                  className="flex gap-4 p-2 -m-2 rounded-sm hover:bg-cream/5 transition-colors cursor-default"
-                  onMouseEnter={() => setScale(r.id, true)}
-                  onMouseLeave={() => setScale(r.id, false)}
-                >
-                  <div
-                    className="w-8 h-8 flex-none rounded-full flex items-center justify-center text-night font-bold text-xs"
-                    style={{ background: r.accent }}
-                  >
-                    {i + 1}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-lg font-semibold tracking-tight leading-tight">{r.name}</p>
-                    <p className="text-cream/55 text-xs font-light mt-0.5">{r.address} · {r.beach}</p>
-                    <p className="text-cream/70 text-xs mt-0.5">
-                      <a href={'tel:' + r.phone.replace(/[^+\d]/g, '')} className="hover:text-amber transition-colors">{r.phone}</a>
-                      <span className="text-cream/40"> · {r.phoneFree}</span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-amber text-[10px] uppercase tracking-[0.3em] mt-6 mb-3 font-medium">Партнёры холдинга</p>
-            <div className="flex flex-wrap gap-2">
-              {PARTNERS.map((p, i) => (
-                <span
-                  key={p.id}
-                  className="inline-flex items-center gap-2 px-3 py-2 border border-cream/15 text-cream/70 text-xs hover:bg-cream/5 transition-colors cursor-default"
-                  onMouseEnter={() => setScale(p.id, true)}
-                  onMouseLeave={() => setScale(p.id, false)}
-                >
-                  <span className="w-5 h-5 rounded-full bg-[#6B7280] text-night flex items-center justify-center font-bold text-[10px]">{i + 5}</span>
-                  {p.name} · {p.type}
-                </span>
-              ))}
-            </div>
-
-            <p className="text-cream/60 text-xs font-light mt-6 pt-4 border-t border-cream/10">
-              Единая линия:{' '}
-              <a href="tel:88002015757" className="text-cream hover:text-amber transition-colors font-medium">8 800 201-57-57</a>
-            </p>
-          </div>
-
-          <div className="lg:col-span-7 reveal reveal-delay-1">
-            <div className="relative z-0 h-[380px] lg:h-[480px] rounded-sm overflow-hidden border border-cream/10">
-              <div ref={mapRef} className="w-full h-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+fs.writeFileSync(p, head + jsx, 'utf-8');
+console.log('✓ Карта заменена на Яндекс: кружочки, попапы, размеры — всё как было');
+console.log('\n✅ Дальше:\n   npm run build\n   git add . && git commit -m "Контакты: Яндекс.Карта вместо OSM" && git push');
