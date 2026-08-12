@@ -164,6 +164,36 @@ export default function Holding() {
   const [vacancy, setVacancy] = useState<string | null>(null);
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [teamIdx, setTeamIdx] = useState(0);
+
+  // Перезагрузка: всегда старт сверху
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Меню и логотип: плавный скролл БЕЗ смены hash (нет прыжков на главную)
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      const a = t.closest ? (t.closest('a[href^="#"]') as HTMLAnchorElement | null) : null;
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (href === '#/') {
+        const cur = window.location.hash;
+        if (cur && cur !== '#/' && cur.startsWith('#/')) return; // со страницы ресторана — роутер сам
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      const el = document.getElementById(href.slice(1));
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
   const filteredPromos =
     promoFilter === 'all'
       ? promos
