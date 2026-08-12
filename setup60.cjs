@@ -1,4 +1,7 @@
-import { useEffect, useRef } from 'react';
+const fs = require('fs');
+const path = require('path');
+
+const file = `import { useEffect, useRef } from 'react';
 import { restaurants } from '../data/holding';
 
 const RESTAURANTS: Record<string, [number, number]> = {
@@ -135,7 +138,7 @@ export default function ContactsSection() {
                     <p className="text-lg font-semibold tracking-tight leading-tight">{r.name}</p>
                     <p className="text-cream/55 text-xs font-light mt-0.5">{r.address} · {r.beach}</p>
                     <p className="text-cream/70 text-xs mt-0.5">
-                      <a href={'tel:' + r.phone.replace(/[^+\d]/g, '')} className="hover:text-amber transition-colors">{r.phone}</a>
+                      <a href={'tel:' + r.phone.replace(/[^+\\d]/g, '')} className="hover:text-amber transition-colors">{r.phone}</a>
                       <span className="text-cream/40"> · {r.phoneFree}</span>
                     </p>
                   </div>
@@ -174,3 +177,8 @@ export default function ContactsSection() {
     </section>
   );
 }
+`;
+
+fs.writeFileSync(path.join(__dirname, 'src', 'components', 'ContactsSection.tsx'), file, 'utf-8');
+console.log('✓ ContactsSection переписан целиком: Яндекс.Карта, JSX прежний');
+console.log('\n✅ Дальше:\n   npm run build\n   git add . && git commit -m "Контакты: Яндекс.Карта (целиком)" && git push');
