@@ -160,7 +160,6 @@ export default function Holding() {
   }, []);
   const curRoute = route.replace(/^#/, '');
   const activeRest = restaurants.find((r) => curRoute === r.path || curRoute === '/' + r.path);
-  if (activeRest) return <RestaurantPage r={activeRest} />;
 
   useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
 
@@ -198,6 +197,7 @@ export default function Holding() {
       ? promos
       : promos.filter((p) => p.restaurants === 'all' || p.restaurants.includes(promoFilter));
 
+  if (activeRest) return <RestaurantPage r={activeRest} />;
   return (
     <div className="bg-night text-cream min-h-screen">
       <HoldingHeader />
