@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import RestaurantPage from '../components/RestaurantPage';
 import OrbitHero from '../components/OrbitHero';
 import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
@@ -149,6 +150,17 @@ export default function Holding() {
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [teamIdx, setTeamIdx] = useState(0);
   const touchX = useRef<number | null>(null);
+
+  // Страницы ресторанов по hash
+  const [route, setRoute] = useState(typeof window !== 'undefined' ? window.location.hash : '');
+  useEffect(() => {
+    const onHash = () => { setRoute(window.location.hash); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+  const curRoute = route.replace(/^#/, '');
+  const activeRest = restaurants.find((r) => curRoute === r.path || curRoute === '/' + r.path);
+  if (activeRest) return <RestaurantPage r={activeRest} />;
 
   useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
 
