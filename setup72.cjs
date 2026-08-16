@@ -248,4 +248,4 @@ function Footer({ data }: { data: RestaurantData }) {
 
 fs.writeFileSync(path.join(__dirname, 'src', 'components', 'UniversalRestaurantSite.tsx'), code, 'utf-8');
 console.log('✓ UniversalRestaurantSite.tsx создан');
-console.log('\n✅ Дальше:\n   npm run build\n   git add . && git commit -m "Универсальный компонент ресторанов" && git push');
+console.log('\n✅ Дальше:\n   npm run build\n   git add . && git commit -m "Универсальный компонент ресторанов" && git push');т
