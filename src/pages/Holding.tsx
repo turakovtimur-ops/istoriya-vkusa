@@ -26,9 +26,11 @@ function HoldingHeader() {
     ['#promos', 'Акции'],
     ['#events', 'Мероприятия'],
     ['#partners', 'Партнёры'],
+    ['#team', 'Команда'],
     ['#vacancies', 'Вакансии'],
+    ['#suppliers', 'Поставщики'],
     ['#contacts', 'Контакты'],
-  ];
+  ] as [string, string][];
   return (
     <>
       <header className={'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[min(1400px,calc(100vw-32px))] rounded-full transition-all duration-700 glass-bar ' + (scrolled ? 'scrolled py-3' : 'py-4')}>

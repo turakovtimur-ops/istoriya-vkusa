@@ -198,3 +198,26 @@ html, body { overflow-x: clip; }
   .marquee { display: none; }
   #suppliers .grid { display: none !important; }
 }
+
+/* ===== setup77: мобильные карусели + орбиты ===== */
+@media (max-width: 767px) {
+  #promos .grid, #partners .grid {
+    display: flex !important;
+    gap: 14px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding-bottom: 14px;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #promos .grid > *, #partners .grid > * {
+    flex: 0 0 auto;
+    min-width: 86%;
+    scroll-snap-align: start;
+  }
+  #promos .grid::-webkit-scrollbar, #partners .grid::-webkit-scrollbar { display: none; }
+  #promos .reveal, #partners .reveal { opacity: 1 !important; transform: none !important; }
+  .marquee { display: none; }
+  #suppliers .grid { display: none !important; }
+  section { scroll-margin-top: 96px; }
+}
