@@ -54,7 +54,7 @@ export default function SuppliersBlock({ onPartner }: { onPartner: () => void })
         </p>
       </div>
 
-      div className="hidden lg:block reveal reveal-delay-1 mb-6">
+      <div className="hidden lg:block reveal reveal-delay-1 mb-6">
         <SuppliersOrbit onPartner={onPartner} />
       </div>
       <div
