@@ -82,7 +82,7 @@ export default function OrbitHero() {
 
   return (
     <section
-      className={'relative overflow-hidden bg-night ' + (isMobile ? 'min-h-[62vh] lg:min-h-screen flex flex-col pt-24 pb-4' : 'h-screen flex flex-col pt-24 md:pt-28 pb-4')}
+      className={'relative overflow-hidden bg-night ' + (isMobile ? 'lg:min-h-screen flex flex-col pt-24 pb-4' : 'h-screen flex flex-col pt-24 md:pt-28 pb-4')}
       onMouseMove={onMove}
       onMouseLeave={() => setTilt({ x: 0, y: 0 })}
     >

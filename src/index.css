@@ -238,3 +238,46 @@ html, body { overflow-x: clip; }
 @media (max-width: 400px) {
   #restaurants .grid > *, #partners .grid > *, #promos .grid > *, #events .grid > * { min-width: 90%; }
 }
+
+/* ===== setup87: мобильные карусели как в макете ===== */
+@media (max-width: 767px) {
+  #restaurants .grid, #partners .grid, #promos .grid, #events .grid {
+    display: flex !important;
+    gap: 14px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding-bottom: 14px;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #restaurants .grid > *, #partners .grid > *, #promos .grid > *, #events .grid > * {
+    flex: 0 0 auto;
+    min-width: 86%;
+    scroll-snap-align: start;
+  }
+  #restaurants .grid::-webkit-scrollbar, #partners .grid::-webkit-scrollbar,
+  #promos .grid::-webkit-scrollbar, #events .grid::-webkit-scrollbar { display: none; }
+  #restaurants .reveal, #partners .reveal, #promos .reveal, #events .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  #restaurants img {
+    display: block !important;
+    width: 100% !important;
+    height: 150px !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+  }
+  #promos .flex-wrap {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+  #promos .flex-wrap::-webkit-scrollbar { display: none; }
+  #promos .flex-wrap > * { flex: 0 0 auto; }
+}
+@media (max-width: 400px) {
+  #restaurants .grid > *, #partners .grid > *, #promos .grid > *, #events .grid > * { min-width: 90%; }
+}

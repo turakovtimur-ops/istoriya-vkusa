@@ -22,13 +22,13 @@ function HoldingHeader() {
   }, []);
   const links = [
     ['#history', 'История'],
-    ['#restaurants', 'Рестораны'],
-    ['#promos', 'Акции'],
-    ['#events', 'Мероприятия'],
-    ['#partners', 'Партнёры'],
     ['#team', 'Команда'],
+    ['#restaurants', 'Рестораны'],
+    ['#partners', 'Партнёры'],
+    ['#promos', 'Акции'],
     ['#vacancies', 'Вакансии'],
     ['#suppliers', 'Поставщики'],
+    ['#events', 'Мероприятия'],
     ['#contacts', 'Контакты'],
   ] as [string, string][];
   return (
