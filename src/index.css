@@ -249,3 +249,11 @@ html, body { overflow-x: clip; }
 @media (max-width: 400px) {
   #promos .grid > *, #partners .grid > *, #events .grid > *, #restaurants .grid > * { min-width: 92%; }
 }
+
+/* ===== setup80 ===== */
+html, body { overflow-x: hidden; max-width: 100vw; }
+#root { overflow-x: clip; }
+@media (max-width: 767px) {
+  #restaurants img { width: 72px !important; height: 72px !important; object-fit: contain; border-radius: 9999px; }
+  #promos .grid p { overflow-wrap: break-word; }
+}

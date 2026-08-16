@@ -43,7 +43,7 @@ export default function OrbitHero() {
       const R = Math.max(280, Math.min(w * 0.44, w / 2 - 130, 1100));
       const ryF = Math.min(0.42, Math.max(0.16, (h - 560) / 2 / R));
       setDims({ R, ryF });
-      setMobileR(Math.min(w * 0.42, 190));
+      setMobileR(Math.min(w * 0.36, 170));
       setIsMobile(w < 768);
     };
     update();

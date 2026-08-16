@@ -80,7 +80,7 @@ function HoldingHeader() {
           </div>
           <nav className="flex-1 flex flex-col justify-center px-8 overflow-y-auto" onClick={(ev) => ev.stopPropagation()}>
             {links.map(([href, label]) => (
-              <a key={href} href={href} onClick={() => setOpen(false)} className="py-3.5 text-3xl font-semibold tracking-tight text-cream/90 border-b border-cream/5 active:text-amber">
+              <a key={href} href={href} onClick={() => setOpen(false)} className="py-2.5 text-2xl font-semibold tracking-tight text-cream/90 border-b border-cream/5 active:text-amber">
                 {label}
               </a>
             ))}
@@ -448,7 +448,7 @@ export default function Holding() {
             <div className="hidden lg:block">
               <VacanciesOrbit onApply={setVacancy} />
             </div>
-            <div className="hidden lg:block lg:hidden flex flex-wrap gap-3">
+            <div className="hidden">
               {vacancies.map((v) => (
                 <button
                   key={v}
