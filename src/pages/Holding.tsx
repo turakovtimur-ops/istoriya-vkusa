@@ -179,6 +179,21 @@ export default function Holding() {
 
   useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
 
+  // Мобайл: шапка прячется при скролле вниз, появляется при скролле вверх
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      if (window.innerWidth >= 1024) return;
+      const y = window.scrollY;
+      const el = document.querySelector('header') as HTMLElement | null;
+      if (el) el.style.transform = y > lastY && y > 240 ? 'translateY(-130%)' : 'translateY(0)';
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  // hideHeaderDone
+
   // Перезагрузка: всегда старт сверху
   useEffect(() => {
     if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';

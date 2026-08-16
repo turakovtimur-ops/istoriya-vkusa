@@ -73,7 +73,7 @@ export default function SuppliersOrbit({ onPartner }: Props) {
   );
 
   if (isMob) {
-    const mobileR = Math.min((w + 40) * 0.42, 190);
+    const mobileR = Math.min((w + 40) * 0.38, 190);
     return (
       <div className="relative mx-auto" style={{ width: mobileR * 2 + 90, maxWidth: '100%', height: mobileR * 2 * M_RY + 190 }}>
         {M_ORBITS.map((o, k) => (

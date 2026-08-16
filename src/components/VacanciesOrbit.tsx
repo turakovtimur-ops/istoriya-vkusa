@@ -25,7 +25,7 @@ export default function VacanciesOrbit({ onApply }: { onApply: (v: string) => vo
   useEffect(() => {
     const update = () => {
       setIsMob(window.innerWidth < 1024);
-      setMobileR(Math.min(window.innerWidth * 0.42, 190));
+      setMobileR(Math.min(window.innerWidth * 0.38, 190));
     };
     update();
     window.addEventListener('resize', update);
