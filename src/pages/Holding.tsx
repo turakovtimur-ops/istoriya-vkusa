@@ -445,10 +445,10 @@ export default function Holding() {
             <h2 className="text-4xl md:text-5xl xl:text-6xl font-semibold tracking-tighter mb-10">
               Ты непременно станешь<br />частью нашей команды
             </h2>
-            <div className="relative">
+            <div className="hidden lg:block">
               <VacanciesOrbit onApply={setVacancy} />
             </div>
-            <div className="hidden">
+            <div className="flex flex-wrap gap-3 lg:hidden mt-2">
               {vacancies.map((v) => (
                 <button
                   key={v}

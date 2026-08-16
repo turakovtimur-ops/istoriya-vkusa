@@ -54,11 +54,11 @@ export default function SuppliersBlock({ onPartner }: { onPartner: () => void })
         </p>
       </div>
 
-      <div className="reveal reveal-delay-1 mb-6">
+      div className="hidden lg:block reveal reveal-delay-1 mb-6">
         <SuppliersOrbit onPartner={onPartner} />
       </div>
       <div
-        className="hidden"
+        className="lg:hidden overflow-hidden reveal reveal-delay-1 cursor-grab active:cursor-grabbing select-none"
         onMouseEnter={() => (hoverRef.current = true)}
         onMouseLeave={() => { hoverRef.current = false; dragRef.current.active = false; }}
         onPointerDown={(e) => { dragRef.current = { active: true, x: e.clientX }; }}

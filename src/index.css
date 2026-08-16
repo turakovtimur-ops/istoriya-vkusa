@@ -191,74 +191,17 @@ html, body { overflow-x: clip; }
 html, body { overflow-x: clip; }
 #root { max-width: 100vw; }
 
-/* ===== setup61 ===== */
+
+/* ===== mobile reset: простая адаптивность ===== */
+html, body { overflow-x: clip; }
+#root { max-width: 100vw; }
 .team-anim { animation: teamIn .45s ease; }
 @keyframes teamIn { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
-@media (max-width: 767px) {
-  .marquee { display: none; }
-  #suppliers .grid { display: none !important; }
-}
-
-/* ===== setup77: мобильные карусели + орбиты ===== */
-@media (max-width: 767px) {
-  #promos .grid, #partners .grid {
-    display: flex !important;
-    gap: 14px !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    padding-bottom: 14px;
-    scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch;
-  }
-  #promos .grid > *, #partners .grid > * {
-    flex: 0 0 auto;
-    min-width: 86%;
-    scroll-snap-align: start;
-  }
-  #promos .grid::-webkit-scrollbar, #partners .grid::-webkit-scrollbar { display: none; }
-  #promos .reveal, #partners .reveal { opacity: 1 !important; transform: none !important; }
-  .marquee { display: none; }
-  #suppliers .grid { display: none !important; }
-  section { scroll-margin-top: 96px; }
-}
-
-/* ===== setup78 ===== */
-.team-anim { animation: teamIn .45s ease; }
-@keyframes teamIn { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
-@media (max-width: 1023px) {
-  header { transition: transform .4s ease; }
-}
-@media (max-width: 767px) {
-  #events .grid, #restaurants .grid {
-    display: flex !important;
-    gap: 14px !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    padding-bottom: 14px;
-    scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch;
-  }
-  #events .grid > *, #restaurants .grid > * { flex: 0 0 auto; min-width: 86%; scroll-snap-align: start; }
-  #events .grid::-webkit-scrollbar, #restaurants .grid::-webkit-scrollbar { display: none; }
-  #events .reveal, #restaurants .reveal { opacity: 1 !important; transform: none !important; }
-  #promos .grid { padding-left: 16px; padding-right: 16px; }
-  .fixed.bottom-5.right-4 { bottom: 10px; right: 10px; }
-  .fixed.bottom-5.right-4 a, .fixed.bottom-5.right-4 button { width: 40px !important; height: 40px !important; }
-  #contacts a[href^="tel:"] { font-size: 15px; font-weight: 500; }
-}
-@media (max-width: 400px) {
-  #promos .grid > *, #partners .grid > *, #events .grid > *, #restaurants .grid > * { min-width: 92%; }
-}
-
-/* ===== setup80 ===== */
-html, body { overflow-x: hidden; max-width: 100vw; }
-#root { overflow-x: clip; }
-@media (max-width: 767px) {
-  #restaurants img { width: 72px !important; height: 72px !important; object-fit: contain; border-radius: 9999px; }
-  #promos .grid p { overflow-wrap: break-word; }
-}
-
-/* ===== setup82 ===== */
 @media (max-width: 1023px) {
   header { transition: top .4s ease, transform .4s ease; }
+}
+@media (max-width: 767px) {
+  /* логотипы ресторанов не растягиваются в белый квадрат */
+  #restaurants img { display: none; }
+  #restaurants .reveal { opacity: 1 !important; transform: none !important; }
 }
