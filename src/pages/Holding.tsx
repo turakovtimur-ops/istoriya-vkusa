@@ -80,7 +80,7 @@ function HoldingHeader() {
           </div>
           <nav className="flex-1 flex flex-col justify-center px-8 overflow-y-auto" onClick={(ev) => ev.stopPropagation()}>
             {links.map(([href, label]) => (
-              <a key={href} href={href} onClick={() => setOpen(false)} className="py-2.5 text-2xl font-semibold tracking-tight text-cream/90 border-b border-cream/5 active:text-amber">
+              <a key={href} href={href} onClick={() => setOpen(false)} className="py-2 text-xl font-semibold tracking-tight text-cream/90 border-b border-cream/5 active:text-amber">
                 {label}
               </a>
             ))}
@@ -186,7 +186,7 @@ export default function Holding() {
       if (window.innerWidth >= 1024) return;
       const y = window.scrollY;
       const el = document.querySelector('header') as HTMLElement | null;
-      if (el) el.style.transform = y > lastY && y > 240 ? 'translateY(-130%)' : 'translateY(0)';
+      if (el) el.style.top = y > lastY && y > 240 ? '-140px' : '';
       lastY = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -445,7 +445,7 @@ export default function Holding() {
             <h2 className="text-4xl md:text-5xl xl:text-6xl font-semibold tracking-tighter mb-10">
               Ты непременно станешь<br />частью нашей команды
             </h2>
-            <div className="hidden lg:block">
+            <div className="relative">
               <VacanciesOrbit onApply={setVacancy} />
             </div>
             <div className="hidden">
