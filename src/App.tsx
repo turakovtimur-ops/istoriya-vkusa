@@ -1,9 +1,7 @@
+import RestaurantPage from './sites/RestaurantPage';
+import { restaurants as restList } from './data/holding';
 import { useEffect, useState } from 'react';
 import Holding from './pages/Holding';
-import KinzaSite from './sites/KinzaSite';
-import NinoSite from './sites/NinoSite';
-import AstoriaSite from './sites/AstoriaSite';
-import LaCostaSite from './sites/LaCostaSite';
 import RestaurantStub from './pages/RestaurantStub';
 
 function useHashRoute() {
@@ -22,10 +20,10 @@ function useHashRoute() {
 export default function App() {
   const route = useHashRoute();
 
-  if (route.startsWith('/kinza')) return <KinzaSite />;
-  if (route.startsWith('/nino')) return <NinoSite />;
-  if (route.startsWith('/astoria')) return <AstoriaSite />;
-  if (route.startsWith('/la-costa')) return <LaCostaSite />;
+  if (route.startsWith('/kinza')) return <RestaurantPage restaurant={restList.find(r => r.id === 'kinza')!} />;
+  if (route.startsWith('/nino')) return <RestaurantPage restaurant={restList.find(r => r.id === 'nino')!} />;
+  if (route.startsWith('/astoria')) return <RestaurantPage restaurant={restList.find(r => r.id === 'astoria')!} />;
+  if (route.startsWith('/la-costa')) return <RestaurantPage restaurant={restList.find(r => r.id === 'la-costa')!} />;
 
   return <Holding />;
 }
