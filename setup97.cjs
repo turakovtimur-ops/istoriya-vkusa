@@ -1,4 +1,8 @@
-import { useEffect } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+fs.writeFileSync(P('src/hooks/useScrollAnimation.ts'), `import { useEffect } from 'react';
 
 const VIS_CLASSES = ['visible', 'revealed', 'on', 'show', 'active', 'in', 'is-visible', 'in-view', 'shown'];
 
@@ -37,3 +41,8 @@ export function useScrollAnimation() {
     };
   }, []);
 }
+`, 'utf-8');
+
+console.log('✓ хук переписан: без IntersectionObserver, чистый scroll + rect');
+console.log('\n✅ Обнови localhost (Cmd+Shift+R) и проскролль главную:');
+console.log('   История → Команда → Рестораны → Партнёры → Акции (погоняй фильтры) → … → Футер');

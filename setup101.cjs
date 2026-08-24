@@ -1,7 +1,18 @@
 const fs = require('fs');
 const path = require('path');
+const P = (f) => path.join(__dirname, f);
 
-const file = `import { useEffect, useRef } from 'react';
+// ================= 1) ФОТО: .jpg → .jpeg в данных =================
+let data = fs.readFileSync(P('src/data/holding.ts'), 'utf-8');
+const dBefore = data;
+data = data.replace(/photo: '([^']+)\.jpg'/g, "photo: '$1.jpeg'");
+if (data !== dBefore) {
+  fs.writeFileSync(P('src/data/holding.ts'), data, 'utf-8');
+  console.log('✓ данные: photo теперь .jpeg (под твои файлы)');
+} else console.log('⚠ данные: .jpg не найден');
+
+// ================= 2) КАРТА: зум при наведении =================
+const cs = `import { useEffect, useRef } from 'react';
 import { restaurants } from '../data/holding';
 
 const RESTAURANTS: Record<string, [number, number]> = {
@@ -30,6 +41,8 @@ function loadYmaps(): Promise<any> {
 
 export default function ContactsSection() {
   const mapRef = useRef<HTMLDivElement>(null);
+  const ymapRef = useRef<any>(null);
+  const boundsRef = useRef<any>(null);
   const markersRef = useRef<Record<string, any>>({});
   const layoutsRef = useRef<Record<string, { small: any; big: any }>>({});
 
@@ -38,6 +51,18 @@ export default function ContactsSection() {
     const l = layoutsRef.current[id];
     if (!pm || !l) return;
     pm.options.set('iconLayout', big ? l.big : l.small);
+  };
+
+  const zoomTo = (id: string, c: [number, number]) => {
+    setScale(id, true);
+    const m = ymapRef.current;
+    if (m) m.setCenter(c, 17, { duration: 300 });
+  };
+
+  const zoomBack = (id: string) => {
+    setScale(id, false);
+    const m = ymapRef.current;
+    if (m && boundsRef.current) m.setBounds(boundsRef.current, { checkZoomRange: true, duration: 300 });
   };
 
   useEffect(() => {
@@ -55,6 +80,7 @@ export default function ContactsSection() {
           { suppressMapOpenBlock: true }
         );
         map.behaviors.disable('scroll');
+        ymapRef.current = map;
 
         const makeLayout = (num: number, bg: string, size: number) =>
           ymaps.templateLayoutFactory.createClass(
@@ -97,10 +123,9 @@ export default function ContactsSection() {
 
         const lats = all.map((c) => c[0]);
         const lngs = all.map((c) => c[1]);
-        map.setBounds(
-          [[Math.min(...lats) - 0.004, Math.min(...lngs) - 0.006], [Math.max(...lats) + 0.004, Math.max(...lngs) + 0.006]],
-          { checkZoomRange: true }
-        );
+        const bounds = [[Math.min(...lats) - 0.004, Math.min(...lngs) - 0.006], [Math.max(...lats) + 0.004, Math.max(...lngs) + 0.006]];
+        boundsRef.current = bounds;
+        map.setBounds(bounds, { checkZoomRange: true });
       });
     });
 
@@ -125,8 +150,8 @@ export default function ContactsSection() {
                 <div
                   key={r.id}
                   className="flex gap-4 p-2 -m-2 rounded-sm hover:bg-cream/5 transition-colors cursor-default"
-                  onMouseEnter={() => setScale(r.id, true)}
-                  onMouseLeave={() => setScale(r.id, false)}
+                  onMouseEnter={() => { const c = RESTAURANTS[r.id]; if (c) zoomTo(r.id, c); }}
+                  onMouseLeave={() => zoomBack(r.id)}
                 >
                   <div
                     className="w-8 h-8 flex-none rounded-full flex items-center justify-center text-night font-bold text-xs"
@@ -152,8 +177,8 @@ export default function ContactsSection() {
                 <span
                   key={p.id}
                   className="inline-flex items-center gap-2 px-3 py-2 border border-cream/15 text-cream/70 text-xs hover:bg-cream/5 transition-colors cursor-default"
-                  onMouseEnter={() => setScale(p.id, true)}
-                  onMouseLeave={() => setScale(p.id, false)}
+                  onMouseEnter={() => zoomTo(p.id, p.coords)}
+                  onMouseLeave={() => zoomBack(p.id)}
                 >
                   <span className="w-5 h-5 rounded-full bg-[#6B7280] text-night flex items-center justify-center font-bold text-[10px]">{i + 5}</span>
                   {p.name} · {p.type}
@@ -179,6 +204,9 @@ export default function ContactsSection() {
 }
 `;
 
-fs.writeFileSync(path.join(__dirname, 'src', 'components', 'ContactsSection.tsx'), file, 'utf-8');
-console.log('✓ ContactsSection переписан целиком: Яндекс.Карта, JSX прежний');
-console.log('\n✅ Дальше:\n   npm run build\n   git add . && git commit -m "Контакты: Яндекс.Карта (целиком)" && git push');
+fs.writeFileSync(P('src/components/ContactsSection.tsx'), cs, 'utf-8');
+console.log('✓ карта: зум 17 при наведении + возврат к общему виду');
+
+console.log('\n✅ Обнови localhost (Cmd+Shift+R):');
+console.log('   1) Кинза и Ла Коста — с ТВОИМИ фото (.jpeg подхватился)');
+console.log('   2) карта: наводишь на ресторан слева → зум на метке, уводишь → общий вид');

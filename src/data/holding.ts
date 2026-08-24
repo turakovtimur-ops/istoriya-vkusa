@@ -12,6 +12,7 @@ export interface HoldingRestaurant {
   image: string;
   accent: string;
   logo?: string;
+  photo?: string;
   roundLogo?: string;
   pattern?: string;
 }
@@ -54,6 +55,7 @@ export const holdingBrand = {
   logo: '/images/holding/istoriya-vkusa-icon.png',
   fullLogo: '/images/holding/istoriya-vkusa-logo.png',
   roundLogo: '/images/holding/istoriya-vkusa-round.png',
+    photo: '/images/holding/holding-photo.jpeg',
   gold: '#C2A076',
   blue: '#5B6C8E',
 };
@@ -70,10 +72,11 @@ export const restaurants: HoldingRestaurant[] = [
     phone: '+7 (938) 409-58-55',
     phoneFree: '8 (800) 201-57-57, доб. 1',
     path: '/kinza',
-    image: 'https://images.unsplash.com/photo-1537047902294-62a40c20a6b4?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&q=80',
     accent: '#71B06B',
     logo: '/images/kinza/kinza-logo.png',
     roundLogo: '/images/kinza/kinza-round.png',
+    photo: '/images/kinza/kinza-photo.jpeg',
     pattern: '/images/kinza/kinza-pattern.png',
   },
   {
@@ -91,6 +94,7 @@ export const restaurants: HoldingRestaurant[] = [
     accent: '#D84C3C',
     logo: '/images/nino/nino-logo.png',
     roundLogo: '/images/nino/nino-round.png',
+    photo: '/images/nino/nino-photo.jpg',
     pattern: '/images/nino/nino-pattern.png',
   },
   {
@@ -108,6 +112,7 @@ export const restaurants: HoldingRestaurant[] = [
     accent: '#C2A076',
     logo: '/images/astoria/astoria-logo.png',
     roundLogo: '/images/astoria/astoria-round.png',
+    photo: '/images/astoria/astoria-photo.jpg',
     pattern: '/images/astoria/astoria-pattern.png',
   },
   {
@@ -121,10 +126,11 @@ export const restaurants: HoldingRestaurant[] = [
     phone: '+7 (938) 433-95-55',
     phoneFree: '8 (800) 201-57-57, доб. 2',
     path: '/la-costa',
-    image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=900&q=80',
     accent: '#349C74',
     logo: '/images/la-costa/la-costa-logo.png',
     roundLogo: '/images/la-costa/la-costa-round.png',
+    photo: '/images/la-costa/la-costa-photo.jpeg',
     pattern: '/images/la-costa/la-costa-pattern.png',
   },
 ];

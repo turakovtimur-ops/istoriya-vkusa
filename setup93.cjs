@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+
+const page = `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -17,8 +20,6 @@ const NAV: [string, string][] = [
   ['reviews', 'Отзывы'],
   ['contacts', 'Контакты'],
 ];
-
-const H2C = 'text-4xl md:text-6xl font-semibold tracking-tighter';
 
 export default function RestaurantPage({ restaurant }: Props) {
   const modal = useModal();
@@ -43,44 +44,45 @@ export default function RestaurantPage({ restaurant }: Props) {
 
   return (
     <div className="min-h-screen bg-cream">
-      {/* липкая связка: плашка + шапка */}
-      <div className="sticky top-0 z-50">
-        <a href="#/" className="block bg-graphite text-cream/70 hover:text-cream transition-colors">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-2 flex items-center justify-between text-[10px] uppercase tracking-[0.25em]">
-            <span className="flex items-center gap-2">
-              <img src={holdingBrand.roundLogo} alt="" className="w-5 h-5 rounded-full object-cover" />
-              ← Вернуться в холдинг
-            </span>
-            <span className="hidden md:block">Геленджик · 8 800 201-57-57</span>
-          </div>
-        </a>
-        <header className="bg-cream/95 backdrop-blur border-b border-graphite/10">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between gap-6">
-            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center" aria-label={restaurant.name}>
-              <img src={restaurant.logo} alt={restaurant.name} className="h-10 lg:h-12 w-auto object-contain" />
-            </button>
-            <nav className="hidden lg:flex items-center gap-7">
-              {NAV.map(([id, label]) => (
-                <button key={id} onClick={() => go(id)} className="text-sm text-graphite/70 hover:text-graphite transition-colors tracking-wide">
-                  {label}
-                </button>
-              ))}
-            </nav>
-            <div className="hidden lg:flex items-center gap-5">
-              <a href={tel} className="text-sm font-medium text-graphite hover:underline whitespace-nowrap">{restaurant.phone}</a>
-              <button onClick={modal.open} className="px-6 py-3 text-xs uppercase tracking-widest font-medium text-cream hover:opacity-90 transition-opacity" style={{ background: accent }}>
-                Забронировать
-              </button>
-            </div>
-            <button className="lg:hidden w-11 h-11 flex flex-col items-center justify-center gap-1.5" aria-label="Меню" onClick={() => setBurger(true)}>
-              <span className="block w-6 h-px bg-graphite" />
-              <span className="block w-6 h-px bg-graphite" />
-              <span className="block w-4 h-px bg-graphite" />
-            </button>
-          </div>
-        </header>
-      </div>
+      {/* полоска холдинга */}
+      <a href="#/" className="block bg-graphite text-cream/70 hover:text-cream transition-colors">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-2 flex items-center justify-between text-[10px] uppercase tracking-[0.25em]">
+          <span className="flex items-center gap-2">
+            <img src={holdingBrand.roundLogo} alt="" className="w-5 h-5 rounded-full object-cover" />
+            Часть холдинга «История Вкуса»
+          </span>
+          <span className="hidden md:block">Геленджик · 8 800 201-57-57</span>
+        </div>
+      </a>
 
+      {/* шапка ресторана */}
+      <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur border-b border-graphite/10">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between gap-6">
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center" aria-label={restaurant.name}>
+            <img src={restaurant.logo} alt={restaurant.name} className="h-10 lg:h-12 w-auto object-contain" />
+          </button>
+          <nav className="hidden lg:flex items-center gap-7">
+            {NAV.map(([id, label]) => (
+              <button key={id} onClick={() => go(id)} className="text-sm text-graphite/70 hover:text-graphite transition-colors tracking-wide">
+                {label}
+              </button>
+            ))}
+          </nav>
+          <div className="hidden lg:flex items-center gap-5">
+            <a href={tel} className="text-sm font-medium text-graphite hover:underline whitespace-nowrap">{restaurant.phone}</a>
+            <button onClick={modal.open} className="px-6 py-3 text-xs uppercase tracking-widest font-medium text-cream hover:opacity-90 transition-opacity" style={{ background: accent }}>
+              Забронировать
+            </button>
+          </div>
+          <button className="lg:hidden w-11 h-11 flex flex-col items-center justify-center gap-1.5" aria-label="Меню" onClick={() => setBurger(true)}>
+            <span className="block w-6 h-px bg-graphite" />
+            <span className="block w-6 h-px bg-graphite" />
+            <span className="block w-4 h-px bg-graphite self-center ml-0" />
+          </button>
+        </div>
+      </header>
+
+      {/* бургер-оверлей */}
       {burger && (
         <div className="fixed inset-0 z-[70] bg-graphite/95 backdrop-blur-xl flex flex-col" onClick={() => setBurger(false)}>
           <div className="flex items-center justify-between px-6 pt-6 pb-5 border-b border-cream/10" onClick={(e) => e.stopPropagation()}>
@@ -89,7 +91,7 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
           <nav className="flex-1 flex flex-col justify-center px-8 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             {NAV.map(([id, label]) => (
-              <button key={id} onClick={() => go(id)} className="py-3 text-left text-2xl font-bold tracking-tight text-cream/90 border-b border-cream/5">
+              <button key={id} onClick={() => go(id)} className="py-3 text-left text-2xl font-serif font-semibold tracking-tight text-cream/90 border-b border-cream/5 active:text-amber">
                 {label}
               </button>
             ))}
@@ -97,18 +99,19 @@ export default function RestaurantPage({ restaurant }: Props) {
           <div className="px-8 pb-10 pt-4" onClick={(e) => e.stopPropagation()}>
             <a href={tel} className="inline-block text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1 mb-4">{restaurant.phone}</a>
             <p className="text-cream/40 text-xs font-light">{restaurant.address} · {restaurant.beach}</p>
-            <a href="#/" className="block mt-4 text-[10px] uppercase tracking-[0.3em] text-cream/50">← Вернуться в холдинг</a>
+            <a href="#/" className="block mt-4 text-[10px] uppercase tracking-[0.3em] text-cream/50">← Все рестораны «История Вкуса»</a>
           </div>
         </div>
       )}
 
       <main>
+        {/* HERO */}
         <section className="relative h-[55vh] lg:h-[70vh] overflow-hidden">
           <img src={restaurant.image} alt={restaurant.name} className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
           <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
-            <h1 className={'text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4 ' + H2C.replace(/text-S+/g, '').trim()}>{restaurant.name}</h1>
+            <h1 className="text-4xl lg:text-6xl font-serif font-semibold tracking-tight text-cream mb-4">{restaurant.name}</h1>
             <p className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
             <button onClick={modal.open} className="mt-8 self-start px-10 py-4 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: accent }}>
               Забронировать стол
@@ -116,11 +119,12 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
         </section>
 
-        <section id="about" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
+        {/* ABOUT */}
+        <section id="about" className="scroll-mt-28 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="reveal">
               <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>О ресторане</p>
-              <h2 className={H2C + ' mb-8 text-graphite'}>{restaurant.name}</h2>
+              <h2 className="text-3xl lg:text-5xl font-serif font-semibold tracking-tighter mb-8 text-graphite">{restaurant.name}</h2>
               <p className="text-graphite/80 font-light text-lg leading-relaxed mb-10">{restaurant.description}</p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="border-l-4 pl-4" style={{ borderColor: accent }}>
@@ -135,7 +139,7 @@ export default function RestaurantPage({ restaurant }: Props) {
                 </div>
               </div>
             </div>
-            <div className="reveal">
+            <div className="reveal reveal-delay-1">
               <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
                 <img src={restaurant.image} alt={restaurant.name} className="w-full h-full object-cover" />
               </div>
@@ -143,10 +147,11 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
         </section>
 
-        <section id="menu" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 border-y border-graphite/10" style={{ background: accent + '14' }}>
+        {/* MENU */}
+        <section id="menu" className="scroll-mt-28 py-16 lg:py-24 px-6 lg:px-12 border-y border-graphite/10" style={{ background: accent + '14' }}>
           <div className="max-w-[1400px] mx-auto text-center reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Меню</p>
-            <h2 className={H2C + ' mb-6 text-graphite'}>Наше меню</h2>
+            <h2 className="text-3xl lg:text-5xl font-serif font-semibold tracking-tighter mb-6 text-graphite">Наше меню</h2>
             <p className="text-graphite/70 font-light text-lg max-w-2xl mx-auto mb-10">
               Авторские блюда от шеф-повара: свежие продукты, сезонные ингредиенты, {restaurant.cuisine.toLowerCase()}.
             </p>
@@ -158,12 +163,13 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
         </section>
 
-        <section id="gallery" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
+        {/* GALLERY */}
+        <section id="gallery" className="scroll-mt-28 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
           <div className="text-center mb-12 reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Галерея</p>
-            <h2 className={H2C + ' text-graphite'}>Атмосфера</h2>
+            <h2 className="text-3xl lg:text-5xl font-serif font-semibold tracking-tighter text-graphite">Атмосфера</h2>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 reveal">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 reveal reveal-delay-1">
             {[1537047902294, 1414235077428, 1517248135467, 1552566626, 1559339352, 1544148103].map((n, i) => (
               <div key={i} className="aspect-[4/3] rounded-lg overflow-hidden shadow-lg group">
                 <img src={'https://images.unsplash.com/photo-' + n + '-62a40c20a6b4?w=800&q=80'} alt={'Фото ' + (i + 1)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -172,39 +178,34 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
         </section>
 
-        <section id="banquets" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 border-y border-graphite/10" style={{ background: accent + '14' }}>
+        {/* BANQUETS */}
+        <section id="banquets" className="scroll-mt-28 py-16 lg:py-24 px-6 lg:px-12 border-y border-graphite/10" style={{ background: accent + '14' }}>
           <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center">
             <div className="reveal">
               <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Банкеты</p>
-              <h2 className={H2C + ' mb-8 text-graphite'}>Мероприятия и банкеты</h2>
+              <h2 className="text-3xl lg:text-5xl font-serif font-semibold tracking-tighter mb-8 text-graphite">Мероприятия и банкеты</h2>
               <p className="text-graphite/80 font-light text-lg leading-relaxed mb-8">
                 Проведите незабываемый праздник в атмосфере {restaurant.name}. Свадьбы, юбилеи, корпоративы — мы создадим идеальные условия для вашего торжества.
               </p>
               <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: accent }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                {[
+                  ['До 80 гостей', 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2|M12 7 a4 4 0 1 0 0.01 0'],
+                  ['от 3 500 ₽ на персону', 'M3 4h18v18H3z|M16 2v4|M8 2v4|M3 10h18'],
+                  ['Оформление, торт, DJ, обслуживание', 'M9 11H1l8-8 8 8h-8z|M9 13v8'],
+                ].map(([txt, d], i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: accent }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">{d.split('|').map((p, j) => <path key={j} d={p} />)}</svg>
+                    </div>
+                    <p className="text-graphite/80 pt-2">{txt}</p>
                   </div>
-                  <p className="text-graphite/80 pt-2">До 80 гостей</p>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: accent }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-                  </div>
-                  <p className="text-graphite/80 pt-2">от 3 500 ₽ на персону</p>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: accent }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M9 11H1l8-8 8 8h-8z" /><path d="M9 13v8" /></svg>
-                  </div>
-                  <p className="text-graphite/80 pt-2">Оформление, торт, DJ, обслуживание</p>
-                </div>
+                ))}
               </div>
               <a href={tel} className="inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: accent }}>
                 Связаться с менеджером
               </a>
             </div>
-            <div className="reveal">
+            <div className="reveal reveal-delay-1">
               <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
                 <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=900&q=80" alt="Банкетный зал" className="w-full h-full object-cover" />
               </div>
@@ -212,12 +213,13 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
         </section>
 
-        <section id="reviews" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
+        {/* REVIEWS */}
+        <section id="reviews" className="scroll-mt-28 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
           <div className="text-center mb-12 reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Отзывы</p>
-            <h2 className={H2C + ' text-graphite'}>Гости о нас</h2>
+            <h2 className="text-3xl lg:text-5xl font-serif font-semibold tracking-tighter text-graphite">Гости о нас</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 reveal">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 reveal reveal-delay-1">
             {[
               { name: 'Анна М.', text: 'Прекрасная атмосфера, вкусная еда и отличный сервис. Обязательно вернёмся!' },
               { name: 'Дмитрий К.', text: 'Один из лучших ресторанов на побережье. Шеф-повар — мастер своего дела.' },
@@ -236,13 +238,14 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
         </section>
 
-        <section id="contacts" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 border-t border-graphite/10">
+        {/* CONTACTS */}
+        <section id="contacts" className="scroll-mt-28 py-16 lg:py-24 px-6 lg:px-12 border-t border-graphite/10">
           <div className="max-w-[1400px] mx-auto">
             <div className="text-center mb-12 reveal">
               <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Контакты</p>
-              <h2 className={H2C + ' text-graphite'}>Как нас найти</h2>
+              <h2 className="text-3xl lg:text-5xl font-serif font-semibold tracking-tighter text-graphite">Как нас найти</h2>
             </div>
-            <div className="grid lg:grid-cols-2 gap-12 reveal">
+            <div className="grid lg:grid-cols-2 gap-12 reveal reveal-delay-1">
               <div className="space-y-6">
                 <div>
                   <p className="text-xs uppercase tracking-widest text-graphite/60 mb-2">Адрес</p>
@@ -273,6 +276,7 @@ export default function RestaurantPage({ restaurant }: Props) {
         </section>
       </main>
 
+      {/* футер ресторана */}
       <footer className="bg-graphite text-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-14 grid md:grid-cols-3 gap-10">
           <div>
@@ -308,3 +312,8 @@ export default function RestaurantPage({ restaurant }: Props) {
     </div>
   );
 }
+`;
+
+fs.writeFileSync(path.join(__dirname, 'src', 'sites', 'RestaurantPage.tsx'), page, 'utf-8');
+console.log('✓ RestaurantPage.tsx: своя шапка у каждого ресторана');
+console.log('\n✅ Дальше: npm run dev → проверь #/kinza #/nino #/astoria #/la-costa');

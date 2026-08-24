@@ -6,7 +6,6 @@ import PartnerModal from '../components/PartnerModal';
 import SuppliersBlock from '../components/SuppliersBlock';
 import EventsBlock from '../components/EventsBlock';
 import ContactsSection from '../components/ContactsSection';
-import RestaurantGallery from '../components/RestaurantGallery';
 import VacanciesOrbit from '../components/VacanciesOrbit';
 import BrandImg from '../components/BrandImg';
 import { restaurants, partners, promos, history, holdingBrand, team, vacancies, benefits, Partner } from '../data/holding';
@@ -137,6 +136,21 @@ function PartnerPhoto({ p }: { p: Partner }) {
     );
   }
   return <img loading="lazy" src={p.image} alt={p.name} onError={() => setFailed(true)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />;
+}
+
+function RestCardPhoto({ r }: { r: (typeof restaurants)[number] }) {
+  const [stage, setStage] = useState(0);
+  const srcs = ([r.photo, r.image, 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80'] as (string | undefined)[]).filter(Boolean) as string[];
+  const src = srcs[Math.min(stage, srcs.length - 1)];
+  return (
+    <img
+      src={src}
+      alt={r.name}
+      loading="lazy"
+      onError={() => setStage((s) => Math.min(s + 1, srcs.length - 1))}
+      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+    />
+  );
 }
 
 function FloatingButtons() {
@@ -315,11 +329,11 @@ export default function Holding() {
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Наши рестораны</p>
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Четыре характера</h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 hv-carousel hv-carousel-r">
             {restaurants.map((r, i) => (
               <a key={r.id} href={'#' + r.path} className="group reveal flex flex-col" style={{ transitionDelay: (i * 0.1) + 's' }}>
                 <div className="relative aspect-[4/3] overflow-hidden mb-4 bg-paper">
-                  <RestaurantGallery r={r} />
+                  <RestCardPhoto r={r} />
                   <div className="absolute bottom-0 left-0 right-0 h-1 z-10" style={{ background: r.accent }} />
                 </div>
                 <p className="text-2xl font-semibold tracking-tight mb-1">{r.name}</p>
@@ -344,7 +358,7 @@ export default function Holding() {
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Партнёры</p>
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Нам доверяют</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 hv-carousel hv-carousel-p">
             {partners.map((p, i) => (
               <div key={p.id} className="group reveal flex flex-col border border-cream/10 hover:border-cream/30 transition-colors" style={{ transitionDelay: (i * 0.1) + 's' }}>
                 <div className="relative aspect-video overflow-hidden">
@@ -438,14 +452,14 @@ export default function Holding() {
         </div>
       </section>
 
-      <section id="vacancies" className="py-16 lg:py-24">
+      <section id="vacancies" className="pt-16 lg:pt-24 pb-8 lg:pb-10">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-12 gap-14 items-center">
           <div className="lg:col-span-7 reveal">
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Вакансии</p>
             <h2 className="text-4xl md:text-5xl xl:text-6xl font-semibold tracking-tighter mb-10">
               Ты непременно станешь<br />частью нашей команды
             </h2>
-            <div className="block">
+            <div className="block -mt-4 lg:-mt-8">
               <VacanciesOrbit onApply={setVacancy} />
             </div>
             <div className="hidden">
@@ -493,9 +507,10 @@ export default function Holding() {
 
       <footer className="py-12 border-t border-cream/10 bg-coal">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid md:grid-cols-3 gap-10">
-          <div>
-            <p className="text-2xl font-semibold tracking-tight mb-3 text-amber">История Вкуса</p>
-            <p className="text-cream/50 text-sm font-light">Сеть ресторанов и отелей · Геленджик</p>
+          <div className="flex flex-col items-center text-center">
+            <img src={holdingBrand.fullLogo} alt="История Вкуса" className="h-24 lg:h-28 w-auto object-contain" />
+            <p className="text-cream/50 text-sm font-light mt-5">Сеть ресторанов и отелей</p>
+            <p className="text-cream/50 text-sm font-light mt-1">Геленджик</p>
           </div>
           <div>
             <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Рестораны</p>

@@ -1,4 +1,121 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ---------- читаем файлы ----------
+let holding = fs.readFileSync(P('src/pages/Holding.tsx'), 'utf-8');
+let css = fs.readFileSync(P('src/index.css'), 'utf-8');
+
+// ---------- 0) класс видимости reveal из CSS ----------
+const visMatch = css.match(/\.reveal\.([A-Za-z0-9_-]+)\s*[{,]/) || css.match(/\.reveal\.([A-Za-z0-9_-]+)/);
+const VIS = visMatch ? visMatch[1] : 'visible';
+console.log('✓ класс видимости reveal:', VIS);
+
+// ---------- 1) useScrollAnimation + MutationObserver (фикс дырок в Акциях) ----------
+fs.writeFileSync(P('src/hooks/useScrollAnimation.ts'), `import { useEffect } from 'react';
+
+export function useScrollAnimation() {
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('${VIS}');
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const observeAll = () => {
+      document.querySelectorAll('.reveal').forEach((el) => {
+        if (!(el as Element).hasAttribute('data-obs')) {
+          (el as Element).setAttribute('data-obs', '1');
+          io.observe(el);
+        }
+      });
+    };
+
+    observeAll();
+    const mo = new MutationObserver(observeAll);
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+}
+`, 'utf-8');
+console.log('✓ useScrollAnimation: новые карточки теперь видны сразу (фикс фильтров)');
+
+// ---------- 2) карусели: вешаем свои классы на контейнеры ----------
+function addClassBefore(src, marker, cls) {
+  const idx = src.indexOf(marker);
+  if (idx === -1) return [src, null];
+  const open = src.lastIndexOf('<div className="', idx);
+  if (open === -1 || idx - open > 800) return [src, null];
+  const q = src.indexOf('"', open + 16);
+  return [src.slice(0, q) + ' ' + cls + src.slice(q), src.slice(open, idx)];
+}
+
+function sectionIdNear(src, marker) {
+  const idx = src.indexOf(marker);
+  if (idx === -1) return null;
+  const back = src.slice(Math.max(0, idx - 3000), idx);
+  const m = back.match(/id="([^"]+)"(?=[\s\S]*$)/);
+  return m ? m[1] : null;
+}
+
+let restId = null, partId = null;
+[holding, restId] = (() => { const [h, ctx] = addClassBefore(holding, '{restaurants.map', 'hv-carousel hv-carousel-r'); return [h, ctx]; })();
+console.log(holding.includes('hv-carousel-r') ? '✓ рестораны: карусель подключена' : '⚠ рестораны: контейнер не найден');
+[holding, partId] = (() => { const [h, ctx] = addClassBefore(holding, '{partners.map', 'hv-carousel hv-carousel-p'); return [h, ctx]; })();
+console.log(holding.includes('hv-carousel-p') ? '✓ партнёры: карусель подключена' : '⚠ партнёры: контейнер не найден');
+restId = sectionIdNear(holding, 'hv-carousel-r');
+partId = sectionIdNear(holding, 'hv-carousel-p');
+console.log('✓ id секций:', restId, partId);
+
+// ---------- 3) футер главной: лого вместо текста ----------
+const fIdx = holding.indexOf('<footer');
+if (fIdx !== -1) {
+  const nameIdx = holding.indexOf('>История Вкуса<', fIdx);
+  if (nameIdx !== -1 && nameIdx - fIdx < 3000) {
+    const tagStart = holding.lastIndexOf('<', nameIdx);
+    const closeStart = holding.indexOf('</', nameIdx);
+    const closeEnd = holding.indexOf('>', closeStart) + 1;
+    holding = holding.slice(0, tagStart) + '<img src={holdingBrand.logo} alt="История Вкуса" className="h-16 lg:h-20 w-auto object-contain" />' + holding.slice(closeEnd);
+    console.log('✓ футер: лого вместо текста');
+  } else console.log('⚠ футер: текст не найден');
+}
+
+// ---------- 4) класс заголовков главной (для шрифтов ресторанов) ----------
+const h2m = holding.match(/<h2[^>]*className="([^"]+)"[^>]*>[^<]*(Четыре характера|Люди, которые создают|Сейчас в ресторанах)/);
+const H2 = h2m ? h2m[1] : 'text-3xl lg:text-5xl font-bold tracking-tighter';
+console.log('✓ класс заголовков главной:', H2);
+
+fs.writeFileSync(P('src/pages/Holding.tsx'), holding, 'utf-8');
+
+// ---------- 5) CSS каруселей ----------
+if (!css.includes('/* setup94 */')) {
+  const rSel = (restId ? '#' + restId + ' .hv-carousel-r img, ' : '') + '.hv-carousel-r img';
+  const pSel = (partId ? '#' + partId + ' .hv-carousel-p img, ' : '') + '.hv-carousel-p img';
+  css += `
+/* setup94 */
+@media (max-width:767px){
+  .hv-carousel{display:flex !important;overflow-x:auto !important;scroll-snap-type:x mandatory;gap:16px !important;margin-left:-24px;margin-right:-24px;padding:4px 24px 16px;-webkit-overflow-scrolling:touch;}
+  .hv-carousel>*{min-width:86%;max-width:86%;flex-shrink:0 !important;scroll-snap-align:start;}
+  ${rSel}{width:100% !important;height:160px !important;object-fit:contain !important;padding:12px;}
+  ${pSel}{width:100% !important;height:180px !important;object-fit:cover !important;}
+}
+`;
+  fs.writeFileSync(P('src/index.css'), css, 'utf-8');
+  console.log('✓ CSS каруселей добавлен');
+}
+
+// ---------- 6) RestaurantPage: фикс-плашка + шрифты главной ----------
+const page = `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -18,7 +135,7 @@ const NAV: [string, string][] = [
   ['contacts', 'Контакты'],
 ];
 
-const H2C = 'text-4xl md:text-6xl font-semibold tracking-tighter';
+const H2C = '${H2}';
 
 export default function RestaurantPage({ restaurant }: Props) {
   const modal = useModal();
@@ -108,7 +225,7 @@ export default function RestaurantPage({ restaurant }: Props) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
           <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
-            <h1 className={'text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4 ' + H2C.replace(/text-S+/g, '').trim()}>{restaurant.name}</h1>
+            <h1 className={'text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4 ' + H2C.replace(/text-\S+/g, '').trim()}>{restaurant.name}</h1>
             <p className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
             <button onClick={modal.open} className="mt-8 self-start px-10 py-4 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: accent }}>
               Забронировать стол
@@ -308,3 +425,10 @@ export default function RestaurantPage({ restaurant }: Props) {
     </div>
   );
 }
+`;
+fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), page, 'utf-8');
+console.log('✓ RestaurantPage: плашка фикс + «← Вернуться в холдинг» + шрифты главной');
+
+console.log('\n✅ ВСЁ ВЫКАТАНО. Дальше:');
+console.log('   npm run dev  → проверь по списку ниже');
+console.log('   npm run build && git add -A && git commit -m "Пакет правок 1-7" && git push --force');

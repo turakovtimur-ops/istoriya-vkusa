@@ -281,3 +281,15 @@ html, body { overflow-x: clip; }
 @media (max-width: 400px) {
   #restaurants .grid > *, #partners .grid > *, #promos .grid > *, #events .grid > * { min-width: 90%; }
 }
+
+/* setup94 */
+@media (max-width:767px){
+  .hv-carousel{display:flex !important;overflow-x:auto !important;scroll-snap-type:x mandatory;gap:16px !important;margin-left:-24px;margin-right:-24px;padding:4px 24px 16px;-webkit-overflow-scrolling:touch;}
+  .hv-carousel>*{min-width:86%;max-width:86%;flex-shrink:0 !important;scroll-snap-align:start;}
+  #restaurants .hv-carousel-r img, .hv-carousel-r img{width:100% !important;height:160px !important;object-fit:contain !important;padding:12px;}
+  #restaurants .hv-carousel-p img, .hv-carousel-p img{width:100% !important;height:180px !important;object-fit:cover !important;}
+}
+
+/* setup98 */
+#vacancies { padding-bottom: 2.5rem !important; }
+#vacancies .reveal { margin-bottom: 0 !important; }

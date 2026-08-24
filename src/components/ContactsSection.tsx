@@ -4,7 +4,7 @@ import { restaurants } from '../data/holding';
 const RESTAURANTS: Record<string, [number, number]> = {
   kinza: [44.5551, 38.0687],
   nino: [44.5552, 38.065],
-  astoria: [44.555733, 38.064269],
+  astoria: [44.555746, 38.064224],
   'la-costa': [44.559098, 38.07625],
 };
 
@@ -27,6 +27,8 @@ function loadYmaps(): Promise<any> {
 
 export default function ContactsSection() {
   const mapRef = useRef<HTMLDivElement>(null);
+  const ymapRef = useRef<any>(null);
+  const boundsRef = useRef<any>(null);
   const markersRef = useRef<Record<string, any>>({});
   const layoutsRef = useRef<Record<string, { small: any; big: any }>>({});
 
@@ -35,6 +37,18 @@ export default function ContactsSection() {
     const l = layoutsRef.current[id];
     if (!pm || !l) return;
     pm.options.set('iconLayout', big ? l.big : l.small);
+  };
+
+  const zoomTo = (id: string, c: [number, number]) => {
+    setScale(id, true);
+    const m = ymapRef.current;
+    if (m) m.setCenter(c, 17, { duration: 300 });
+  };
+
+  const zoomBack = (id: string) => {
+    setScale(id, false);
+    const m = ymapRef.current;
+    if (m && boundsRef.current) m.setBounds(boundsRef.current, { checkZoomRange: true, duration: 300 });
   };
 
   useEffect(() => {
@@ -52,6 +66,7 @@ export default function ContactsSection() {
           { suppressMapOpenBlock: true }
         );
         map.behaviors.disable('scroll');
+        ymapRef.current = map;
 
         const makeLayout = (num: number, bg: string, size: number) =>
           ymaps.templateLayoutFactory.createClass(
@@ -94,10 +109,9 @@ export default function ContactsSection() {
 
         const lats = all.map((c) => c[0]);
         const lngs = all.map((c) => c[1]);
-        map.setBounds(
-          [[Math.min(...lats) - 0.004, Math.min(...lngs) - 0.006], [Math.max(...lats) + 0.004, Math.max(...lngs) + 0.006]],
-          { checkZoomRange: true }
-        );
+        const bounds = [[Math.min(...lats) - 0.004, Math.min(...lngs) - 0.006], [Math.max(...lats) + 0.004, Math.max(...lngs) + 0.006]];
+        boundsRef.current = bounds;
+        map.setBounds(bounds, { checkZoomRange: true });
       });
     });
 
@@ -122,8 +136,9 @@ export default function ContactsSection() {
                 <div
                   key={r.id}
                   className="flex gap-4 p-2 -m-2 rounded-sm hover:bg-cream/5 transition-colors cursor-default"
-                  onMouseEnter={() => setScale(r.id, true)}
-                  onMouseLeave={() => setScale(r.id, false)}
+                  onMouseEnter={() => { const c = RESTAURANTS[r.id]; if (c) zoomTo(r.id, c); }}
+                  onClick={() => { const c = RESTAURANTS[r.id]; if (c) zoomTo(r.id, c); }}
+                  onMouseLeave={() => zoomBack(r.id)}
                 >
                   <div
                     className="w-8 h-8 flex-none rounded-full flex items-center justify-center text-night font-bold text-xs"
@@ -149,8 +164,9 @@ export default function ContactsSection() {
                 <span
                   key={p.id}
                   className="inline-flex items-center gap-2 px-3 py-2 border border-cream/15 text-cream/70 text-xs hover:bg-cream/5 transition-colors cursor-default"
-                  onMouseEnter={() => setScale(p.id, true)}
-                  onMouseLeave={() => setScale(p.id, false)}
+                  onMouseEnter={() => zoomTo(p.id, p.coords)}
+                  onClick={() => zoomTo(p.id, p.coords)}
+                  onMouseLeave={() => zoomBack(p.id)}
                 >
                   <span className="w-5 h-5 rounded-full bg-[#6B7280] text-night flex items-center justify-center font-bold text-[10px]">{i + 5}</span>
                   {p.name} · {p.type}
