@@ -50,7 +50,7 @@ export default function SuppliersBlock({ onPartner }: { onPartner: () => void })
         <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Партнёры и поставщики</p>
         <h2 className="text-4xl md:text-5xl font-semibold tracking-tighter mb-4">Те, кто с нами</h2>
         <p className="text-cream/60 font-light max-w-2xl leading-relaxed">
-          Кухня, бар, сервис и город. Работаем с теми, кому доверяем сами. Партнёры вращаются вокруг бренда — наведите мышь, чтобы остановить и рассмотреть.
+          Кухня, бар, сервис и город. Работаем с теми, кому доверяем сами. Партнёры вращаются вокруг бренда — листайте, чтобы рассмотреть.
         </p>
       </div>
 

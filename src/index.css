@@ -293,3 +293,25 @@ html, body { overflow-x: clip; }
 /* setup98 */
 #vacancies { padding-bottom: 2.5rem !important; }
 #vacancies .reveal { margin-bottom: 0 !important; }
+
+/* setup105 */
+@media (max-width:767px){
+  /* Акции / Мероприятия / Поставщики — вертикальный столбик */
+  #promos .grid, #events .grid, #events [class*="grid"], #suppliers .grid, #suppliers [class*="grid"] {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    overflow-x: visible !important;
+    flex-direction: column !important;
+  }
+  #promos .grid > *, #events .grid > *, #events [class*="grid"] > *, #suppliers .grid > *, #suppliers [class*="grid"] > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  /* Карусели: боковые отступы, карточки не вплотную */
+  .hv-carousel { margin: 0 !important; padding: 4px 20px 16px !important; }
+  .hv-carousel > * { min-width: 86% !important; max-width: 86% !important; }
+  /* Фото ресторанов на весь блок */
+  .hv-carousel-r img { width: 100% !important; height: 100% !important; object-fit: cover !important; padding: 0 !important; }
+  .hv-carousel-p img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+}
