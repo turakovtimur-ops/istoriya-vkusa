@@ -145,7 +145,7 @@ function RestCardPhoto({ r }: { r: (typeof restaurants)[number] }) {
   return (
     <img
       src={src}
-      alt={r.name}
+      alt={r.name + ' — ресторан в Геленджике'}
       loading="lazy"
       onError={() => setStage((s) => Math.min(s + 1, srcs.length - 1))}
       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
@@ -246,6 +246,7 @@ export default function Holding() {
   return (
     <div className="bg-night text-cream min-h-screen">
       <HoldingHeader />
+      <h1 className="sr-only">История Вкуса — рестораны и отели в Геленджике</h1>
       <OrbitHero />
 
       <section id="history" className="py-16 lg:py-24 bg-coal">
