@@ -16,7 +16,7 @@ export default function About() {
               Место<br /><em className="text-forest">на каждый день.</em>
             </h2>
             <div className="reveal reveal-delay-2 space-y-6 text-graphite/80 text-lg leading-relaxed font-light max-w-xl">
-              <p>КИНZA — современный ресторан грузинской и кавказской кухни на берегу Чёрного моря. Здесь встречаются старинные рецепты и авторская подача, классика застолья и смелые идеи.</p>
+              <p>Кинза — современный ресторан грузинской и кавказской кухни на берегу Чёрного моря. Здесь встречаются старинные рецепты и авторская подача, классика застолья и смелые идеи.</p>
               <p>Приходите завтракать под утреннее солнце, обедать, наблюдая за волнами, или провести вечер, который запомнится надолго.</p>
             </div>
             <div className="reveal reveal-delay-3 grid grid-cols-2 gap-8 mt-14 pt-14 border-t border-graphite/10">
@@ -31,7 +31,7 @@ export default function About() {
           <div className="lg:col-span-7 reveal reveal-delay-2">
             <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden">
               <img src="https://images.unsplash.com/photo-1544124232-4c9e0db0a0b3?w=1200&q=85"
-                alt="Интерьер ресторана КИНZA"
+                alt="Интерьер ресторана Кинза"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-[2000ms]" loading="lazy" />
               <div className="absolute bottom-6 left-6 bg-cream/90 backdrop-blur-sm px-6 py-4">
                 <p className="font-serif text-sm italic text-graphite">«Приходите не просто поужинать —<br />приходите за вечером»</p>

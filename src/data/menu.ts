@@ -17,7 +17,7 @@ export const menuItems: MenuItem[] = [
   { id: 'z2', name: 'Пхали из свёклы', description: 'С грецким орехом', weight: '150 г', price: 420, category: 'Закуски' },
   { id: 'z3', name: 'Бадриджани', description: 'Баклажаны с ореховой начинкой', weight: '200 г', price: 480, category: 'Закуски' },
   { id: 'z4', name: 'Лаваш с сыром', description: 'Тёплый, с сулугуни', weight: '250 г', price: 490, category: 'Закуски', featured: true },
-  { id: 's1', name: 'Фирменный КИНZA', description: 'С говядиной и свежими овощами', weight: '200 г', price: 720, category: 'Салаты' },
+  { id: 's1', name: 'Фирменный Кинза', description: 'С говядиной и свежими овощами', weight: '200 г', price: 720, category: 'Салаты' },
   { id: 's2', name: 'Тбилиси', description: 'С фасолью, грецким орехом и ткемали', weight: '220 г', price: 580, category: 'Салаты' },
   { id: 'su1', name: 'Харчо', description: 'Густой, пряный, с говядиной', weight: '350 мл', price: 490, category: 'Супы' },
   { id: 'su2', name: 'Чихиртма', description: 'Куриный бульон с яйцом', weight: '350 мл', price: 420, category: 'Супы' },

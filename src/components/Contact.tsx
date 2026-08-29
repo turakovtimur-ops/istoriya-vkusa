@@ -46,7 +46,7 @@ export default function Contact({ onBook }: Props) {
               <iframe src="https://yandex.ru/map-widget/v1/?ll=38.0687%2C44.5551&mode=search&oid=17647113856&ol=biz&z=17"
                 width="100%" height="100%" frameBorder="0"
                 style={{ border: 0, filter: 'grayscale(1) invert(0.92) contrast(0.9)' }}
-                loading="lazy" title="Ресторан КИНZA на карте" />
+                loading="lazy" title="Ресторан Кинза на карте" />
             </div>
           </div>
         </div>

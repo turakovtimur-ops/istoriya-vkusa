@@ -35,7 +35,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="pt-10 border-t border-cream/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="text-cream/50 text-xs">© 2026 Ресторан КИНZA. Все права защищены.</p>
+          <p className="text-cream/50 text-xs">© 2026 Ресторан Кинза. Все права защищены.</p>
           <div className="flex gap-6 text-cream/50 text-xs">
             <a href="#" className="hover:text-cream transition-colors">Пользовательское соглашение</a>
             <a href="#" className="hover:text-cream transition-colors">Политика конфиденциальности</a>
