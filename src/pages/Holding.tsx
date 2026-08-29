@@ -182,13 +182,13 @@ export default function Holding() {
   const touchX = useRef<number | null>(null);
 
   // Страницы ресторанов по hash
-  const [route, setRoute] = useState(typeof window !== 'undefined' ? window.location.hash : '');
+  const [route, setRoute] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
   useEffect(() => {
-    const onHash = () => { setRoute(window.location.hash); window.scrollTo(0, 0); };
-    window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
+    const onPop = () => { setRoute(window.location.pathname); window.scrollTo(0, 0); };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
   }, []);
-  const curRoute = route.replace(/^#/, '');
+  const curRoute = route.replace(/\/+$/, '');
   const activeRest = restaurants.find((r) => curRoute === r.path || curRoute === '/' + r.path);
 
   useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
