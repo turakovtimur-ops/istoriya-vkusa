@@ -1,27 +1,14 @@
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0E0D0B" />
-    <title>История Вкуса — рестораны и отели в Геленджике | Официальный сайт</title>
-    <meta name="description" content="История Вкуса — ресторанный холдинг: Кинза, Нино, Астория, Ла Коста Берег. Четыре ресторана и партнёрские отели на побережье." />
-    <link rel="canonical" href="https://www.istoriya-vkusa.ru/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="История Вкуса — ресторанный холдинг" />
-    <meta property="og:description" content="Четыре ресторана — одна история. Геленджик." />
-    <meta property="og:url" content="https://www.istoriya-vkusa.ru/" />
-    <meta property="og:image" content="https://www.istoriya-vkusa.ru/images/holding/istoriya-vkusa-logo.png" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="История Вкуса — ресторанный холдинг" />
-    <meta name="twitter:description" content="Четыре ресторана — одна история. Геленджик." />
-    <meta name="twitter:image" content="https://www.istoriya-vkusa.ru/images/holding/istoriya-vkusa-logo.png" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ================= 1) index.html: SEO-пакет =================
+let html = fs.readFileSync(P('index.html'), 'utf-8');
+
+html = html.replace(/<title>[\s\S]*?<\/title>/, '<title>История Вкуса — рестораны и отели в Геленджике | Официальный сайт</title>');
+
+if (!html.includes('setup107-seo')) {
+  const seo = `
   <!-- setup107-seo -->
   <meta name="description" content="Ресторанный холдинг «История Вкуса» в Геленджике: Кинза, Нино, Астория, Ла Коста Берег. Партнёрские отели Бригантина и Янтарь, загородный комплекс Природа. Бронируйте стол онлайн." />
   <meta name="keywords" content="рестораны Геленджика, история вкуса, кинза, нино, астория, ла коста берег, ресторан у моря, банкет Геленджик, свадьба Геленджик, отели Геленджика" />
@@ -54,9 +41,18 @@
     ]
   }
   </script>
-</head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+`;
+  html = html.replace('</head>', seo + '</head>');
+  fs.writeFileSync(P('index.html'), html, 'utf-8');
+  console.log('✓ index.html: title, description, OG, гео, JSON-LD');
+} else console.log('ℹ SEO-блок уже в index.html');
+
+// ================= 2) robots.txt =================
+fs.writeFileSync(P('public/robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: https://www.istoriya-vkusa.ru/sitemap.xml\n', 'utf-8');
+console.log('✓ robots.txt');
+
+// ================= 3) sitemap.xml =================
+fs.writeFileSync(P('public/sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://www.istoriya-vkusa.ru/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>\n</urlset>\n', 'utf-8');
+console.log('✓ sitemap.xml');
+
+console.log('\n✅ Пушим: npm run build && git add -A && git commit -m "SEO-пакет: мета, OG, JSON-LD, sitemap" && git push');
