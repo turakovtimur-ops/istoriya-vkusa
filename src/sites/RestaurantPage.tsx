@@ -28,7 +28,9 @@ const lum = (hex: string) => {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 };
 
-export default function RestaurantPage({ restaurant }: Props) {
+export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
+  const extra0 = RESTO_EXTRA[restaurantProp.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };
+  const restaurant = { ...restaurantProp, ...((extra0 as { overrides?: Record<string, string> }).overrides || {}) };
   const modal = useModal();
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
@@ -36,7 +38,7 @@ export default function RestaurantPage({ restaurant }: Props) {
   
   const accent = restaurant.accent;
   const tel = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
-  const extra = RESTO_EXTRA[restaurant.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };
+  const extra = extra0;
   const theme = (extra as { theme?: { pageBg?: string; btn?: string } }).theme || {};
   const custom = Boolean(theme.pageBg);
   const pageBg = theme.pageBg || '#F1EDE6';

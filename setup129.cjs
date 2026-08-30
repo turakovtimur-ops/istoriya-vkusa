@@ -1,4 +1,55 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ================= 1) api/publish.ts — один коммит на всё =================
+fs.writeFileSync(P('api/publish.ts'), `import type { VercelRequest, VercelResponse } from '@vercel/node';
+const OWNER = 'turakovtimur-ops';
+const REPO = 'istoriya-vkusa';
+const H = (t: string) => ({ Authorization: 'token ' + t, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'iv-admin' });
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
+  const token = req.headers['x-gh-token'] as string;
+  const message = (req.body && req.body.message) || 'админка: правки';
+  const changes = (req.body && req.body.changes) || [];
+  if (!token || !Array.isArray(changes) || !changes.length) return res.status(400).json({ error: 'bad_request' });
+  const gh = (p: string, o: any = {}) => fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + p, { method: o.method || 'GET', headers: H(token), body: o.body ? JSON.stringify(o.body) : undefined });
+  const ref = await gh('/git/ref/heads/main'); if (!ref.ok) return res.status(500).json({ error: 'ref', d: await ref.text() });
+  const commitSha = (await ref.json()).object.sha;
+  const bc = await gh('/git/commits/' + commitSha); if (!bc.ok) return res.status(500).json({ error: 'basecommit' });
+  const baseTree = (await bc.json()).tree.sha;
+  const tree: any[] = [];
+  for (const c of changes) {
+    if (c.del) { tree.push({ path: c.path, mode: '100644', type: 'blob', sha: null }); continue; }
+    const content = c.base64 || Buffer.from(c.text || '', 'utf-8').toString('base64');
+    const b = await gh('/git/blobs', { method: 'POST', body: { content, encoding: 'base64' } });
+    if (!b.ok) return res.status(500).json({ error: 'blob', d: await b.text() });
+    tree.push({ path: c.path, mode: '100644', type: 'blob', sha: (await b.json()).sha });
+  }
+  const t = await gh('/git/trees', { method: 'POST', body: { base_tree: baseTree, tree } });
+  if (!t.ok) return res.status(500).json({ error: 'tree', d: await t.text() });
+  const cm = await gh('/git/commits', { method: 'POST', body: { message, tree: (await t.json()).sha, parents: [commitSha] } });
+  if (!cm.ok) return res.status(500).json({ error: 'commit', d: await cm.text() });
+  const up = await gh('/git/refs/heads/main', { method: 'PATCH', body: { sha: (await cm.json()).sha } });
+  if (!up.ok) return res.status(500).json({ error: 'refupd', d: await up.text() });
+  return res.status(200).json({ ok: true });
+}
+`, 'utf-8');
+console.log('✓ api/publish.ts (мульти-коммит)');
+
+// ================= 2) RestaurantPage: читаем правки из админки =================
+let rp = fs.readFileSync(P('src/sites/RestaurantPage.tsx'), 'utf-8');
+const sig = 'export default function RestaurantPage({ restaurant }: Props) {';
+const sigNew = "export default function RestaurantPage({ restaurant: restaurantProp }: Props) {\n  const extra0 = RESTO_EXTRA[restaurantProp.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };\n  const restaurant = { ...restaurantProp, ...((extra0 as { overrides?: Record<string, string> }).overrides || {}) };";
+if (rp.includes(sig)) {
+  rp = rp.split(sig).join(sigNew);
+  rp = rp.split("const extra = RESTO_EXTRA[restaurant.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };").join('const extra = extra0;');
+  fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), rp, 'utf-8');
+  console.log('✓ RestaurantPage: реквизиты можно менять из админки');
+} else console.log('⚠ RestaurantPage: сигнатура не найдена — реквизиты пропускаем');
+
+// ================= 3) Admin.tsx v2 =================
+fs.writeFileSync(P('src/pages/Admin.tsx'), `import { useEffect, useState } from 'react';
 import { news as initialNews, NewsItem } from '../data/news';
 import { PROMO_MEDIA, PromoMedia } from '../data/promos-media';
 import { RESTO_EXTRA } from '../data/resto-extra';
@@ -75,15 +126,15 @@ export default function Admin() {
   };
 
   // ---------- новости ----------
-  const newsText = () => '// НОВОСТИ ХОЛДИНГА (обновлено через админку)\n' +
-    'export interface NewsItem { id: string; date: string; tag: string; title: string; text: string }\n' +
-    'export const news: NewsItem[] = ' + JSON.stringify(news, null, 2) + ';\n';
+  const newsText = () => '// НОВОСТИ ХОЛДИНГА (обновлено через админку)\\n' +
+    'export interface NewsItem { id: string; date: string; tag: string; title: string; text: string }\\n' +
+    'export const news: NewsItem[] = ' + JSON.stringify(news, null, 2) + ';\\n';
   const pubNews = () => publish('админка: новости', [{ path: 'src/data/news.ts', text: newsText() }]);
 
   // ---------- акции ----------
-  const promosText = (list: PromoMedia[]) => '// генерируется админкой\n' +
-    'export interface PromoMedia { id: string; restaurant: string; src: string }\n' +
-    'export const PROMO_MEDIA: PromoMedia[] = ' + JSON.stringify(list, null, 2) + ';\n';
+  const promosText = (list: PromoMedia[]) => '// генерируется админкой\\n' +
+    'export interface PromoMedia { id: string; restaurant: string; src: string }\\n' +
+    'export const PROMO_MEDIA: PromoMedia[] = ' + JSON.stringify(list, null, 2) + ';\\n';
   const addPromo = async (file: File) => {
     const name = (promoRest === 'all' ? 'all' : promoRest) + '-a' + Date.now() + '.jpg';
     const b64 = await fileToB64(file);
@@ -104,9 +155,9 @@ export default function Admin() {
   };
 
   // ---------- галереи + рестораны ----------
-  const restoText = () => '// генерируется админкой\n' +
-    'export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number }; overrides?: Record<string, string> }\n' +
-    'export const RESTO_EXTRA: Record<string, RestoExtra> = ' + JSON.stringify(extra, null, 2) + ';\n';
+  const restoText = () => '// генерируется админкой\\n' +
+    'export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number }; overrides?: Record<string, string> }\\n' +
+    'export const RESTO_EXTRA: Record<string, RestoExtra> = ' + JSON.stringify(extra, null, 2) + ';\\n';
   const addGal = async (file: File) => {
     const e = extra[galRest]; if (!e) { setMsg('Нет данных ресторана'); return; }
     const name = 'a' + Date.now() + '.jpg';
@@ -310,3 +361,7 @@ export default function Admin() {
     </div>
   );
 }
+`, 'utf-8');
+console.log('✓ Admin.tsx v2: 5 вкладок');
+
+console.log('\n✅ Выкатываем: npm run build && git add -A && git commit -m "Админка v2: акции, галереи, данные ресторанов" && git push');
