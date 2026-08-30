@@ -33,7 +33,7 @@ export default function RestaurantPage({ restaurant }: Props) {
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
   useDocumentMeta(restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса', restaurant.tagline);
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  
   const accent = restaurant.accent;
   const tel = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
   const extra = RESTO_EXTRA[restaurant.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };

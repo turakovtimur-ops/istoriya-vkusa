@@ -3,6 +3,8 @@ import { suppliers } from '../data/suppliers';
 import SuppliersOrbit from './SuppliersOrbit';
 
 // Лента: плывёт сама; при наведении — управление мышью (drag / горизонтальный скролл)
+const STARS = Array.from({ length: 60 }, () => ({ top: Math.random() * 100, left: Math.random() * 100, size: Math.random() * 2 + 1, delay: Math.random() * 4 }));
+
 export default function SuppliersBlock({ onPartner }: { onPartner: () => void }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);
@@ -45,7 +47,8 @@ export default function SuppliersBlock({ onPartner }: { onPartner: () => void })
   }, []);
 
   return (
-    <section id="suppliers" className="py-8 lg:py-12 bg-coal border-t border-cream/10">
+    <section id="suppliers" className="relative overflow-hidden py-8 lg:py-12 bg-coal border-t border-cream/10">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">{STARS.map((s, i) => (<span key={i} className="absolute rounded-full bg-cream/50 star-twinkle" style={{ top: s.top + '%', left: s.left + '%', width: s.size, height: s.size, animationDelay: s.delay + 's' }} />))}</div>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mb-5 reveal">
         <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Партнёры и поставщики</p>
         <h2 className="text-4xl md:text-5xl font-semibold tracking-tighter mb-4">Те, кто с нами</h2>

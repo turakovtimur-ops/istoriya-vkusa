@@ -10,6 +10,7 @@ import VacanciesOrbit from '../components/VacanciesOrbit';
 import BrandImg from '../components/BrandImg';
 import { restaurants, partners, promos, history, holdingBrand, team, vacancies, benefits, Partner } from '../data/holding';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+const STARS = Array.from({ length: 70 }, () => ({ top: Math.random() * 100, left: Math.random() * 100, size: Math.random() * 2 + 1, delay: Math.random() * 4 }));
 
 function HoldingHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -210,8 +211,7 @@ export default function Holding() {
 
   // Перезагрузка: всегда старт сверху
   useEffect(() => {
-    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
+    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'auto';
   }, []);
 
   // Меню и логотип: плавный скролл БЕЗ смены hash (нет прыжков на главную)
@@ -453,8 +453,9 @@ export default function Holding() {
         </div>
       </section>
 
-      <section id="vacancies" className="pt-16 lg:pt-24 pb-8 lg:pb-10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-12 gap-14 items-center">
+      <section id="vacancies" className="relative overflow-hidden pt-16 lg:pt-24 pb-8 lg:pb-10">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">{STARS.map((s, i) => (<span key={i} className="absolute rounded-full bg-cream/60 star-twinkle" style={{ top: s.top + '%', left: s.left + '%', width: s.size, height: s.size, animationDelay: s.delay + 's' }} />))}</div>
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-12 gap-14 items-center">
           <div className="lg:col-span-7 reveal">
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Вакансии</p>
             <h2 className="text-4xl md:text-5xl xl:text-6xl font-semibold tracking-tighter mb-10">
@@ -509,8 +510,8 @@ export default function Holding() {
       <footer className="py-12 border-t border-cream/10 bg-coal">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid md:grid-cols-3 gap-10">
           <div className="flex flex-col items-center text-center">
-            <img src={holdingBrand.fullLogo} alt="История Вкуса" className="h-24 lg:h-28 w-auto object-contain" />
-            <p className="text-cream/50 text-sm font-light mt-5">Сеть ресторанов и отелей</p>
+            <img src={holdingBrand.fullLogo} alt="История Вкуса" className="h-14 lg:h-16 w-auto object-contain" />
+            <p className="text-cream/50 text-sm font-light mt-3">Сеть ресторанов и отелей</p>
             <p className="text-cream/50 text-sm font-light mt-1">Геленджик</p>
           </div>
           <div>
