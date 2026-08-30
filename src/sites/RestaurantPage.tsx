@@ -82,7 +82,7 @@ export default function RestaurantPage({ restaurant }: Props) {
         >
           <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between gap-6">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center" aria-label={restaurant.name}>
-              <img src={restaurant.logo} alt={restaurant.name} className={'h-10 lg:h-12 w-auto object-contain ' + (dark ? 'brightness-0 invert' : '')} />
+              <img src={restaurant.logo} alt={restaurant.name} className="h-10 lg:h-12 w-auto object-contain" />
             </button>
             <nav className="hidden lg:flex items-center gap-7">
               {NAV.map(([id, label]) => (
@@ -121,7 +121,7 @@ export default function RestaurantPage({ restaurant }: Props) {
       )}
       <main>
         <section className="relative h-[55vh] lg:h-[70vh] overflow-hidden">
-          <img src={restaurant.image} alt={restaurant.name} className="absolute inset-0 w-full h-full object-cover" />
+          <img src={restaurant.image} alt={restaurant.name} className="absolute inset-0 w-full h-full object-cover kenburns" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
           <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
@@ -233,6 +233,13 @@ export default function RestaurantPage({ restaurant }: Props) {
           <div className="text-center mb-12 reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Отзывы</p>
             <h2 className={H2C + ' ' + cHead}>Гости о нас</h2>
+            {extra.rating && (
+              <p className={'rating-badge mt-5 inline-flex items-center gap-2 text-sm font-medium ' + cSoft}>
+                <span className="text-2xl font-semibold" style={{ color: accent }}>{extra.rating.score}</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill={accent} stroke={accent} strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                · {extra.rating.count} отзывов на Яндекс Картах
+              </p>
+            )}
           </div>
           <div className="grid md:grid-cols-2 gap-6 reveal">
             {extra.reviews.map((r, i) => (

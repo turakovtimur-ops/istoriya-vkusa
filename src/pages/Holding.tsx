@@ -6,6 +6,7 @@ import PartnerModal from '../components/PartnerModal';
 import SuppliersBlock from '../components/SuppliersBlock';
 import PromoStories from '../components/PromoStories';
 import EventsBlock from '../components/EventsBlock';
+import { news } from '../data/news';
 import ContactsSection from '../components/ContactsSection';
 import VacanciesOrbit from '../components/VacanciesOrbit';
 import BrandImg from '../components/BrandImg';
@@ -26,6 +27,7 @@ function HoldingHeader() {
     ['#team', 'Команда'],
     ['#restaurants', 'Рестораны'],
     ['#partners', 'Партнёры'],
+    ['#news', 'Новости'],
     ['#promos', 'Акции'],
     ['#vacancies', 'Вакансии'],
     ['#suppliers', 'Поставщики'],
@@ -394,7 +396,27 @@ export default function Holding() {
         </div>
       </section>
 
-      <section id="promos" className="py-16 lg:py-24 bg-coal">
+      <section id="news" className="py-16 lg:py-24 bg-coal">
+    <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="reveal mb-10">
+        <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Новости</p>
+        <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Новости и анонсы</h2>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {news.slice(0, 6).map((nItem, i) => (
+          <article key={nItem.id} className="border border-cream/10 hover:border-cream/30 transition-colors p-7 flex flex-col reveal" style={{ transitionDelay: (i * 0.08) + 's' }}>
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <span className="text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 rounded-full bg-amber/15 text-amber">{nItem.tag}</span>
+              <time className="text-cream/40 text-xs">{nItem.date}</time>
+            </div>
+            <h3 className="text-xl font-semibold tracking-tight mb-3">{nItem.title}</h3>
+            <p className="text-cream/60 text-sm font-light leading-relaxed">{nItem.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section id="promos" className="py-16 lg:py-24 bg-coal">
     <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
       <div className="reveal mb-10">
         <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Акции</p>

@@ -1,5 +1,5 @@
 // генерируется setup114.cjs — после добавления фото в gallery запусти setup заново
-export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string } }
+export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number } }
 export const RESTO_EXTRA: Record<string, RestoExtra> = {
   "kinza": {
     "hours": "09:00–00:00",
@@ -25,6 +25,10 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "theme": {
       "pageBg": "#E6D9C5",
       "btn": "#76522D"
+    },
+    "rating": {
+      "score": "4.8",
+      "count": 1261
     }
   },
   "nino": {
@@ -51,6 +55,10 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "theme": {
       "pageBg": "#DB4C3C",
       "btn": "#565E62"
+    },
+    "rating": {
+      "score": "4.8",
+      "count": 447
     }
   },
   "astoria": {
@@ -77,6 +85,10 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "theme": {
       "pageBg": "#8F7A55",
       "btn": "#62646F"
+    },
+    "rating": {
+      "score": "4.7",
+      "count": 606
     }
   },
   "la-costa": {
@@ -103,6 +115,10 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "theme": {
       "pageBg": "#348C74",
       "btn": "#E7D6B2"
+    },
+    "rating": {
+      "score": "4.6",
+      "count": 1105
     }
   }
 };

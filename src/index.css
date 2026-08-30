@@ -315,3 +315,6 @@ html, body { overflow-x: clip; }
   .hv-carousel-r img { width: 100% !important; height: 100% !important; object-fit: cover !important; padding: 0 !important; }
   .hv-carousel-p img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
 }
+
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.08); } }
+.kenburns { animation: kenburns 14s ease-in-out infinite alternate; }
