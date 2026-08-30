@@ -11,7 +11,7 @@ const ORBITS = [
   { r: 0.4, ry: 0.4 },
 ];
 const M_ORBITS = [1, 0.8, 0.62, 0.46];
-const M_RY = 0.8;
+const M_RY = 0.42;
 const PHASES = [45, 135, 225, 315];
 const SPEED = 4;
 

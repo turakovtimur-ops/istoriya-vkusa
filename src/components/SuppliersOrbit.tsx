@@ -11,7 +11,7 @@ const SPEEDS = [5, -4, 6, -5, 7, -6];
 const PHASES = [20, 120, 220, 60, 170, 300];
 
 const M_ORBITS = [1, 0.8, 0.62, 0.46];
-const M_RY = 0.8;
+const M_RY = 0.42;
 
 const sizeFor = (name: string) => Math.round(Math.min(104, Math.max(64, 44 + name.length * 2.2)));
 
@@ -73,13 +73,13 @@ export default function SuppliersOrbit({ onPartner }: Props) {
   );
 
   if (isMob) {
-    const mobileR = Math.min((w + 40) * 0.36, 170);
+    const mobileR = (w + 40) * 0.62;
     return (
       <div className="relative mx-auto" style={{ width: mobileR * 2 + 90, maxWidth: '100%', height: mobileR * 2 * M_RY + 190 }}>
         {M_ORBITS.map((o, k) => (
           <div key={k} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-amber/25" style={{ width: mobileR * 2 * o, height: mobileR * 2 * o * M_RY }} />
         ))}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 sun-glow rounded-full overflow-hidden" style={{ width: 100, height: 100 }}>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 sun-glow rounded-full overflow-hidden" style={{ width: 120, height: 120 }}>
           <BrandImg src={holdingBrand.roundLogo} alt={holdingBrand.name} fallback={'История Вкуса'} color={holdingBrand.blue} fit="cover" className="w-full h-full scale-[1.08]" />
           <div className="absolute inset-0 rounded-full sphere-shade-sun pointer-events-none" />
         </div>
@@ -95,7 +95,7 @@ export default function SuppliersOrbit({ onPartner }: Props) {
             <div key={s.id} className="absolute left-1/2 top-1/2" style={{ transform: 'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(' + scale + ')', zIndex: z, opacity: 0.75 + depth * 0.25 }}
               onMouseEnter={() => show(s.id)} onMouseLeave={hideSoon}>
               <div className="flex flex-col items-center gap-1 w-16">
-                <div className="relative w-14 h-14 rounded-full overflow-hidden border border-cream/20" style={{ boxShadow: '0 0 20px ' + s.accent + '66' }}>
+                <div className="relative w-16 h-16 rounded-full overflow-hidden border border-cream/20" style={{ boxShadow: '0 0 20px ' + s.accent + '66' }}>
                   {s.logo ? (
                     <img src={s.logo} alt={s.name} className="w-full h-full object-cover" />
                   ) : (
@@ -119,7 +119,7 @@ export default function SuppliersOrbit({ onPartner }: Props) {
           return (
             <div className="absolute left-1/2 top-1/2" style={{ transform: 'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(' + (0.85 + depth * 0.3) + ')', zIndex: Math.sin(rad) > 0 ? 30 : 10, opacity: 0.75 + depth * 0.25 }}>
               <button onClick={onPartner} className="flex flex-col items-center gap-1">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'radial-gradient(circle at 32% 28%, #EBD3A8, #C2A076 55%, #8A6F4D)', boxShadow: '0 0 24px rgba(194,160,118,0.55)' }}>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'radial-gradient(circle at 32% 28%, #EBD3A8, #C2A076 55%, #8A6F4D)', boxShadow: '0 0 24px rgba(194,160,118,0.55)' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E0D0B" strokeWidth="2">
                     <line x1="12" y1="5" x2="12" y2="19" />
                     <line x1="5" y1="12" x2="19" y2="12" />
