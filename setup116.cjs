@@ -1,54 +1,28 @@
 const fs = require('fs');
 const path = require('path');
 const P = (f) => path.join(__dirname, f);
-const del = (f) => { if (fs.existsSync(P(f))) { fs.rmSync(P(f), { recursive: true, force: true }); return true; } return false; };
 
-// ================= чистка =================
-['public/.DS_Store', 'public/images/.DS_Store', 'public/images/holding/.DS_Store', 'public/images/kinza/.DS_Store', 'public/images/la-costa/.DS_Store', 'public/images/nino/.DS_Store', 'public/images/partners/.DS_Store'].forEach(del);
-let gi = fs.readFileSync(P('.gitignore'), 'utf-8');
-if (!gi.includes('.DS_Store')) fs.writeFileSync(P('.gitignore'), gi + '\n.DS_Store\n', 'utf-8');
-for (let i = 93; i <= 125; i++) if (i !== 120) del('setup' + i + '.cjs');
-['public/images/astoria/astoria-photo.jpg', 'public/images/kinza/kinza-photo.jpeg', 'public/images/la-costa/la-costa-photo.jpeg', 'public/images/nino/nino-photo.jpg'].forEach(del);
-console.log('✓ чистка: .DS_Store, старые setup (93–125 кроме 120), фото ресторанов');
-
-if (!fs.existsSync(P('refresh-gallery.cjs'))) {
-  fs.writeFileSync(P('refresh-gallery.cjs'), [
-    "const fs = require('fs');",
-    "const path = require('path');",
-    "const P = (f) => path.join(__dirname, f);",
-    "const re = P('src/data/resto-extra.ts');",
-    "let txt = fs.readFileSync(re, 'utf-8');",
-    "const i0 = txt.indexOf('= {'); const i1 = txt.lastIndexOf('};');",
-    "const data = JSON.parse(txt.slice(i0 + 2, i1 + 1));",
-    "for (const id of Object.keys(data)) {",
-    "  const dir = P('public/images/' + id + '/gallery');",
-    "  data[id].gallery = fs.existsSync(dir)",
-    "    ? fs.readdirSync(dir).filter((f) => /\\.(jpe?g|png|webp)$/i.test(f)).sort().map((f) => '/images/' + id + '/gallery/' + f)",
-    "    : [];",
-    "  console.log(id + ': ' + data[id].gallery.length + ' фото');",
-    "}",
-    "fs.writeFileSync(re, txt.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + txt.slice(i1 + 1), 'utf-8');",
-    "console.log('✓ галереи обновлены. Дальше: npm run build && пуш');"
-  ].join('\n'), 'utf-8');
-  console.log('✓ refresh-gallery.cjs');
+// ================= 1) темы всех 4 ресторанов =================
+let re = fs.readFileSync(P('src/data/resto-extra.ts'), 'utf-8');
+const i0 = re.indexOf('= {');
+const i1 = re.lastIndexOf('};');
+if (i0 === -1 || i1 === -1) { console.log('⚠ resto-extra.ts не распознан'); process.exit(1); }
+const data = JSON.parse(re.slice(i0 + 2, i1 + 1));
+const THEMES = {
+  kinza: { pageBg: '#E6D9C5', btn: '#76522D' },
+  nino: { pageBg: '#DB4C3C', btn: '#565E62' },
+  astoria: { pageBg: '#8F7A55', btn: '#62646F' },
+  'la-costa': { pageBg: '#348C74', btn: '#E7D6B2' },
+};
+for (const id of Object.keys(THEMES)) if (data[id]) data[id].theme = THEMES[id];
+re = re.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + re.slice(i1 + 1);
+if (!re.includes('theme?:')) {
+  re = re.replace('gallery: string[] }', 'gallery: string[]; theme?: { pageBg?: string; btn?: string } }');
 }
+fs.writeFileSync(P('src/data/resto-extra.ts'), re, 'utf-8');
+console.log('✓ темы: ' + Object.keys(THEMES).join(', '));
 
-// ================= мёртвый код (безопасная проверка, без RegExp) =================
-const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => { const p = path.join(dir, e.name); return e.isDirectory() ? walk(p) : [p]; });
-const srcAll = walk(P('src')).filter((f) => /\.(tsx?|css)$/.test(f)).map((f) => fs.readFileSync(f, 'utf-8')).join('\n');
-const used = (n) =>
-  srcAll.includes("'" + n + "'") || srcAll.includes('"' + n + '"') ||
-  srcAll.includes('/' + n + "'") || srcAll.includes('/' + n + '"');
-let k = 0;
-['AstoriaSite', 'LaCostaSite', 'NinoSite', 'KinzaSite_old', 'RestaurantStub', 'About', 'Banquets', 'Contact', 'Footer', 'Header', 'Hero', 'MenuSection', 'MobileNav', 'Gallery', 'Reviews', 'SeaBlock', 'CinematicRestaurants', 'RestaurantGallery', 'SuppliersOrbit', 'UniversalRestaurantSite'].forEach((n) => {
-  const file = ['AstoriaSite', 'LaCostaSite', 'NinoSite', 'KinzaSite_old'].includes(n) ? 'src/sites/' + n + '.tsx' : n === 'RestaurantStub' ? 'src/pages/' + n + '.tsx' : 'src/components/' + n + '.tsx';
-  if (!fs.existsSync(P(file))) return;
-  if (used(n)) { console.log('ℹ ' + n + ' используется — оставлен'); return; }
-  del(file); k++;
-});
-console.log('✓ мёртвых компонентов удалено: ' + k);
-
-// ================= страница ресторана: заглушки вместо фото =================
+// ================= 2) RestaurantPage с авто-контрастом =================
 fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
@@ -68,6 +42,11 @@ const NAV: [string, string][] = [
   ['contacts', 'Контакты'],
 ];
 const H2C = 'text-4xl md:text-6xl font-semibold tracking-tighter';
+const FALLBACK_GALLERY = [
+  'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
+  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
+  'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80',
+];
 const lum = (hex: string) => {
   const h = hex.replace('#', '');
   const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
@@ -79,17 +58,18 @@ export default function RestaurantPage({ restaurant }: Props) {
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
   useDocumentMeta(restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса', restaurant.tagline);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
   const accent = restaurant.accent;
   const tel = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
   const extra = RESTO_EXTRA[restaurant.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };
-  const theme = (extra as { theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number } }).theme || {};
-  const rating = (extra as { rating?: { score: string; count: number } }).rating;
+  const theme = (extra as { theme?: { pageBg?: string; btn?: string } }).theme || {};
   const custom = Boolean(theme.pageBg);
   const pageBg = theme.pageBg || '#F1EDE6';
   const btn = theme.btn || accent;
   const lightBg = custom && lum(pageBg) > 0.6;
-  const dark = custom && !lightBg;
+  const dark = custom && !lightBg; // тёмный фон → светлый текст
   const btnStyle = { background: btn, color: lum(btn) > 0.6 ? '#221c14' : '#f5efe6' } as const;
+  const gallery = extra.gallery.length ? extra.gallery : FALLBACK_GALLERY;
   const cHead = dark ? 'text-cream' : 'text-graphite';
   const cSoft = dark ? 'text-cream/80' : 'text-graphite/80';
   const cMute = dark ? 'text-cream/60' : 'text-graphite/60';
@@ -109,12 +89,6 @@ export default function RestaurantPage({ restaurant }: Props) {
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 50);
   };
-  const Stub = ({ tall, label }: { tall?: boolean; label?: string }) => (
-    <div className={'w-full ' + (tall ? 'h-full min-h-[280px]' : 'aspect-[4/3]') + ' flex flex-col items-center justify-center gap-4 border-2 border-dashed rounded-lg'} style={{ borderColor: accent + '66', background: accent + '0d' }}>
-      <img src={restaurant.logo} alt="" className="h-12 w-auto object-contain opacity-50" />
-      <p className={'text-xs uppercase tracking-[0.3em] ' + cMute}>{label || 'Фото скоро'}</p>
-    </div>
-  );
   return (
     <div className={'min-h-screen ' + (custom ? '' : 'bg-cream')} style={custom ? { background: pageBg } : undefined}>
       <div className="sticky top-0 z-50">
@@ -133,7 +107,7 @@ export default function RestaurantPage({ restaurant }: Props) {
         >
           <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between gap-6">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center" aria-label={restaurant.name}>
-              <img src={restaurant.logo} alt={restaurant.name} className="h-10 lg:h-12 w-auto object-contain" />
+              <img src={restaurant.logo} alt={restaurant.name} className={'h-10 lg:h-12 w-auto object-contain ' + (dark ? 'brightness-0 invert' : '')} />
             </button>
             <nav className="hidden lg:flex items-center gap-7">
               {NAV.map(([id, label]) => (
@@ -172,11 +146,8 @@ export default function RestaurantPage({ restaurant }: Props) {
       )}
       <main>
         <section className="relative h-[55vh] lg:h-[70vh] overflow-hidden">
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 35%, ' + accent + '55, #100e0c 80%)' }} />
-          <div className="absolute inset-0 flex items-center justify-center opacity-25">
-            <img src={restaurant.logo} alt="" className="h-32 w-auto object-contain" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <img src={restaurant.image} alt={restaurant.name} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
           <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
@@ -204,7 +175,11 @@ export default function RestaurantPage({ restaurant }: Props) {
                 </div>
               </div>
             </div>
-            <div className="reveal"><Stub tall /></div>
+            <div className="reveal">
+              <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
+                <img src={gallery[0]} alt={restaurant.name + ' — ресторан в Геленджике'} className="w-full h-full object-cover" />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -233,11 +208,11 @@ export default function RestaurantPage({ restaurant }: Props) {
             <h2 className={H2C + ' ' + cHead}>Атмосфера</h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 reveal">
-            {extra.gallery.length > 0 ? extra.gallery.map((src, i) => (
+            {gallery.map((src, i) => (
               <div key={i} className="aspect-[4/3] rounded-lg overflow-hidden shadow-lg group">
                 <img loading="lazy" src={src} alt={restaurant.name + ' — фото ' + (i + 1)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               </div>
-            )) : Array.from({ length: 6 }).map((_, i) => <Stub key={i} />)}
+            ))}
           </div>
         </section>
 
@@ -271,7 +246,11 @@ export default function RestaurantPage({ restaurant }: Props) {
               </div>
               <a href={tel} className="inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Связаться с менеджером</a>
             </div>
-            <div className="reveal"><Stub tall label="Фото банкетного зала скоро" /></div>
+            <div className="reveal">
+              <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
+                <img src={gallery[1] || gallery[0]} alt={'Банкеты в ' + restaurant.name} className="w-full h-full object-cover" />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -279,13 +258,6 @@ export default function RestaurantPage({ restaurant }: Props) {
           <div className="text-center mb-12 reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Отзывы</p>
             <h2 className={H2C + ' ' + cHead}>Гости о нас</h2>
-            {rating && (
-              <p className={'rating-badge mt-5 inline-flex items-center gap-2 text-sm font-medium ' + cSoft}>
-                <span className={'text-2xl font-semibold ' + cHead}>{rating.score}</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" className={cHead} fill="currentColor" stroke="currentColor" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                · {rating.count} отзывов на Яндекс Картах
-              </p>
-            )}
           </div>
           <div className="grid md:grid-cols-2 gap-6 reveal">
             {extra.reviews.map((r, i) => (
@@ -373,6 +345,6 @@ export default function RestaurantPage({ restaurant }: Props) {
   );
 }
 `, 'utf-8');
-console.log('✓ страница ресторана переписана: заглушки вместо фото');
+console.log('✓ RestaurantPage: 4 темы + авто-контраст текста');
 
-console.log('\n✅ Выкатываем: npm run build && git add -A && git commit -m "Чистка + заглушки фото" && git push');
+console.log('\\n✅ Выкатываем: npm run build && git add -A && git commit -m "Темы всех ресторанов: фирменные цвета" && git push');

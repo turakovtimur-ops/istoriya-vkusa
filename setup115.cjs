@@ -1,4 +1,25 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ================= 1) тема Нино в resto-extra.ts =================
+let re = fs.readFileSync(P('src/data/resto-extra.ts'), 'utf-8');
+const i0 = re.indexOf('= {');
+const i1 = re.lastIndexOf('};');
+if (i0 !== -1 && i1 !== -1) {
+  const data = JSON.parse(re.slice(i0 + 2, i1 + 1));
+  if (data.nino) data.nino.theme = { pageBg: '#DB4C3C', btn: '#565E62' };
+  re = re.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + re.slice(i1 + 1);
+  re = re.replace(
+    'gallery: string[] }',
+    'gallery: string[]; theme?: { pageBg?: string; btn?: string } }'
+  );
+  fs.writeFileSync(P('src/data/resto-extra.ts'), re, 'utf-8');
+  console.log('✓ тема Нино: фон #DB4C3C, кнопки #565E62');
+} else console.log('⚠ resto-extra.ts не распознан');
+
+// ================= 2) RestaurantPage с поддержкой темы =================
+fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -22,18 +43,13 @@ const FALLBACK_GALLERY = [
   'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
   'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80',
 ];
-const lum = (hex: string) => {
-  const h = hex.replace('#', '');
-  const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-};
 
 export default function RestaurantPage({ restaurant }: Props) {
   const modal = useModal();
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
   useDocumentMeta(restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса', restaurant.tagline);
-  
+  useEffect(() => { window.scrollTo(0, 0); }, []);
   const accent = restaurant.accent;
   const tel = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
   const extra = RESTO_EXTRA[restaurant.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };
@@ -41,16 +57,14 @@ export default function RestaurantPage({ restaurant }: Props) {
   const custom = Boolean(theme.pageBg);
   const pageBg = theme.pageBg || '#F1EDE6';
   const btn = theme.btn || accent;
-  const lightBg = custom && lum(pageBg) > 0.6;
-  const dark = custom && !lightBg; // тёмный фон → светлый текст
-  const btnStyle = { background: btn, color: lum(btn) > 0.6 ? '#221c14' : '#f5efe6' } as const;
   const gallery = extra.gallery.length ? extra.gallery : FALLBACK_GALLERY;
-  const cHead = dark ? 'text-cream' : 'text-graphite';
-  const cSoft = dark ? 'text-cream/80' : 'text-graphite/80';
-  const cMute = dark ? 'text-cream/60' : 'text-graphite/60';
-  const cNav = dark ? 'text-cream/70 hover:text-cream' : 'text-graphite/70 hover:text-graphite';
-  const lineB = dark ? 'border-cream/15' : 'border-graphite/10';
-  const secBg = custom ? (lightBg ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.14)') : accent + '14';
+  // темы текста: для цветного фона — светлый текст
+  const cHead = custom ? 'text-cream' : 'text-graphite';
+  const cSoft = custom ? 'text-cream/80' : 'text-graphite/80';
+  const cMute = custom ? 'text-cream/60' : 'text-graphite/60';
+  const cNav = custom ? 'text-cream/70 hover:text-cream' : 'text-graphite/70 hover:text-graphite';
+  const lineB = custom ? 'border-cream/15' : 'border-graphite/10';
+  const secBg = custom ? 'rgba(0,0,0,0.14)' : accent + '14';
   const menus = [
     { file: '/menus/' + restaurant.id + '-kuhnya.pdf', label: 'Кухня' },
     { file: '/menus/' + restaurant.id + '-bar.pdf', label: 'Бар' },
@@ -82,7 +96,7 @@ export default function RestaurantPage({ restaurant }: Props) {
         >
           <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between gap-6">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center" aria-label={restaurant.name}>
-              <img src={restaurant.logo} alt={restaurant.name} className="h-10 lg:h-12 w-auto object-contain" />
+              <img src={restaurant.logo} alt={restaurant.name} className={'h-10 lg:h-12 w-auto object-contain ' + (custom ? 'brightness-0 invert' : '')} />
             </button>
             <nav className="hidden lg:flex items-center gap-7">
               {NAV.map(([id, label]) => (
@@ -91,12 +105,12 @@ export default function RestaurantPage({ restaurant }: Props) {
             </nav>
             <div className="hidden lg:flex items-center gap-5">
               <a href={tel} className={'text-sm font-medium ' + cHead + ' hover:underline whitespace-nowrap'}>{restaurant.phone}</a>
-              <button onClick={modal.open} className="px-6 py-3 text-xs uppercase tracking-widest font-medium hover:opacity-90 transition-opacity" style={btnStyle}>Забронировать</button>
+              <button onClick={modal.open} className="px-6 py-3 text-xs uppercase tracking-widest font-medium text-cream hover:opacity-90 transition-opacity" style={{ background: btn }}>Забронировать</button>
             </div>
             <button className="lg:hidden w-11 h-11 flex flex-col items-center justify-center gap-1.5" aria-label="Меню" onClick={() => setBurger(true)}>
-              <span className={'block w-6 h-px ' + (dark ? 'bg-cream' : 'bg-graphite')} />
-              <span className={'block w-6 h-px ' + (dark ? 'bg-cream' : 'bg-graphite')} />
-              <span className={'block w-4 h-px ' + (dark ? 'bg-cream' : 'bg-graphite')} />
+              <span className={'block w-6 h-px ' + (custom ? 'bg-cream' : 'bg-graphite')} />
+              <span className={'block w-6 h-px ' + (custom ? 'bg-cream' : 'bg-graphite')} />
+              <span className={'block w-4 h-px ' + (custom ? 'bg-cream' : 'bg-graphite')} />
             </button>
           </div>
         </header>
@@ -121,13 +135,13 @@ export default function RestaurantPage({ restaurant }: Props) {
       )}
       <main>
         <section className="relative h-[55vh] lg:h-[70vh] overflow-hidden">
-          <img src={restaurant.image} alt={restaurant.name} className="absolute inset-0 w-full h-full object-cover kenburns" />
+          <img src={restaurant.image} alt={restaurant.name} className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
           <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
             <p className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
-            <button onClick={modal.open} className="mt-8 self-start px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
+            <button onClick={modal.open} className="mt-8 self-start px-10 py-4 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: btn }}>Забронировать стол</button>
           </div>
         </section>
 
@@ -168,7 +182,7 @@ export default function RestaurantPage({ restaurant }: Props) {
             <div className="flex flex-wrap justify-center gap-4">
               {menus.map((m) => (
                 <a key={m.file} href={m.file} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>
+                  className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: btn }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                   {m.label} (PDF)
                 </a>
@@ -219,7 +233,7 @@ export default function RestaurantPage({ restaurant }: Props) {
                   <p className={cSoft + ' pt-2'}>Оформление, торт, DJ, обслуживание</p>
                 </div>
               </div>
-              <a href={tel} className="inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Связаться с менеджером</a>
+              <a href={tel} className="inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: btn }}>Связаться с менеджером</a>
             </div>
             <div className="reveal">
               <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
@@ -233,13 +247,6 @@ export default function RestaurantPage({ restaurant }: Props) {
           <div className="text-center mb-12 reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Отзывы</p>
             <h2 className={H2C + ' ' + cHead}>Гости о нас</h2>
-            {extra.rating && (
-              <p className={'rating-badge mt-5 inline-flex items-center gap-2 text-sm font-medium ' + cSoft}>
-                <span className={'text-2xl font-semibold ' + cHead}>{extra.rating.score}</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" className={cHead} fill="currentColor" stroke="currentColor" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                · {extra.rating.count} отзывов на Яндекс Картах
-              </p>
-            )}
           </div>
           <div className="grid md:grid-cols-2 gap-6 reveal">
             {extra.reviews.map((r, i) => (
@@ -256,7 +263,7 @@ export default function RestaurantPage({ restaurant }: Props) {
           </div>
           <div className="text-center mt-10 reveal">
             <a href={yandexReviews} target="_blank" rel="noopener noreferrer"
-              className={'inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium border transition-colors rounded-full ' + (dark ? 'border-cream/30 text-cream hover:bg-cream hover:text-graphite' : 'border-graphite/30 text-graphite hover:bg-graphite hover:text-cream')}>
+              className={'inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium border transition-colors rounded-full ' + (custom ? 'border-cream/30 text-cream hover:bg-cream hover:text-graphite' : 'border-graphite/30 text-graphite hover:bg-graphite hover:text-cream')}>
               Все отзывы на Яндекс Картах →
             </a>
           </div>
@@ -284,7 +291,7 @@ export default function RestaurantPage({ restaurant }: Props) {
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Часы работы</p>
                   <p className={'text-xl font-medium ' + cHead}>Ежедневно {extra.hours}</p>
                 </div>
-                <button onClick={modal.open} className="mt-2 px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
+                <button onClick={modal.open} className="mt-2 px-10 py-4 text-sm uppercase tracking-widest font-medium text-cream shadow-lg hover:scale-105 transition-transform" style={{ background: btn }}>Забронировать стол</button>
               </div>
               <div className="rounded-lg overflow-hidden shadow-2xl">
                 <iframe
@@ -322,7 +329,12 @@ export default function RestaurantPage({ restaurant }: Props) {
         </div>
       </footer>
       <BookingModal isOpen={modal.isOpen} onClose={modal.close} />
-      <button onClick={modal.open} className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 shadow-2xl shadow-black/30 px-8 py-4 text-sm uppercase tracking-widest font-medium" style={btnStyle}>Забронировать стол</button>
+      <button onClick={modal.open} className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 shadow-2xl shadow-black/30 px-8 py-4 text-sm uppercase tracking-widest font-medium text-cream" style={{ background: btn }}>Забронировать стол</button>
     </div>
   );
 }
+`, 'utf-8');
+console.log('✓ RestaurantPage: поддержка тем (фон страницы + цвет кнопок)');
+
+console.log('\\n✅ Выкатываем: npm run build && git add -A && git commit -m "Нино: красный фон, серые кнопки" && git push');
+console.log('ℹ Для других ресторанов просто скажи цвета — добавлю по одной строке темы.');
