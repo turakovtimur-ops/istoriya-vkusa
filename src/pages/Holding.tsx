@@ -99,6 +99,8 @@ function HoldingHeader() {
 
 function TeamAvatar({ src, name }: { src: string; name: string }) {
   const [failed, setFailed] = useState(false);
+  useEffect(() => { setFailed(false); }, [src]);
+  useEffect(() => { setFailed(false); }, [src]);
   if (failed) {
     return (
       <div className="w-full h-full flex items-end justify-center bg-coal">
@@ -280,41 +282,37 @@ export default function Holding() {
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Люди, которые создают вкус</h2>
           </div>
           <div
-          className="md:hidden relative"
-          onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
-          onTouchEnd={(e) => {
-            const dx = e.changedTouches[0].clientX - (touchX.current ?? 0);
-            if (dx < -40) setTeamIdx((teamIdx + 1) % team.length);
-            if (dx > 40) setTeamIdx((teamIdx + team.length - 1) % team.length);
-          }}
-        >
-          <div className="flex items-start justify-center gap-2">
-            <div className="w-24 opacity-70 pointer-events-none">
-              <div className="w-24 h-24 rounded-full overflow-hidden border border-amber/40 bg-coal">
-                <TeamAvatar src={team[(teamIdx + team.length - 1) % team.length].photo} name={team[(teamIdx + team.length - 1) % team.length].name} />
-              </div>
-            </div>
-            <div key={teamIdx} className="w-[68%] z-10 text-center px-2 team-anim">
-              <div className="relative w-36 h-36 mx-auto mb-4 rounded-full overflow-hidden border-2 border-amber/60 bg-coal" style={{ boxShadow: '0 0 30px rgba(194,160,118,0.2)' }}>
-                <TeamAvatar src={team[teamIdx].photo} name={team[teamIdx].name} />
-              </div>
-              <p className="text-amber text-[9px] uppercase tracking-[0.3em] mb-1.5 font-medium">{team[teamIdx].role}</p>
-              <h3 className="text-xl font-semibold tracking-tight mb-2">{team[teamIdx].name}</h3>
-              <p className="text-cream/60 text-xs font-light leading-relaxed">{team[teamIdx].desc}</p>
-            </div>
-            <div className="w-24 opacity-70 pointer-events-none">
-              <div className="w-24 h-24 rounded-full overflow-hidden border border-amber/40 bg-coal">
-                <TeamAvatar src={team[(teamIdx + 1) % team.length].photo} name={team[(teamIdx + 1) % team.length].name} />
-              </div>
-            </div>
+        className="md:hidden relative"
+        onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+        onTouchEnd={(e) => {
+          const dx = e.changedTouches[0].clientX - (touchX.current ?? 0);
+          if (dx < -40) setTeamIdx((teamIdx + 1) % team.length);
+          if (dx > 40) setTeamIdx((teamIdx + team.length - 1) % team.length);
+        }}
+      >
+        <div className="flex items-center justify-center overflow-visible">
+          <div className="w-36 h-36 flex-none rounded-full overflow-hidden border border-amber/40 bg-coal opacity-60 pointer-events-none">
+            <TeamAvatar src={team[(teamIdx + team.length - 1) % team.length].photo} name={team[(teamIdx + team.length - 1) % team.length].name} />
+          </div>
+          <div key={teamIdx} className="w-44 h-44 mx-3 flex-none rounded-full overflow-hidden border-2 border-amber/60 bg-coal z-10 team-anim" style={{ boxShadow: '0 0 30px rgba(194,160,118,0.2)' }}>
+            <TeamAvatar src={team[teamIdx].photo} name={team[teamIdx].name} />
+          </div>
+          <div className="w-36 h-36 flex-none rounded-full overflow-hidden border border-amber/40 bg-coal opacity-60 pointer-events-none">
+            <TeamAvatar src={team[(teamIdx + 1) % team.length].photo} name={team[(teamIdx + 1) % team.length].name} />
           </div>
         </div>
-          <div className="team-dots md:hidden flex justify-center gap-2 mt-6">
+        <div key={'txt' + teamIdx} className="text-center px-6 mt-6 team-anim">
+          <p className="text-amber text-[9px] uppercase tracking-[0.3em] mb-2 font-medium">{team[teamIdx].role}</p>
+          <h3 className="text-lg font-semibold tracking-tight whitespace-nowrap">{team[teamIdx].name}</h3>
+          <p className="text-cream/60 text-sm font-light leading-relaxed mt-3">{team[teamIdx].desc}</p>
+        </div>
+        <div className="team-dots flex justify-center gap-2 mt-6">
           {team.map((m, i) => (
             <button key={m.id} onClick={() => setTeamIdx(i)} aria-label={m.name} className={'w-2.5 h-2.5 rounded-full transition-colors ' + (i === teamIdx ? 'bg-amber' : 'bg-cream/25')} />
           ))}
         </div>
-        <p className="md:hidden text-center text-cream/40 text-[9px] tracking-[0.3em] uppercase mt-3">Листайте</p>
+        <p className="text-center text-cream/40 text-[9px] tracking-[0.3em] uppercase mt-3">Листайте</p>
+      </div>
         <div className="hidden md:grid md:grid-cols-3 gap-8">
             {team.map((t, i) => (
               <div key={t.id} className="reveal text-center" style={{ transitionDelay: (i * 0.1) + 's' }}>
