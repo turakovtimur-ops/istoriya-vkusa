@@ -324,3 +324,24 @@ html, body { overflow-x: clip; }
   -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
 }
+
+/* ===== setup136: мобилка — фото без белых полей + орбиты вместо карточек ===== */
+@media (max-width: 767px) {
+  /* фото ресторанов растянуты, без белых пустот */
+  #restaurants .hv-carousel-r img, .hv-carousel-r img, #restaurants img {
+    object-fit: cover !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 220px !important;
+    background: transparent !important;
+  }
+  #restaurants [class*="hv-carousel-r"] > * { background: #141210 !important; }
+}
+@media (max-width: 1023px) {
+  /* орбита поставщиков на мобилке вместо карточек */
+  #suppliers [class*="lg:block"] { display: block !important; }
+  #suppliers [class*="lg:hidden"] { display: none !important; }
+  /* орбита вакансий на мобилке вместо столбика */
+  #vacancies [class*="lg:block"] { display: block !important; }
+  #vacancies [class*="lg:hidden"] { display: none !important; }
+}
