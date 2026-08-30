@@ -235,8 +235,8 @@ export default function RestaurantPage({ restaurant }: Props) {
             <h2 className={H2C + ' ' + cHead}>Гости о нас</h2>
             {extra.rating && (
               <p className={'rating-badge mt-5 inline-flex items-center gap-2 text-sm font-medium ' + cSoft}>
-                <span className="text-2xl font-semibold" style={{ color: accent }}>{extra.rating.score}</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill={accent} stroke={accent} strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                <span className={'text-2xl font-semibold ' + cHead}>{extra.rating.score}</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" className={cHead} fill="currentColor" stroke="currentColor" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
                 · {extra.rating.count} отзывов на Яндекс Картах
               </p>
             )}
