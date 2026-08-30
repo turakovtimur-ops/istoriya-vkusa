@@ -144,7 +144,7 @@ export default function ContactsSection() {
                     className="w-8 h-8 flex-none rounded-full flex items-center justify-center text-night font-bold text-xs"
                     style={{ background: r.accent }}
                   >
-                    {i + 1}
+                    {<img src={'/images/icons/' + r.id + '.jpeg'} alt={r.name} className="w-full h-full object-cover rounded-full" />}
                   </div>
                   <div className="min-w-0">
                     <p className="text-lg font-semibold tracking-tight leading-tight">{r.name}</p>
