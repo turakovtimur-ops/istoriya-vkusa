@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.istoriya-vkusa.ru/sitemap.xml
+Disallow: /upravlenie

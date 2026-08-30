@@ -1,4 +1,9 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ================= 1) App.tsx начисто =================
+fs.writeFileSync(P('src/App.tsx'), `import { useEffect, useState } from 'react';
 import Holding from './pages/Holding';
 import Admin from './pages/Admin';
 import RestaurantPage from './sites/RestaurantPage';
@@ -33,9 +38,24 @@ export default function App() {
     };
   }, []);
 
-  const clean = pathName.replace(/\/+$/, '') || '/';
+  const clean = pathName.replace(/\\/+$/, '') || '/';
   if (clean === '/upravlenie') return <Admin />;
   const rest = restaurants.find((r) => clean === r.path || clean === '/' + r.path || clean === '/' + r.id);
   if (rest) return <RestaurantPage restaurant={rest} />;
   return <Holding />;
 }
+`, 'utf-8');
+console.log('✓ App.tsx переписан начисто: /upravlenie + рестораны + холдинг');
+
+// ================= 2) vercel.json: чтобы /upravlenie открывался =================
+const vj = P('vercel.json');
+let v = {};
+try { v = JSON.parse(fs.readFileSync(vj, 'utf-8')); } catch (e) {}
+v.rewrites = v.rewrites || [];
+if (!v.rewrites.some((r) => r.source === '/(.*)')) {
+  v.rewrites.push({ source: '/(.*)', destination: '/index.html' });
+  fs.writeFileSync(vj, JSON.stringify(v, null, 2), 'utf-8');
+  console.log('✓ vercel.json: catch-all rewrite добавлен');
+} else console.log('ℹ vercel.json: rewrite уже есть');
+
+console.log('\n✅ Выкатываем: npm run build && git add -A && git commit -m "Админка v1: фикс App + роут /upravlenie" && git push');
