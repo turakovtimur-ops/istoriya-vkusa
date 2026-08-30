@@ -66,12 +66,9 @@ function HoldingHeader() {
         <div className="fixed inset-0 z-[70] bg-night/95 flex flex-col" style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }} onClick={() => setOpen(false)}>
           <div className="flex items-center justify-between px-6 pt-6 pb-5 border-b border-cream/10" onClick={(ev) => ev.stopPropagation()}>
             <a href="#/" onClick={() => setOpen(false)} className="flex items-center gap-3">
-              <span className="w-10 h-10 rounded-full bg-cream flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E0D0B" strokeWidth="2" strokeLinecap="round">
-                  <line x1="9" y1="4" x2="9" y2="20" />
-                  <path d="M15 4c-1.5 2-2 4-2 6 0 1.5 1 2 2 2v8" />
-                </svg>
-              </span>
+              <span className="w-10 h-10 rounded-full bg-paper flex items-center justify-center overflow-hidden shadow-lg">
+              <BrandImg src={holdingBrand.logo} alt={holdingBrand.name} fallback="ИВ" color={holdingBrand.gold} className="w-full h-full p-1.5" />
+            </span>
               <span className="text-lg font-semibold tracking-tight text-amber">История Вкуса</span>
             </a>
             <button aria-label="Закрыть" onClick={() => setOpen(false)} className="glass-chip w-11 h-11 flex items-center justify-center">
@@ -291,13 +288,13 @@ export default function Holding() {
             if (dx > 40) setTeamIdx((teamIdx + team.length - 1) % team.length);
           }}
         >
-          <div className="flex items-start justify-center">
-            <div className="w-32 -mr-6 opacity-50 pointer-events-none">
-              <div className="w-32 h-32 rounded-full overflow-hidden border border-amber/40 bg-coal">
+          <div className="flex items-start justify-center gap-2">
+            <div className="w-24 opacity-70 pointer-events-none">
+              <div className="w-24 h-24 rounded-full overflow-hidden border border-amber/40 bg-coal">
                 <TeamAvatar src={team[(teamIdx + team.length - 1) % team.length].photo} name={team[(teamIdx + team.length - 1) % team.length].name} />
               </div>
             </div>
-            <div key={teamIdx} className="w-[62%] z-10 text-center px-2 team-anim">
+            <div key={teamIdx} className="w-[68%] z-10 text-center px-2 team-anim">
               <div className="relative w-36 h-36 mx-auto mb-4 rounded-full overflow-hidden border-2 border-amber/60 bg-coal" style={{ boxShadow: '0 0 30px rgba(194,160,118,0.2)' }}>
                 <TeamAvatar src={team[teamIdx].photo} name={team[teamIdx].name} />
               </div>
@@ -305,14 +302,20 @@ export default function Holding() {
               <h3 className="text-xl font-semibold tracking-tight mb-2">{team[teamIdx].name}</h3>
               <p className="text-cream/60 text-xs font-light leading-relaxed">{team[teamIdx].desc}</p>
             </div>
-            <div className="w-32 -ml-6 opacity-50 pointer-events-none">
-              <div className="w-32 h-32 rounded-full overflow-hidden border border-amber/40 bg-coal">
+            <div className="w-24 opacity-70 pointer-events-none">
+              <div className="w-24 h-24 rounded-full overflow-hidden border border-amber/40 bg-coal">
                 <TeamAvatar src={team[(teamIdx + 1) % team.length].photo} name={team[(teamIdx + 1) % team.length].name} />
               </div>
             </div>
           </div>
         </div>
-          <div className="hidden md:grid md:grid-cols-3 gap-8">
+          <div className="team-dots md:hidden flex justify-center gap-2 mt-6">
+          {team.map((m, i) => (
+            <button key={m.id} onClick={() => setTeamIdx(i)} aria-label={m.name} className={'w-2.5 h-2.5 rounded-full transition-colors ' + (i === teamIdx ? 'bg-amber' : 'bg-cream/25')} />
+          ))}
+        </div>
+        <p className="md:hidden text-center text-cream/40 text-[9px] tracking-[0.3em] uppercase mt-3">Листайте</p>
+        <div className="hidden md:grid md:grid-cols-3 gap-8">
             {team.map((t, i) => (
               <div key={t.id} className="reveal text-center" style={{ transitionDelay: (i * 0.1) + 's' }}>
                 <div className="relative w-36 h-36 mx-auto mb-5 rounded-full overflow-hidden border-2 border-amber/60 bg-coal" style={{ boxShadow: '0 0 45px rgba(194,160,118,0.25)' }}>

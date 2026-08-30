@@ -385,3 +385,31 @@ html, body { overflow-x: clip; }
   #team p { max-width: 340px !important; margin-left: auto !important; margin-right: auto !important; }
   #team [class*="rounded-full"] { margin-left: 6px !important; margin-right: 6px !important; }
 }
+
+/* ===== setup140: мобилка — мероприятия карусель, команда мягче ===== */
+@media (max-width: 767px) {
+  #events .grid, #events [class*="grid"] {
+    display: flex !important;
+    flex-direction: row !important;
+    grid-template-columns: none !important;
+    gap: 14px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding-bottom: 14px;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #events .grid > *, #events [class*="grid"] > * {
+    flex: 0 0 auto !important;
+    min-width: 86% !important;
+    max-width: 86% !important;
+    width: auto !important;
+    scroll-snap-align: start;
+  }
+  #events .grid::-webkit-scrollbar, #events [class*="grid"]::-webkit-scrollbar { display: none; }
+}
+.team-anim { animation: teamInSoft 0.7s cubic-bezier(0.25, 0.8, 0.35, 1) !important; }
+@keyframes teamInSoft {
+  from { opacity: 0; transform: translateX(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
