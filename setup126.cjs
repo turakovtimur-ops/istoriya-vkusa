@@ -3,39 +3,42 @@ const path = require('path');
 const P = (f) => path.join(__dirname, f);
 const del = (f) => { if (fs.existsSync(P(f))) { fs.rmSync(P(f), { recursive: true, force: true }); return true; } return false; };
 
-// ================= чистка (идемпотентно) =================
+// ================= чистка =================
 ['public/.DS_Store', 'public/images/.DS_Store', 'public/images/holding/.DS_Store', 'public/images/kinza/.DS_Store', 'public/images/la-costa/.DS_Store', 'public/images/nino/.DS_Store', 'public/images/partners/.DS_Store'].forEach(del);
 let gi = fs.readFileSync(P('.gitignore'), 'utf-8');
 if (!gi.includes('.DS_Store')) fs.writeFileSync(P('.gitignore'), gi + '\n.DS_Store\n', 'utf-8');
-for (let i = 93; i <= 124; i++) if (i !== 120) del('setup' + i + '.cjs');
+for (let i = 93; i <= 125; i++) if (i !== 120) del('setup' + i + '.cjs');
 ['public/images/astoria/astoria-photo.jpg', 'public/images/kinza/kinza-photo.jpeg', 'public/images/la-costa/la-costa-photo.jpeg', 'public/images/nino/nino-photo.jpg'].forEach(del);
-console.log('✓ чистка: .DS_Store, старые setup, фото ресторанов');
+console.log('✓ чистка: .DS_Store, старые setup (93–125 кроме 120), фото ресторанов');
 
 if (!fs.existsSync(P('refresh-gallery.cjs'))) {
-  fs.writeFileSync(P('refresh-gallery.cjs'), `const fs = require('fs');
-const path = require('path');
-const P = (f) => path.join(__dirname, f);
-const re = P('src/data/resto-extra.ts');
-let txt = fs.readFileSync(re, 'utf-8');
-const i0 = txt.indexOf('= {'); const i1 = txt.lastIndexOf('};');
-const data = JSON.parse(txt.slice(i0 + 2, i1 + 1));
-for (const id of Object.keys(data)) {
-  const dir = P('public/images/' + id + '/gallery');
-  data[id].gallery = fs.existsSync(dir)
-    ? fs.readdirSync(dir).filter((f) => /\\.(jpe?g|png|webp)$/i.test(f)).sort().map((f) => '/images/' + id + '/gallery/' + f)
-    : [];
-  console.log(id + ': ' + data[id].gallery.length + ' фото');
-}
-fs.writeFileSync(re, txt.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + txt.slice(i1 + 1), 'utf-8');
-console.log('✓ галереи обновлены. Дальше: npm run build && пуш');
-`, 'utf-8');
+  fs.writeFileSync(P('refresh-gallery.cjs'), [
+    "const fs = require('fs');",
+    "const path = require('path');",
+    "const P = (f) => path.join(__dirname, f);",
+    "const re = P('src/data/resto-extra.ts');",
+    "let txt = fs.readFileSync(re, 'utf-8');",
+    "const i0 = txt.indexOf('= {'); const i1 = txt.lastIndexOf('};');",
+    "const data = JSON.parse(txt.slice(i0 + 2, i1 + 1));",
+    "for (const id of Object.keys(data)) {",
+    "  const dir = P('public/images/' + id + '/gallery');",
+    "  data[id].gallery = fs.existsSync(dir)",
+    "    ? fs.readdirSync(dir).filter((f) => /\\.(jpe?g|png|webp)$/i.test(f)).sort().map((f) => '/images/' + id + '/gallery/' + f)",
+    "    : [];",
+    "  console.log(id + ': ' + data[id].gallery.length + ' фото');",
+    "}",
+    "fs.writeFileSync(re, txt.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + txt.slice(i1 + 1), 'utf-8');",
+    "console.log('✓ галереи обновлены. Дальше: npm run build && пуш');"
+  ].join('\n'), 'utf-8');
   console.log('✓ refresh-gallery.cjs');
 }
 
-// мёртвый код с предохранителем
+// ================= мёртвый код (безопасная проверка, без RegExp) =================
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => { const p = path.join(dir, e.name); return e.isDirectory() ? walk(p) : [p]; });
 const srcAll = walk(P('src')).filter((f) => /\.(tsx?|css)$/.test(f)).map((f) => fs.readFileSync(f, 'utf-8')).join('\n');
-const used = (n) => new RegExp("['\"/]" + n + "['\"]').test(srcAll);
+const used = (n) =>
+  srcAll.includes("'" + n + "'") || srcAll.includes('"' + n + '"') ||
+  srcAll.includes('/' + n + "'") || srcAll.includes('/' + n + '"');
 let k = 0;
 ['AstoriaSite', 'LaCostaSite', 'NinoSite', 'KinzaSite_old', 'RestaurantStub', 'About', 'Banquets', 'Contact', 'Footer', 'Header', 'Hero', 'MenuSection', 'MobileNav', 'Gallery', 'Reviews', 'SeaBlock', 'CinematicRestaurants', 'RestaurantGallery', 'SuppliersOrbit', 'UniversalRestaurantSite'].forEach((n) => {
   const file = ['AstoriaSite', 'LaCostaSite', 'NinoSite', 'KinzaSite_old'].includes(n) ? 'src/sites/' + n + '.tsx' : n === 'RestaurantStub' ? 'src/pages/' + n + '.tsx' : 'src/components/' + n + '.tsx';
@@ -45,7 +48,7 @@ let k = 0;
 });
 console.log('✓ мёртвых компонентов удалено: ' + k);
 
-// ================= полный rewrite страницы ресторана (без фото, с заглушками) =================
+// ================= страница ресторана: заглушки вместо фото =================
 fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
@@ -370,7 +373,6 @@ export default function RestaurantPage({ restaurant }: Props) {
   );
 }
 `, 'utf-8');
-console.log('✓ страница ресторана переписана: заглушки вместо фото, темы/рейтинги/меню/отзывы на месте');
+console.log('✓ страница ресторана переписана: заглушки вместо фото');
 
-console.log('\n✅ Выкатываем: npm run build && git add -A && git commit -m "Чистка + заглушки фото на страницах ресторанов" && git push');
-console.log('ℹ Фото добавишь позже: public/images/{id}/gallery/ → node refresh-gallery.cjs → build → пуш');
+console.log('\n✅ Выкатываем: npm run build && git add -A && git commit -m "Чистка + заглушки фото" && git push');
