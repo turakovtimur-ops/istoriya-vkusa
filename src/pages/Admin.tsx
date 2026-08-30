@@ -128,6 +128,18 @@ export default function Admin() {
       { path: 'src/data/resto-extra.ts', text: restoText() }
     ]);
   };
+  const uploadHero = async (file: File) => {
+    const e = extra[restSel] || (extra[restSel] = { hours: '09:00–00:00', reviews: [], gallery: [] });
+    const name = 'hero-' + Date.now() + '.jpg';
+    e.overrides = e.overrides || {};
+    e.overrides.image = '/images/' + restSel + '/' + name;
+    setExtra({ ...extra });
+    const b64 = await fileToB64(file);
+    await publish('админка: хиро-фото ' + restSel, [
+      { path: 'public/images/' + restSel + '/' + name, base64: b64 },
+      { path: 'src/data/resto-extra.ts', text: restoText() }
+    ]);
+  };
   const setOv = (key: string, val: string) => {
     const e = extra[restSel] || (extra[restSel] = { hours: '09:00–00:00', reviews: [], gallery: [] });
     e.overrides = e.overrides || {};
@@ -255,7 +267,12 @@ export default function Admin() {
             </select>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <p className="text-cream/50 text-xs uppercase tracking-widest">Часы работы</p>
+                <p className="text-cream/50 text-xs uppercase tracking-widest">Главное фото (первый экран)</p>
+                <div className="flex items-center gap-3">
+                  <img src={(cur.overrides && cur.overrides.image) || rest0.image} alt="" className="w-24 h-16 object-cover rounded-lg border border-cream/15" />
+                  <input type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) uploadHero(f); e.target.value = ''; }} />
+                </div>
+                <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Часы работы</p>
                 <input className={inp} value={cur.hours || ''} onChange={(e) => setHours(e.target.value)} placeholder="09:00–00:00" />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Телефон</p>
                 <input className={inp} defaultValue={rest0.phone} key={restSel + 'p'} onChange={(e) => setOv('phone', e.target.value)} />
