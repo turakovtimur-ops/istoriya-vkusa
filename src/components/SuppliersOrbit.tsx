@@ -106,10 +106,8 @@ export default function SuppliersOrbit({ onPartner }: Props) {
                   )}
                   <div className="absolute inset-0 rounded-full sphere-shade pointer-events-none" />
                 </div>
-                <span className="text-[8px] font-semibold text-cream/85 text-center leading-tight break-words w-full">{s.name}</span>
-<span className="glass-chip text-[7px] uppercase tracking-[0.12em] px-2 py-0.5 text-cream/90">{s.site ? 'Перейти →' : 'Подробнее'}</span>
+                <span className="text-[8px] font-semibold text-cream/85 text-center leading-tight w-24 -mx-4">{s.name}</span>
 {hover === s.id && tooltip(s)}
-<span className="glass-chip text-[7px] uppercase tracking-[0.12em] px-2 py-0.5 text-cream/90">{s.site ? 'Перейти →' : 'Подробнее'}</span>
 {hover === s.id && tooltip(s)}
               </div>
             </div>

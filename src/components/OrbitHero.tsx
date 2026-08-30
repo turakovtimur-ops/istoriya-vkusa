@@ -142,7 +142,7 @@ export default function OrbitHero() {
                       <BrandImg src={r.roundLogo ? r.roundLogo : r.logo} alt={r.name} fallback={r.name} color={r.accent} fit={r.roundLogo ? 'cover' : 'contain'} className={r.roundLogo ? 'w-full h-full scale-[1.12]' : 'w-full h-full p-1.5'} />
                       <div className="absolute inset-0 rounded-full sphere-shade pointer-events-none" />
                     </div>
-                    <span className="glass-chip text-[8px] uppercase tracking-[0.15em] px-2.5 py-1 text-cream/90">Перейти →</span>
+                    
                   </div>
                 </a>
               );
