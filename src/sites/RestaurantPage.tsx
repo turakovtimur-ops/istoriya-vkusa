@@ -324,7 +324,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
         </div>
       </footer>
       <BookingModal isOpen={modal.isOpen} onClose={modal.close} />
-      <button onClick={modal.open} className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 shadow-2xl shadow-black/30 px-8 py-4 text-sm uppercase tracking-widest font-medium" style={btnStyle}>Забронировать стол</button>
+      <button onClick={modal.open} aria-label="Забронировать стол" className="lg:hidden fixed bottom-5 right-4 z-40 rounded-full shadow-2xl shadow-black/40 flex items-center justify-center active:scale-95 transition-transform" style={{ ...btnStyle, width: 52, height: 52 }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></button>
     </div>
   );
 }

@@ -93,6 +93,7 @@ export default function SuppliersOrbit({ onPartner }: Props) {
           const z = Math.sin(rad) > 0 ? 30 : 10;
           return (
             <div key={s.id} className="absolute left-1/2 top-1/2" style={{ transform: 'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(' + scale + ')', zIndex: z, opacity: 0.75 + depth * 0.25 }}
+ onClick={() => { if (s.site) window.open(s.site, '_blank'); else if (hover === s.id) { setHover(null); pausedRef.current = false; } else show(s.id); }}
               onMouseEnter={() => show(s.id)} onMouseLeave={hideSoon}>
               <div className="flex flex-col items-center gap-1 w-16">
                 <div className="relative w-16 h-16 rounded-full overflow-hidden border border-cream/20" style={{ boxShadow: '0 0 20px ' + s.accent + '66' }}>
@@ -106,6 +107,8 @@ export default function SuppliersOrbit({ onPartner }: Props) {
                   <div className="absolute inset-0 rounded-full sphere-shade pointer-events-none" />
                 </div>
                 <span className="text-[8px] font-semibold text-cream/85 text-center leading-tight break-words w-full">{s.name}</span>
+<span className="glass-chip text-[7px] uppercase tracking-[0.12em] px-2 py-0.5 text-cream/90">{s.site ? 'Перейти →' : 'Подробнее'}</span>
+{hover === s.id && tooltip(s)}
               </div>
             </div>
           );
