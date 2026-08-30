@@ -1,5 +1,5 @@
 // генерируется setup114.cjs — после добавления фото в gallery запусти setup заново
-export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[] }
+export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string } }
 export const RESTO_EXTRA: Record<string, RestoExtra> = {
   "kinza": {
     "hours": "09:00–00:00",
@@ -43,7 +43,11 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
         "text": "Уютное место на набережной с прекрасным видом. Заказывали десерты с чаем — минимально сладкие и вкусные, как и хотели. Спасибо за рекомендации."
       }
     ],
-    "gallery": []
+    "gallery": [],
+    "theme": {
+      "pageBg": "#DB4C3C",
+      "btn": "#565E62"
+    }
   },
   "astoria": {
     "hours": "09:00–00:00",

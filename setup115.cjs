@@ -1,4 +1,25 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ================= 1) тема Нино в resto-extra.ts =================
+let re = fs.readFileSync(P('src/data/resto-extra.ts'), 'utf-8');
+const i0 = re.indexOf('= {');
+const i1 = re.lastIndexOf('};');
+if (i0 !== -1 && i1 !== -1) {
+  const data = JSON.parse(re.slice(i0 + 2, i1 + 1));
+  if (data.nino) data.nino.theme = { pageBg: '#DB4C3C', btn: '#565E62' };
+  re = re.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + re.slice(i1 + 1);
+  re = re.replace(
+    'gallery: string[] }',
+    'gallery: string[]; theme?: { pageBg?: string; btn?: string } }'
+  );
+  fs.writeFileSync(P('src/data/resto-extra.ts'), re, 'utf-8');
+  console.log('✓ тема Нино: фон #DB4C3C, кнопки #565E62');
+} else console.log('⚠ resto-extra.ts не распознан');
+
+// ================= 2) RestaurantPage с поддержкой темы =================
+fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -312,3 +333,8 @@ export default function RestaurantPage({ restaurant }: Props) {
     </div>
   );
 }
+`, 'utf-8');
+console.log('✓ RestaurantPage: поддержка тем (фон страницы + цвет кнопок)');
+
+console.log('\\n✅ Выкатываем: npm run build && git add -A && git commit -m "Нино: красный фон, серые кнопки" && git push');
+console.log('ℹ Для других ресторанов просто скажи цвета — добавлю по одной строке темы.');
