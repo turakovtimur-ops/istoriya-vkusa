@@ -318,3 +318,9 @@ html, body { overflow-x: clip; }
 
 @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.08); } }
 .kenburns { animation: kenburns 14s ease-in-out infinite alternate; }
+
+/* setup123: плавные края ленты поставщиков */
+.marquee-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
