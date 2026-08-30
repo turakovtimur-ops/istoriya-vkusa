@@ -1,4 +1,29 @@
-import { useEffect, useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+// ================= 1) темы всех 4 ресторанов =================
+let re = fs.readFileSync(P('src/data/resto-extra.ts'), 'utf-8');
+const i0 = re.indexOf('= {');
+const i1 = re.lastIndexOf('};');
+if (i0 === -1 || i1 === -1) { console.log('⚠ resto-extra.ts не распознан'); process.exit(1); }
+const data = JSON.parse(re.slice(i0 + 2, i1 + 1));
+const THEMES = {
+  kinza: { pageBg: '#E6D9C5', btn: '#76522D' },
+  nino: { pageBg: '#DB4C3C', btn: '#565E62' },
+  astoria: { pageBg: '#8F7A55', btn: '#62646F' },
+  'la-costa': { pageBg: '#348C74', btn: '#E7D6B2' },
+};
+for (const id of Object.keys(THEMES)) if (data[id]) data[id].theme = THEMES[id];
+re = re.slice(0, i0 + 2) + JSON.stringify(data, null, 2) + re.slice(i1 + 1);
+if (!re.includes('theme?:')) {
+  re = re.replace('gallery: string[] }', 'gallery: string[]; theme?: { pageBg?: string; btn?: string } }');
+}
+fs.writeFileSync(P('src/data/resto-extra.ts'), re, 'utf-8');
+console.log('✓ темы: ' + Object.keys(THEMES).join(', '));
+
+// ================= 2) RestaurantPage с авто-контрастом =================
+fs.writeFileSync(P('src/sites/RestaurantPage.tsx'), `import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -319,3 +344,7 @@ export default function RestaurantPage({ restaurant }: Props) {
     </div>
   );
 }
+`, 'utf-8');
+console.log('✓ RestaurantPage: 4 темы + авто-контраст текста');
+
+console.log('\\n✅ Выкатываем: npm run build && git add -A && git commit -m "Темы всех ресторанов: фирменные цвета" && git push');
