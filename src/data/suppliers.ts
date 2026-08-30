@@ -6,6 +6,7 @@ export interface Supplier {
   accent: string;
   logo?: string;
   site?: string;
+  image?: string;
 }
 
 // 12 слотов под партнёров: добавляете имя, ссылку и логотип — и он встаёт на орбиту
@@ -45,6 +46,8 @@ export const suppliers: Supplier[] = [
     name: 'Администрация Геленджика',
     category: 'Город и события',
     desc: 'Вместе делаем праздники города — участвуем во всех ключевых событиях курорта',
-    accent: '#C2A076',
+    accent: '#C2A076',,
+    site: 'https://admgel.ru/',
+    image: '/images/suppliers/admgel.png'
   },
 ];
