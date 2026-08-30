@@ -46,8 +46,8 @@ export const suppliers: Supplier[] = [
     name: 'Администрация Геленджика',
     category: 'Город и события',
     desc: 'Вместе делаем праздники города — участвуем во всех ключевых событиях курорта',
-    accent: '#C2A076',,
+    accent: '#C2A076',
     site: 'https://admgel.ru/',
-    image: '/images/suppliers/admgel.png'
+    logo: '/images/suppliers/admgel.png',
   },
 ];
