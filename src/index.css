@@ -345,3 +345,9 @@ html, body { overflow-x: clip; }
   #vacancies [class*="lg:block"] { display: block !important; }
   #vacancies [class*="lg:hidden"] { display: none !important; }
 }
+
+/* ===== setup137: мобилка — орбита вакансий вместо столбика ===== */
+@media (max-width: 1023px) {
+  #vacancies .hidden { display: block !important; }
+  #vacancies .md\:hidden, #vacancies .lg\:hidden { display: none !important; }
+}
