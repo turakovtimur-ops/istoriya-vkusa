@@ -84,7 +84,7 @@ export default function SuppliersOrbit({ onPartner }: Props) {
           <div className="absolute inset-0 rounded-full sphere-shade-sun pointer-events-none" />
         </div>
         {suppliers.map((s, i) => {
-          const deg = PHASES[i] + t * SPEEDS[i];
+          const deg = PHASES[i % PHASES.length] + Math.floor(i / 4) * 180 + t * SPEEDS[i % SPEEDS.length];
           const rad = (deg * Math.PI) / 180;
           const x = Math.cos(rad) * mobileR * M_ORBITS[i % 4];
           const y = Math.sin(rad) * mobileR * M_ORBITS[i % 4] * M_RY;
@@ -188,12 +188,12 @@ export default function SuppliersOrbit({ onPartner }: Props) {
       </svg>
       {suppliers.map((s, i) => {
         const ring = RINGS[i % RINGS.length];
-        const deg = ring.phase + t * ring.speed;
+        const deg = ring.phase + Math.floor(i / RINGS.length) * 180 + t * ring.speed;
         return bubble(s, deg, i % RINGS.length, s.id);
       })}
       {(() => {
         const ring = RINGS[suppliers.length % RINGS.length];
-        const deg = ring.phase + t * ring.speed;
+        const deg = ring.phase + 90 + t * ring.speed;
         const p = place(deg, ring.R);
         return (
           <div className="absolute" style={{ left: p.x, top: p.y, transform: 'translate(-50%,-50%) scale(' + (0.8 + p.depth * 0.3) + ')', zIndex: p.depth > 0.5 ? 30 : 10, opacity: 0.75 + p.depth * 0.25 }}

@@ -3,6 +3,7 @@ import { news as initialNews, NewsItem } from '../data/news';
 import { PROMO_MEDIA, PromoMedia } from '../data/promos-media';
 import { RESTO_EXTRA } from '../data/resto-extra';
 import { restaurants } from '../data/holding';
+import { suppliers as initialSuppliers } from '../data/suppliers';
 
 const LS_HASH = 'iv_admin_hash';
 const LS_TOKEN = 'iv_gh_token';
@@ -27,7 +28,7 @@ export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pwd, setPwd] = useState('');
   const [err, setErr] = useState('');
-  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'settings'>('news');
+  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'settings'>('news');
   const [token, setToken] = useState(localStorage.getItem(LS_TOKEN) || '');
   const [tokenInput, setTokenInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -152,6 +153,38 @@ export default function Admin() {
   const delReview = (i: number) => { const e = extra[restSel]; e.reviews = e.reviews.filter((_: any, idx: number) => idx !== i); setExtra({ ...extra }); };
   const pubResto = () => publish('админка: данные ' + restSel, [{ path: 'src/data/resto-extra.ts', text: restoText() }]);
 
+  // ---------- партнёры ----------
+  const [sups, setSups] = useState<any[]>(JSON.parse(JSON.stringify(initialSuppliers)));
+  const [supForm, setSupForm] = useState({ name: '', category: 'Бар и напитки', desc: '', site: '' });
+  const PALETTE = ['#1E4E8C', '#7A2E3B', '#349C74', '#B85A3C', '#C2A076', '#5B4B8A', '#2C6E63'];
+  const supText = (list: any[]) => 'export interface Supplier { id: string; name: string; category: string; desc: string; accent: string; logo?: string; site?: string; image?: string }\n' +
+    '// партнёры холдинга — редактируется через админку\n' +
+    'export const suppliers: Supplier[] = ' + JSON.stringify(list, null, 2) + ';\n';
+  const addSup = async (file: File | null) => {
+    if (!supForm.name) { setMsg('Укажи название компании'); return; }
+    const id = 's' + Date.now();
+    const entry: any = { id, name: supForm.name, category: supForm.category, desc: supForm.desc || 'Партнёр холдинга «История Вкуса»', accent: PALETTE[sups.length % PALETTE.length] };
+    if (supForm.site) entry.site = supForm.site;
+    const changes: Change[] = [];
+    if (file) {
+      const ext = (file.name.split('.').pop() || 'png').toLowerCase();
+      entry.logo = '/images/suppliers/' + id + '.' + ext;
+      changes.push({ path: 'public/images/suppliers/' + id + '.' + ext, base64: await fileToB64(file) });
+    }
+    const list = [...sups, entry];
+    setSups(list);
+    changes.push({ path: 'src/data/suppliers.ts', text: supText(list) });
+    await publish('админка: партнёр + ' + supForm.name, changes);
+    setSupForm({ name: '', category: 'Бар и напитки', desc: '', site: '' });
+  };
+  const delSup = async (s: any) => {
+    const list = sups.filter((x) => x.id !== s.id);
+    setSups(list);
+    const changes: Change[] = [{ path: 'src/data/suppliers.ts', text: supText(list) }];
+    if (s.logo) changes.push({ path: 'public' + s.logo, del: true });
+    await publish('админка: партнёр - ' + s.name, changes);
+  };
+
   if (!authed) {
     return (
       <div className="min-h-screen bg-graphite text-cream flex items-center justify-center px-6">
@@ -180,7 +213,7 @@ export default function Admin() {
           <a href="#/" className="text-xs text-cream/60 hover:text-cream">← На сайт</a>
         </div>
         <div className="max-w-[1200px] mx-auto px-6 lg:px-10 flex gap-2 overflow-x-auto pb-3">
-          {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['settings', 'Настройки']] as const).map(([id, label]) => (
+          {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['suppliers', 'Партнёры'], ['settings', 'Настройки']] as const).map(([id, label]) => (
             <button key={id} onClick={() => { setTab(id); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === id ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>{label}</button>
           ))}
         </div>
@@ -302,6 +335,47 @@ export default function Admin() {
               </div>
             </div>
             <button className={btnA + ' mt-8 px-8 py-4'} disabled={busy} onClick={pubResto}>{busy ? 'Отправляем...' : 'Опубликовать данные'}</button>
+          </section>
+        )}
+
+        {tab === 'suppliers' && (
+          <section>
+            <h2 className="text-2xl font-semibold mb-6">Партнёры и поставщики</h2>
+            <div className="border border-cream/15 rounded-xl p-5 bg-cream/5 mb-8 space-y-3">
+              <p className="text-cream/50 text-xs uppercase tracking-widest">Добавить компанию</p>
+              <div className="grid md:grid-cols-2 gap-3">
+                <input className={inp} placeholder="Название компании" value={supForm.name} onChange={(e) => setSupForm({ ...supForm, name: e.target.value })} />
+                <select className={inp} value={supForm.category} onChange={(e) => setSupForm({ ...supForm, category: e.target.value })}>
+                  <option>Бар и напитки</option>
+                  <option>Кухня и продукты</option>
+                  <option>Город и события</option>
+                  <option>Сервис и оборудование</option>
+                </select>
+              </div>
+              <input className={inp} placeholder="Сайт (https://...)" value={supForm.site} onChange={(e) => setSupForm({ ...supForm, site: e.target.value })} />
+              <textarea className={inp} rows={2} placeholder="Описание для тултипа (1–2 строки)" value={supForm.desc} onChange={(e) => setSupForm({ ...supForm, desc: e.target.value })} />
+              <div className="flex items-center gap-3 flex-wrap">
+                <input type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addSup(f); e.target.value = ''; }} />
+                <button className={btnG} onClick={() => addSup(null)}>Добавить без логотипа</button>
+              </div>
+              <p className="text-cream/40 text-xs">Логотип — квадратный, до 1 МБ. Компоний больше шести — садятся по две на орбиту, кольца не раздуваются.</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {sups.map((s) => (
+                <div key={s.id} className="border border-cream/15 rounded-xl p-4 bg-cream/5 flex items-center gap-4">
+                  {s.logo ? (
+                    <img src={s.logo} alt="" className="w-12 h-12 rounded-full object-cover border border-cream/15" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-coal flex items-center justify-center text-[9px] text-cream/80 text-center px-1">{s.name}</div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{s.name}</p>
+                    <p className="text-cream/50 text-xs truncate">{s.category}{s.site ? ' · ' + s.site : ''}</p>
+                  </div>
+                  <button className="text-xs text-red-400 uppercase tracking-wider flex-none" onClick={() => delSup(s)}>Удалить</button>
+                </div>
+              ))}
+            </div>
           </section>
         )}
 
