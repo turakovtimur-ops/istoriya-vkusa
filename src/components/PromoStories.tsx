@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { restaurants, promos } from '../data/holding';
 import { PROMO_MEDIA } from '../data/promos-media';
 
 export default function PromoStories() {
   const [filter, setFilter] = useState('all');
   const [view, setView] = useState<number | null>(null);
+const touchX = useRef<number | null>(null);
   const media = PROMO_MEDIA.filter((m) => filter === 'all' || m.restaurant === filter || m.restaurant === 'all');
   const filteredPromos =
     filter === 'all' ? promos : promos.filter((p) => p.restaurants === 'all' || p.restaurants.includes(filter));
@@ -99,7 +100,7 @@ export default function PromoStories() {
       )}
 
       {view !== null && media[view] && (
-        <div className="fixed inset-0 z-[80] bg-black/95 backdrop-blur-xl flex items-center justify-center gap-3 px-3" onClick={() => setView(null)}>
+        <div className="fixed inset-0 z-[80] bg-black/95 backdrop-blur-xl flex items-center justify-center gap-3 px-3" onClick={() => setView(null)} onTouchStart={(e) => (touchX.current = e.touches[0].clientX)} onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - (touchX.current ?? 0); if (Math.abs(dx) < 50) return; if (dx < 0) setView((view + 1) % media.length); else setView((view + media.length - 1) % media.length); }}>
           <button
             aria-label="Назад"
             className="hidden md:flex w-12 h-12 rounded-full border border-cream/20 text-cream items-center justify-center hover:bg-cream/10 flex-none"
