@@ -4,6 +4,7 @@ import OrbitHero from '../components/OrbitHero';
 import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
 import SuppliersBlock from '../components/SuppliersBlock';
+import PromoStories from '../components/PromoStories';
 import EventsBlock from '../components/EventsBlock';
 import ContactsSection from '../components/ContactsSection';
 import VacanciesOrbit from '../components/VacanciesOrbit';
@@ -394,66 +395,15 @@ export default function Holding() {
       </section>
 
       <section id="promos" className="py-16 lg:py-24 bg-coal">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="reveal mb-10">
-            <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Акции</p>
-            <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Сейчас в ресторанах</h2>
-          </div>
-          <div className="reveal reveal-delay-1 mb-12 flex flex-wrap gap-2">
-            <button
-              onClick={() => setPromoFilter('all')}
-              className={'px-5 py-2.5 text-xs uppercase tracking-wider font-medium rounded-full transition-all ' + (promoFilter === 'all' ? 'bg-amber text-night border border-amber' : 'glass-chip text-cream/70')}
-            >
-              Все
-            </button>
-            {restaurants.map((r) => (
-              <button
-                key={r.id}
-                onClick={() => setPromoFilter(r.id)}
-                className={'px-5 py-2.5 text-xs uppercase tracking-wider font-medium rounded-full transition-all ' + (promoFilter === r.id ? 'bg-amber text-night border border-amber' : 'glass-chip text-cream/70')}
-              >
-                {r.name}
-              </button>
-            ))}
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {filteredPromos.map((promo) => (
-              <div key={promo.id} className="border border-cream/10 p-6 lg:p-8 hover:border-cream/30 transition-colors reveal">
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {promo.restaurants === 'all' ? (
-                    <span className="text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 bg-cream/10 text-cream/80 rounded-full">
-                      Все рестораны
-                    </span>
-                  ) : (
-                    promo.restaurants.map((id) => {
-                      const r = restaurants.find((x) => x.id === id);
-                      return r ? (
-                        <span key={id} className="text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 text-cream rounded-full" style={{ background: r.accent }}>
-                          {r.name}
-                        </span>
-                      ) : null;
-                    })
-                  )}
-                </div>
-                <h3 className="text-2xl lg:text-3xl font-semibold tracking-tight mb-5">{promo.title}</h3>
-                {promo.items && (
-                  <ul className="space-y-2.5 mb-5">
-                    {promo.items.map((item, i) => (
-                      <li key={i} className="flex items-baseline justify-between gap-4 text-sm border-b border-dotted border-cream/15 pb-2">
-                        <span className="text-cream/70 font-light">{item.name}</span>
-                        <span className="font-semibold whitespace-nowrap">{item.price} ₽</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {promo.note && <p className="text-cream/60 text-sm font-light leading-relaxed">{promo.note}</p>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="vacancies" className="relative overflow-hidden pt-16 lg:pt-24 pb-8 lg:pb-10">
+    <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="reveal mb-10">
+        <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Акции</p>
+        <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Сейчас в ресторанах</h2>
+      </div>
+      <PromoStories />
+    </div>
+  </section>
+  <section id="vacancies" className="relative overflow-hidden pt-16 lg:pt-24 pb-8 lg:pb-10">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">{STARS.map((s, i) => (<span key={i} className="absolute rounded-full bg-cream/60 star-twinkle" style={{ top: s.top + '%', left: s.left + '%', width: s.size, height: s.size, animationDelay: s.delay + 's' }} />))}</div>
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-12 gap-14 items-center">
           <div className="lg:col-span-7 reveal">
