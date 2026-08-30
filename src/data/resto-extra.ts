@@ -54,7 +54,8 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "gallery": [
       "/images/nino/gallery/a1788111646557.jpg",
       "/images/nino/gallery/a1788111707388.jpg",
-      "/images/nino/gallery/a1788111712442.jpg"
+      "/images/nino/gallery/a1788111712442.jpg",
+      "/images/nino/gallery/a1788111719887.jpg"
     ],
     "theme": {
       "pageBg": "#DB4C3C",
