@@ -4,7 +4,7 @@ import { restaurants } from '../data/holding';
 const RESTAURANTS: Record<string, [number, number]> = {
   kinza: [44.5551, 38.0687],
   nino: [44.5552, 38.065],
-  astoria: [44.555746, 38.064224],
+  astoria: [44.555713, 38.063362],
   'la-costa': [44.559098, 38.07625],
 };
 
@@ -138,7 +138,7 @@ export default function ContactsSection() {
                   className="flex gap-4 p-2 -m-2 rounded-sm hover:bg-cream/5 transition-colors cursor-default"
                   onMouseEnter={() => { const c = RESTAURANTS[r.id]; if (c) zoomTo(r.id, c); }}
                   onClick={() => { const c = RESTAURANTS[r.id]; if (c) zoomTo(r.id, c); }}
-                  onMouseLeave={() => zoomBack(r.id)}
+                  
                 >
                   <div
                     className="w-8 h-8 flex-none rounded-full flex items-center justify-center text-night font-bold text-xs"
@@ -166,7 +166,7 @@ export default function ContactsSection() {
                   className="inline-flex items-center gap-2 px-3 py-2 border border-cream/15 text-cream/70 text-xs hover:bg-cream/5 transition-colors cursor-default"
                   onMouseEnter={() => zoomTo(p.id, p.coords)}
                   onClick={() => zoomTo(p.id, p.coords)}
-                  onMouseLeave={() => zoomBack(p.id)}
+                  
                 >
                   <span className="w-5 h-5 rounded-full bg-[#6B7280] text-night flex items-center justify-center font-bold text-[10px]">{i + 5}</span>
                   {p.name} · {p.type}
