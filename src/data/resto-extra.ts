@@ -103,7 +103,6 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
       }
     ],
     "gallery": [
-      "/images/astoria/gallery/a1788169336115.jpg",
       "/images/astoria/gallery/a1788169339369.jpg",
       "/images/astoria/gallery/a1788169342288.jpg",
       "/images/astoria/gallery/a1788169344899.jpg",
