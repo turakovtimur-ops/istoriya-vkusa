@@ -2,13 +2,6 @@ export interface Supplier { id: string; name: string; category: string; desc: st
 // партнёры холдинга — редактируется через админку
 export const suppliers: Supplier[] = [
   {
-    "id": "zozulya",
-    "name": "Зозуля",
-    "category": "Кухня и продукты",
-    "desc": "Свежие овощи и фрукты — каждый день на наших кухнях",
-    "accent": "#349C74"
-  },
-  {
     "id": "marchenko",
     "name": "Марченко",
     "category": "Кухня и продукты",
