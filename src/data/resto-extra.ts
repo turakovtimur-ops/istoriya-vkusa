@@ -23,7 +23,8 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     ],
     "gallery": [
       "/images/kinza/gallery/a1788168619950.jpg",
-      "/images/kinza/gallery/a1788168622887.jpg"
+      "/images/kinza/gallery/a1788168622887.jpg",
+      "/images/kinza/gallery/a1788168625515.jpg"
     ],
     "theme": {
       "pageBg": "#E6D9C5",
