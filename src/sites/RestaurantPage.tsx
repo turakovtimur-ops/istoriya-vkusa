@@ -17,6 +17,13 @@ const NAV: [string, string][] = [
   ['contacts', 'Контакты'],
 ];
 const H2C = 'text-4xl md:text-6xl font-semibold tracking-tighter';
+const GEO: Record<string, [number, number]> = {
+  kinza: [38.068116, 44.555321],
+  nino: [38.065023, 44.555225],
+  astoria: [38.064269, 44.555733],
+  'la-costa': [38.076432, 44.558886],
+};
+const geo = (id: string) => GEO[id] || [38.0776, 44.5611];
 const FALLBACK_GALLERY = [
   'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
   'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
@@ -290,7 +297,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
               </div>
               <div className="rounded-lg overflow-hidden shadow-2xl">
                 <iframe
-                  src={'https://yandex.ru/map-widget/v1/?text=' + encodeURIComponent('Геленджик, ' + restaurant.address) + '&z=16'}
+                  src={'https://yandex.ru/map-widget/v1/?ll=' + geo(restaurant.id).join(',') + '&z=16&pt=' + geo(restaurant.id).join(',') + ',pm2rdm'}
                   width="100%" height="100%" style={{ minHeight: 400, border: 0 }} title={'Карта: ' + restaurant.name}
                 />
               </div>
