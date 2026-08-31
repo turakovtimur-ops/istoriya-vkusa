@@ -18,13 +18,6 @@ export const suppliers: Supplier[] = [
     "site": "https://www.martini.com"
   },
   {
-    "id": "marchenko",
-    "name": "Марченко",
-    "category": "Кухня и продукты",
-    "desc": "Бакалея и сухие продукты для всех четырёх ресторанов",
-    "accent": "#B85A3C"
-  },
-  {
     "id": "city",
     "name": "Администрация Геленджика",
     "category": "Город и события",
