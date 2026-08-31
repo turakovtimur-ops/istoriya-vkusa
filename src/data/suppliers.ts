@@ -10,6 +10,20 @@ export const suppliers: Supplier[] = [
     "site": "https://www.martini.com"
   },
   {
+    "id": "zozulya",
+    "name": "Зозуля",
+    "category": "Кухня и продукты",
+    "desc": "Свежие овощи и фрукты — каждый день на наших кухнях",
+    "accent": "#349C74"
+  },
+  {
+    "id": "marchenko",
+    "name": "Марченко",
+    "category": "Кухня и продукты",
+    "desc": "Бакалея и сухие продукты для всех четырёх ресторанов",
+    "accent": "#B85A3C"
+  },
+  {
     "id": "city",
     "name": "Администрация Геленджика",
     "category": "Город и события",
