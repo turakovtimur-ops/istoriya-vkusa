@@ -146,7 +146,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
               <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>О ресторане</p>
               <h2 className={H2C + ' mb-8 ' + cHead}>{restaurant.name}</h2>
               <p className={cSoft + ' font-light text-lg leading-relaxed mb-10'}>{restaurant.description}</p>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="border-l-4 pl-4" style={{ borderColor: accent }}>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-1'}>Адрес</p>
                   <p className={'font-medium ' + cHead}>{restaurant.address}</p>
