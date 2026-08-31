@@ -18,10 +18,10 @@ const NAV: [string, string][] = [
 ];
 const H2C = 'text-4xl md:text-6xl font-semibold tracking-tighter';
 const GEO: Record<string, [number, number]> = {
-  kinza: [38.068116, 44.555321],
-  nino: [38.065023, 44.555225],
-  astoria: [38.064269, 44.555733],
-  'la-costa': [38.076432, 44.558886],
+  kinza: [38.0687, 44.5551],
+  nino: [38.065, 44.5552],
+  astoria: [38.063362, 44.555713],
+  'la-costa': [38.07625, 44.559098],
 };
 const geo = (id: string) => GEO[id] || [38.0776, 44.5611];
 const FALLBACK_GALLERY = [
