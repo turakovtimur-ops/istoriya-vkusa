@@ -82,7 +82,7 @@ export default function OrbitHero() {
 
   return (
     <section
-      className={'relative overflow-hidden bg-night ' + (isMobile ? 'lg:min-h-screen flex flex-col pt-24 pb-4' : 'h-screen flex flex-col pt-24 md:pt-28 pb-4')}
+      className={'relative overflow-hidden bg-night ' + (isMobile ? 'lg:min-h-screen flex flex-col pt-32 pb-4' : 'h-screen flex flex-col pt-24 md:pt-28 pb-4')}
       onMouseMove={onMove}
       onMouseLeave={() => setTilt({ x: 0, y: 0 })}
     >
@@ -98,8 +98,8 @@ export default function OrbitHero() {
 
       <div className="relative z-10 text-center px-6 pb-1 md:pb-2">
         <p className="text-amber text-[10px] md:text-xs tracking-[0.4em] uppercase mb-3 font-medium">Ресторанный холдинг</p>
-        <p className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tighter text-cream">Одна история —<br className="md:hidden" /> четыре вкуса</p>
-        <p className="text-cream/60 font-light text-base md:text-xl mt-4">Ты непременно станешь частью нашей истории</p>
+        <p className="text-[min(6vw,30px)] md:text-5xl lg:text-6xl font-semibold tracking-tighter text-cream whitespace-nowrap">Одна история — четыре вкуса</p>
+        <p className="text-cream/60 font-light text-[min(3.9vw,18px)] md:text-xl mt-4 whitespace-nowrap">Ты непременно станешь частью нашей истории</p>
       </div>
 
       {isMobile ? (
