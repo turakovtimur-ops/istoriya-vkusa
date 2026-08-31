@@ -124,6 +124,9 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "rating": {
       "score": "4.7",
       "count": 606
+    },
+    "overrides": {
+      "image": "/images/astoria/hero-1788169534747.jpg"
     }
   },
   "la-costa": {
