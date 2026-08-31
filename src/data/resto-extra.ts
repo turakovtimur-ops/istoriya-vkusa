@@ -122,7 +122,8 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
       }
     ],
     "gallery": [
-      "/images/la-costa/gallery/a1788168400423.jpg"
+      "/images/la-costa/gallery/a1788168400423.jpg",
+      "/images/la-costa/gallery/a1788168404178.jpg"
     ],
     "theme": {
       "pageBg": "#348C74",
