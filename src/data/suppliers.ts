@@ -2,14 +2,6 @@ export interface Supplier { id: string; name: string; category: string; desc: st
 // партнёры холдинга — редактируется через админку
 export const suppliers: Supplier[] = [
   {
-    "id": "baltika",
-    "name": "Балтика",
-    "category": "Бар и напитки",
-    "desc": "Разливное пиво и стаут для всех ресторанов холдинга",
-    "accent": "#1E4E8C",
-    "site": "https://baltika.com"
-  },
-  {
     "id": "martini",
     "name": "Мартини",
     "category": "Бар и напитки",
