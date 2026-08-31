@@ -39,5 +39,14 @@ export const suppliers: Supplier[] = [
     "accent": "#C2A076",
     "site": "https://admgel.ru/",
     "logo": "/images/suppliers/admgel.png"
+  },
+  {
+    "id": "s1788162464112",
+    "name": "Флагман",
+    "category": "Сервис и оборудование",
+    "desc": "Типография «Флагман» выполняет полный цикл рекламных услуг: от дизайна до монтажа и доставки. Мы заслужили доверие клиентов благодаря высокому качеству работы.",
+    "accent": "#5B4B8A",
+    "site": "https://gelengik.flagman-print.ru/",
+    "logo": "/images/suppliers/s1788162464112.jpg"
   }
 ];
