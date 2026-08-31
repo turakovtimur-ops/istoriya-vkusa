@@ -5,6 +5,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import { HoldingRestaurant, holdingBrand } from '../data/holding';
 import { RESTO_EXTRA } from '../data/resto-extra';
+import { OVERRIDES } from '../data/overrides';
 
 interface Props { restaurant: HoldingRestaurant; }
 
@@ -37,7 +38,7 @@ const lum = (hex: string) => {
 
 export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
   const extra0 = RESTO_EXTRA[restaurantProp.id] || { hours: '09:00–00:00', reviews: [], gallery: [] };
-  const restaurant = { ...restaurantProp, ...((extra0 as { overrides?: Record<string, string> }).overrides || {}) };
+  const restaurant = { ...restaurantProp, ...((extra0 as { overrides?: Record<string, string> }).overrides || {}), ...(((OVERRIDES as any).pages || {})[restaurantProp.id] || {}) };
   const modal = useModal();
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
@@ -45,7 +46,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
   
   const accent = restaurant.accent;
   const tel = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
-  const extra = extra0;
+  const extra = { ...extra0, ...((OVERRIDES as any).pages || {})[restaurantProp.id] } as typeof extra0;
   const theme = (extra as { theme?: { pageBg?: string; btn?: string } }).theme || {};
   const custom = Boolean(theme.pageBg);
   const pageBg = theme.pageBg || '#F1EDE6';
@@ -135,7 +136,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
           <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
-            <p className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
+            <p data-e={'pages.' + restaurant.id + '.tagline'} className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
             <button onClick={modal.open} className="mt-8 self-start px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
           </div>
         </section>
@@ -145,17 +146,17 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <div className="reveal">
               <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>О ресторане</p>
               <h2 className={H2C + ' mb-8 ' + cHead}>{restaurant.name}</h2>
-              <p className={cSoft + ' font-light text-lg leading-relaxed mb-10'}>{restaurant.description}</p>
+              <p data-e={'pages.' + restaurant.id + '.description'} className={cSoft + ' font-light text-lg leading-relaxed mb-10'}>{restaurant.description}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="border-l-4 pl-4" style={{ borderColor: accent }}>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-1'}>Адрес</p>
-                  <p className={'font-medium ' + cHead}>{restaurant.address}</p>
+                  <p data-e={'pages.' + restaurant.id + '.address'} className={'font-medium ' + cHead}>{restaurant.address}</p>
                   <p className={'text-sm ' + cMute + ' mt-1'}>{restaurant.beach}</p>
                 </div>
                 <div className="border-l-4 pl-4" style={{ borderColor: accent }}>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-1'}>Телефон</p>
-                  <a href={tel} className={'font-medium ' + cHead + ' hover:underline'}>{restaurant.phone}</a>
-                  <p className={'text-sm ' + cMute + ' mt-1'}>Ежедневно {extra.hours}</p>
+                  <a data-e={'pages.' + restaurant.id + '.phone'} href={tel} className={'font-medium ' + cHead + ' hover:underline'}>{restaurant.phone}</a>
+                  <p data-e={'pages.' + restaurant.id + '.hours'} className={'text-sm ' + cMute + ' mt-1'}>Ежедневно {extra.hours}</p>
                 </div>
               </div>
             </div>
@@ -281,17 +282,17 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
               <div className="space-y-6">
                 <div>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Адрес</p>
-                  <p className={'text-xl font-medium ' + cHead}>{restaurant.address}</p>
+                  <p data-e={'pages.' + restaurant.id + '.address'} className={'text-xl font-medium ' + cHead}>{restaurant.address}</p>
                   <p className={cMute + ' mt-1'}>{restaurant.beach}</p>
                 </div>
                 <div>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Телефон</p>
-                  <a href={tel} className={'text-xl font-medium ' + cHead + ' hover:underline block'}>{restaurant.phone}</a>
+                  <a data-e={'pages.' + restaurant.id + '.phone'} href={tel} className={'text-xl font-medium ' + cHead + ' hover:underline block'}>{restaurant.phone}</a>
                   <p className={cMute + ' mt-1'}>{restaurant.phoneFree}</p>
                 </div>
                 <div>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Часы работы</p>
-                  <p className={'text-xl font-medium ' + cHead}>Ежедневно {extra.hours}</p>
+                  <p data-e={'pages.' + restaurant.id + '.hours'} className={'text-xl font-medium ' + cHead}>Ежедневно {extra.hours}</p>
                 </div>
                 <button onClick={modal.open} className="mt-2 px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
               </div>

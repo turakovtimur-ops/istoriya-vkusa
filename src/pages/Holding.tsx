@@ -9,8 +9,16 @@ import { news } from '../data/news';
 import ContactsSection from '../components/ContactsSection';
 import VacanciesOrbit from '../components/VacanciesOrbit';
 import BrandImg from '../components/BrandImg';
-import { restaurants, partners, promos, history, holdingBrand, team, vacancies, benefits, Partner } from '../data/holding';
+import { restaurants as restaurantsBase, partners as partnersBase, promos, history as historyBase, holdingBrand as holdingBrandBase, team as teamBase, vacancies, benefits, Partner } from '../data/holding';
+import { OVERRIDES, merge } from '../data/overrides';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+const O = OVERRIDES as any;
+const restaurants = merge(restaurantsBase, O.restaurants);
+const partners = merge(partnersBase, O.partners);
+const history = merge(historyBase, O.history);
+const holdingBrand = merge(holdingBrandBase, O.holdingBrand);
+const team = merge(teamBase, O.team);
+const ui = merge({ teamTitle: 'Люди, которые создают вкус', restTitle: 'Четыре характера', partnersTitle: 'Нам доверяют', newsTitle: 'Новости и анонсы' }, O.ui);
 const STARS = Array.from({ length: 70 }, () => ({ top: Math.random() * 100, left: Math.random() * 100, size: Math.random() * 2 + 1, delay: Math.random() * 4 }));
 
 function HoldingHeader() {
@@ -251,7 +259,7 @@ export default function Holding() {
           <div className="lg:col-span-7 reveal reveal-delay-1">
             <div className="space-y-5 text-cream/75 text-lg font-light leading-relaxed">
               {history.paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
+                <p key={i} data-e={'history.paragraphs.' + i}>{p}</p>
               ))}
             </div>
             <div className="grid grid-cols-3 gap-6 mt-10 pt-8 border-t border-cream/10">
@@ -270,7 +278,7 @@ export default function Holding() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <div className="reveal mb-10 text-center">
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Команда</p>
-            <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Люди, которые создают вкус</h2>
+            <h2 data-e="ui.teamTitle" className="text-4xl md:text-6xl font-semibold tracking-tighter">{ui.teamTitle}</h2>
           </div>
           <div
         className="md:hidden relative"
@@ -310,9 +318,9 @@ export default function Holding() {
                 <div className="relative w-36 h-36 mx-auto mb-5 rounded-full overflow-hidden border-2 border-amber/60 bg-coal" style={{ boxShadow: '0 0 45px rgba(194,160,118,0.25)' }}>
                   <TeamAvatar src={t.photo} name={t.name} />
                 </div>
-                <p className="text-amber text-[10px] uppercase tracking-[0.3em] mb-2 font-medium">{t.role}</p>
-                <h3 className="text-2xl font-semibold tracking-tight mb-3">{t.name}</h3>
-                <p className="text-cream/60 text-sm font-light leading-relaxed max-w-xs mx-auto">{t.desc}</p>
+                <p data-e={'team.' + i + '.role'} className="text-amber text-[10px] uppercase tracking-[0.3em] mb-2 font-medium">{t.role}</p>
+                <h3 data-e={'team.' + i + '.name'} className="text-2xl font-semibold tracking-tight mb-3">{t.name}</h3>
+                <p data-e={'team.' + i + '.desc'} className="text-cream/60 text-sm font-light leading-relaxed max-w-xs mx-auto">{t.desc}</p>
               </div>
             ))}
           </div>
@@ -323,7 +331,7 @@ export default function Holding() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <div className="reveal mb-10">
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Наши рестораны</p>
-            <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Четыре характера</h2>
+            <h2 data-e="ui.restTitle" className="text-4xl md:text-6xl font-semibold tracking-tighter">{ui.restTitle}</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 hv-carousel hv-carousel-r">
             {restaurants.map((r, i) => (
@@ -332,11 +340,11 @@ export default function Holding() {
                   <RestCardPhoto r={r} />
                   <div className="absolute bottom-0 left-0 right-0 h-1 z-10" style={{ background: r.accent }} />
                 </div>
-                <p className="text-2xl font-semibold tracking-tight mb-1">{r.name}</p>
+                <p data-e={'restaurants.' + r.id + '.name'} className="text-2xl font-semibold tracking-tight mb-1">{r.name}</p>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-cream/50 mb-3">{r.cuisine}</p>
-                <p className="text-cream/60 text-sm font-light mb-4">{r.tagline}</p>
+                <p data-e={'restaurants.' + r.id + '.tagline'} className="text-cream/60 text-sm font-light mb-4">{r.tagline}</p>
                 <div className="mt-auto pt-4 border-t border-cream/10 space-y-1.5">
-                  <p className="text-xs text-cream/50">{r.beach} · {r.address}</p>
+                  <p data-e={'restaurants.' + r.id + '.address'} className="text-xs text-cream/50">{r.beach} · {r.address}</p>
                   <p className="text-xs text-cream/70"><a href={"tel:" + r.phone.replace(/[^+\d]/g, "")} className="hover:text-amber transition-colors">{r.phone}</a></p>
                 </div>
                 <span className="mt-4 self-start text-xs uppercase tracking-[0.2em] border-b pb-1 border-cream/30 group-hover:border-amber group-hover:text-amber transition-colors">
@@ -352,7 +360,7 @@ export default function Holding() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <div className="reveal mb-10">
             <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Партнёры</p>
-            <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Нам доверяют</h2>
+            <h2 data-e="ui.partnersTitle" className="text-4xl md:text-6xl font-semibold tracking-tighter">{ui.partnersTitle}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6 hv-carousel hv-carousel-p">
             {partners.map((p, i) => (
@@ -365,8 +373,8 @@ export default function Holding() {
                   </span>
                 </div>
                 <div className="p-7 flex flex-col flex-1">
-                  <h3 className="text-2xl font-semibold tracking-tight mb-2">{p.name}</h3>
-                  <p className="text-cream/60 text-sm font-light leading-relaxed mb-5">{p.desc}</p>
+                  <h3 data-e={'partners.' + p.id + '.name'} className="text-2xl font-semibold tracking-tight mb-2">{p.name}</h3>
+                  <p data-e={'partners.' + p.id + '.desc'} className="text-cream/60 text-sm font-light leading-relaxed mb-5">{p.desc}</p>
                   <div className="mt-auto space-y-1.5 pt-4 border-t border-cream/10">
                     <p className="text-xs text-cream/50">{p.address}</p>
                     <p className="text-xs text-cream/70">
@@ -392,7 +400,7 @@ export default function Holding() {
     <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
       <div className="reveal mb-10">
         <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Новости</p>
-        <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter">Новости и анонсы</h2>
+        <h2 data-e="ui.newsTitle" className="text-4xl md:text-6xl font-semibold tracking-tighter">{ui.newsTitle}</h2>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {news.slice(0, 6).map((nItem, i) => (

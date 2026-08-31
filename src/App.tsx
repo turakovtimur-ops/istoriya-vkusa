@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Holding from './pages/Holding';
 import Admin from './pages/Admin';
+import EditMode from './components/EditMode';
 import RestaurantPage from './sites/RestaurantPage';
 import { restaurants } from './data/holding';
 
@@ -42,8 +43,8 @@ export default function App() {
   }, []);
 
   const clean = pathName.replace(/\/+$/, '') || '/';
-  if (clean === '/upravlenie') return <Admin />;
+  if (clean === '/upravlenie') return (<><EditMode /><Admin /></>);
   const rest = restaurants.find((r) => clean === r.path || clean === '/' + r.path || clean === '/' + r.id);
-  if (rest) return <RestaurantPage restaurant={rest} />;
-  return <Holding />;
+  if (rest) return (<><EditMode /><RestaurantPage restaurant={rest} /></>);
+  return (<><EditMode /><Holding /></>);
 }
