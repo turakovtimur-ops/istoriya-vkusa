@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import RestaurantPage from '../components/RestaurantPage';
 import OrbitHero from '../components/OrbitHero';
 import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
@@ -184,15 +183,7 @@ export default function Holding() {
   const [teamIdx, setTeamIdx] = useState(0);
   const touchX = useRef<number | null>(null);
 
-  // Страницы ресторанов по hash
-  const [route, setRoute] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
-  useEffect(() => {
-    const onPop = () => { setRoute(window.location.pathname); window.scrollTo(0, 0); };
-    window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
-  }, []);
-  const curRoute = route.replace(/\/+$/, '');
-  const activeRest = restaurants.find((r) => curRoute === r.path || curRoute === '/' + r.path);
+  
 
   useEffect(() => { document.title = 'История Вкуса — рестораны в Геленджике'; }, []);
 
@@ -244,7 +235,7 @@ export default function Holding() {
       ? promos
       : promos.filter((p) => p.restaurants === 'all' || p.restaurants.includes(promoFilter));
 
-  if (activeRest) return <RestaurantPage r={activeRest} />;
+  
   return (
     <div className="bg-night text-cream min-h-screen">
       <HoldingHeader />
@@ -336,7 +327,7 @@ export default function Holding() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 hv-carousel hv-carousel-r">
             {restaurants.map((r, i) => (
-              <a key={r.id} href={'#' + r.path} className="group reveal flex flex-col" style={{ transitionDelay: (i * 0.1) + 's' }}>
+              <a key={r.id} href={r.path} className="group reveal flex flex-col" style={{ transitionDelay: (i * 0.1) + 's' }}>
                 <div className="relative aspect-[4/3] overflow-hidden mb-4 bg-paper">
                   <RestCardPhoto r={r} />
                   <div className="absolute bottom-0 left-0 right-0 h-1 z-10" style={{ background: r.accent }} />
@@ -491,7 +482,7 @@ export default function Holding() {
             <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Рестораны</p>
             <ul className="space-y-2 text-cream/70 font-light text-sm">
               {restaurants.map((r) => (
-                <li key={r.id}><a href={'#' + r.path} className="hover:text-cream transition-colors">{r.name}</a></li>
+                <li key={r.id}><a href={r.path} className="hover:text-cream transition-colors">{r.name}</a></li>
               ))}
             </ul>
           </div>

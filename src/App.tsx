@@ -24,6 +24,13 @@ export default function App() {
         setPathName(to);
         window.scrollTo(0, 0);
       }
+
+      if (href.startsWith('/') && !href.startsWith('//')) {
+        e.preventDefault();
+        window.history.pushState({}, '', href);
+        setPathName(href);
+        window.scrollTo(0, 0);
+      }
     };
     window.addEventListener('popstate', onPop);
     document.addEventListener('click', onClick);

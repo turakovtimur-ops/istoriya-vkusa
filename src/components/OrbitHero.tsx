@@ -129,7 +129,7 @@ export default function OrbitHero() {
               return (
                 <a
                   key={r.id}
-                  href={'#' + r.path}
+                  href={r.path}
                   className="absolute left-1/2 top-1/2 planet"
                   style={{
                     transform: 'translate(-50%, -50%) translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')',
@@ -212,7 +212,7 @@ export default function OrbitHero() {
               return (
                 <a
                   key={r.id}
-                  href={'#' + r.path}
+                  href={r.path}
                   className="absolute left-1/2 top-1/2 planet"
                   style={{
                     transform: 'translate(-50%, -50%) translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')',

@@ -1,0 +1,131 @@
+=== 1) Старые домены ===
+ℹ авто-замен нет (или уже чисто)
+
+=== 2) Файлы в public/ ===
+  favicon.svg
+  images/astoria/astoria-logo.png
+  images/astoria/astoria-pattern.png
+  images/astoria/astoria-photo.jpg
+  images/astoria/astoria-round.png
+  images/astoria/gallery/a1788169339369.jpg
+  images/astoria/gallery/a1788169342288.jpg
+  images/astoria/gallery/a1788169344899.jpg
+  images/astoria/gallery/a1788169348992.jpg
+  images/astoria/gallery/a1788169354154.jpg
+  images/astoria/gallery/a1788169359684.jpg
+  images/astoria/gallery/a1788169362137.jpg
+  images/astoria/gallery/a1788169366001.jpg
+  images/astoria/gallery/a1788169409916.jpg
+  images/astoria/gallery/a1788169412918.jpg
+  images/astoria/gallery/a1788169417282.jpg
+  images/astoria/gallery/a1788169420069.jpg
+  images/astoria/hero-1788169534747.jpg
+  images/astoria/hero-1788169616175.jpg
+  images/holding/istoriya-vkusa-icon.png
+  images/holding/istoriya-vkusa-logo.png
+  images/holding/istoriya-vkusa-round.png
+  images/icons/astoria.jpeg
+  images/icons/kinza.jpeg
+  images/icons/la-costa.jpeg
+  images/icons/nino.jpeg
+  images/kinza/gallery/a1788168619950.jpg
+  images/kinza/gallery/a1788168622887.jpg
+  images/kinza/gallery/a1788168625515.jpg
+  images/kinza/gallery/a1788168628217.jpg
+  images/kinza/gallery/a1788168636552.jpg
+  images/kinza/gallery/a1788168639240.jpg
+  images/kinza/gallery/a1788168686407.jpg
+  images/kinza/hero-1788168822250.jpg
+  images/kinza/kinza-logo.png
+  images/kinza/kinza-pattern.png
+  images/kinza/kinza-photo.jpeg
+  images/kinza/kinza-round.png
+  images/la-costa/gallery/a1788168400423.jpg
+  images/la-costa/gallery/a1788168404178.jpg
+  images/la-costa/gallery/a1788168407056.jpg
+  images/la-costa/gallery/a1788168409576.jpg
+  images/la-costa/hero-1788168259530.jpg
+  images/la-costa/hero-1788168323195.jpg
+  images/la-costa/la-costa-logo.png
+  images/la-costa/la-costa-pattern.png
+  images/la-costa/la-costa-photo.jpeg
+  images/la-costa/la-costa-round.png
+  images/nino/gallery/a1788111646557.jpg
+  images/nino/gallery/a1788111707388.jpg
+  images/nino/gallery/a1788111712442.jpg
+  images/nino/gallery/a1788111719887.jpg
+  images/nino/gallery/a1788111728790.jpg
+  images/nino/gallery/a1788111736003.jpg
+  images/nino/hero-1788113157138.jpg
+  images/nino/nino-logo.png
+  images/nino/nino-pattern.png
+  images/nino/nino-photo.jpg
+  images/nino/nino-round.png
+  images/partners/brigantina.jpg
+  images/partners/priroda.jpg
+  images/partners/yantar.jpg
+  images/promos/all-1.jpg
+  images/promos/all-2.jpg
+  images/promos/astoria-1.jpg
+  images/promos/astoria-2.jpg
+  images/promos/astoria-3.jpg
+  images/promos/astoria-4.jpg
+  images/promos/astoria-5.jpg
+  images/promos/astoria-6.jpg
+  images/promos/kinza-1.jpg
+  images/promos/kinza-2.jpg
+  images/promos/kinza-3.jpg
+  images/promos/kinza-4.jpg
+  images/promos/kinza-5.jpg
+  images/promos/kinza-6.jpg
+  images/promos/la-costa-1.jpg
+  images/promos/la-costa-2.jpg
+  images/promos/la-costa-3.jpg
+  images/promos/la-costa-4.jpg
+  images/promos/la-costa-5.jpg
+  images/promos/la-costa-6.jpg
+  images/promos/la-costa-7.jpg
+  images/promos/la-costa-8.jpg
+  images/promos/la-costa-9.jpg
+  images/promos/nino-1.jpg
+  images/promos/nino-2.jpg
+  images/promos/nino-3.jpg
+  images/promos/nino-4.jpg
+  images/promos/nino-5.jpg
+  images/promos/nino-6.jpg
+  images/suppliers/admgel.png
+  images/suppliers/s1788162464112.jpg
+  images/team/bar.jpg
+  images/team/chef.jpg
+  menus/astoria-bar.pdf
+  menus/astoria-deserty.pdf
+  menus/astoria-kuhnya.pdf
+  menus/kinza-bar.pdf
+  menus/kinza-deserty.pdf
+  menus/kinza-kuhnya.pdf
+  menus/la-costa-bar.pdf
+  menus/la-costa-deserty.pdf
+  menus/la-costa-kuhnya.pdf
+  menus/nino-bar.pdf
+  menus/nino-deserty.pdf
+  menus/nino-kuhnya.pdf
+  robots.txt
+  sitemap.xml
+  yandex_8ce225761fc9f9ac.html
+
+=== 3) Мёртвые компоненты ===
+  MobileNav используется в: src/components/Header.tsx, src/components/MobileNav.tsx
+  framer-motion используется в: src/components/BookingModal.tsx, src/components/CinematicRestaurants.tsx, src/components/EventModal.tsx, src/components/FeaturedDishes.tsx, src/components/Gallery.tsx, src/components/Hero.tsx, src/components/MenuSection.tsx, src/components/MobileNav.tsx, src/components/PartnerModal.tsx, src/components/Reviews.tsx, src/components/SeaBlock.tsx, src/components/UniversalRestaurantSite.tsx, src/components/VacancyModal.tsx
+
+=== 4) Мусорные файлы ===
+
+=== 5) http:// (проверить глазами) ===
+✓ небезопасных ссылок нет
+
+✅ Ритуал:
+npm run build
+git add -A && git commit -m "Чистка: старые домены и мусор"
+git pull --rebase
+git push
+
+📋 ПРИШЛИ МНЕ ВЕСЬ ВЫВОД КОНСОЛИ — по нему сделаю Шаг 2!
