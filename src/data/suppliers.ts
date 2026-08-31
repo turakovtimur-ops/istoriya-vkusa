@@ -2,14 +2,6 @@ export interface Supplier { id: string; name: string; category: string; desc: st
 // партнёры холдинга — редактируется через админку
 export const suppliers: Supplier[] = [
   {
-    "id": "martini",
-    "name": "Мартини",
-    "category": "Бар и напитки",
-    "desc": "Вермуты и игристые для коктейльных и винных карт",
-    "accent": "#7A2E3B",
-    "site": "https://www.martini.com"
-  },
-  {
     "id": "zozulya",
     "name": "Зозуля",
     "category": "Кухня и продукты",
