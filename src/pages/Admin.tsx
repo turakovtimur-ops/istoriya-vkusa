@@ -28,7 +28,7 @@ export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pwd, setPwd] = useState('');
   const [err, setErr] = useState('');
-  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'settings'>('news');
+  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'settings' | 'editor'>('news');
   const [token, setToken] = useState(localStorage.getItem(LS_TOKEN) || '');
   const [tokenInput, setTokenInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -153,7 +153,59 @@ export default function Admin() {
   const delReview = (i: number) => { const e = extra[restSel]; e.reviews = e.reviews.filter((_: any, idx: number) => idx !== i); setExtra({ ...extra }); };
   const pubResto = () => publish('админка: данные ' + restSel, [{ path: 'src/data/resto-extra.ts', text: restoText() }]);
 
-  // ---------- партнёры ----------
+  // ---------- редактор ----------
+const [edDevice, setEdDevice] = useState<'desktop' | 'mobile'>('desktop');
+const [edPage, setEdPage] = useState('/');
+const [edKey, setEdKey] = useState(0);
+const [edSel, setEdSel] = useState<{ path: string; kind: string; value: string } | null>(null);
+const [edVal, setEdVal] = useState('');
+const [edOv, setEdOv] = useState<any>(null);
+useEffect(() => {
+  const onMsg = (e: MessageEvent) => {
+    const d: any = e.data;
+    if (d && d.type === 'iv-edit') { setEdSel({ path: d.path, kind: d.kind, value: d.value }); setEdVal(d.value || ''); }
+  };
+  window.addEventListener('message', onMsg);
+  return () => window.removeEventListener('message', onMsg);
+}, []);
+const loadOv = async () => {
+  try {
+    const r = await fetch('/api/read?path=' + encodeURIComponent('src/data/overrides.ts'), { headers: { 'x-gh-token': token } });
+    const j = await r.json();
+    if (r.ok && j.text) {
+      const i = j.text.indexOf('export const OVERRIDES');
+      const eq = j.text.indexOf('=', i);
+      let body = j.text.slice(eq + 1).trim();
+      if (body.endsWith(';')) body = body.slice(0, -1);
+      const o = JSON.parse(body);
+      setEdOv(o);
+      return o;
+    }
+  } catch (e) { }
+  const o = {};
+  setEdOv(o);
+  return o;
+};
+const setByPath = (obj: any, p: string, v: any) => {
+  const parts = p.split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (typeof cur[parts[i]] !== 'object' || cur[parts[i]] === null) cur[parts[i]] = String(Number(parts[i + 1])) === parts[i + 1] ? [] : {};
+    cur = cur[parts[i]];
+  }
+  cur[parts[parts.length - 1]] = v;
+};
+const overridesText = (obj: any) => "import { merge } from './merge';\nexport { merge };\nexport const OVERRIDES: Record<string, any> = " + JSON.stringify(obj, null, 2) + ';\n';
+const edSave = async () => {
+  if (!edSel) return;
+  let o = edOv;
+  if (!o) o = await loadOv();
+  setByPath(o, edSel.path, edVal.trim());
+  setEdOv(JSON.parse(JSON.stringify(o)));
+  await publish('админка: редактор ' + edSel.path, [{ path: 'src/data/overrides.ts', text: overridesText(o) }]);
+  setEdSel(null);
+};
+// ---------- партнёры ----------
   const [sups, setSups] = useState<any[]>(JSON.parse(JSON.stringify(initialSuppliers)));
   const [supForm, setSupForm] = useState({ name: '', category: 'Бар и напитки', desc: '', site: '' });
   const PALETTE = ['#1E4E8C', '#7A2E3B', '#349C74', '#B85A3C', '#C2A076', '#5B4B8A', '#2C6E63'];
@@ -213,7 +265,7 @@ export default function Admin() {
           <a href="#/" className="text-xs text-cream/60 hover:text-cream">← На сайт</a>
         </div>
         <div className="max-w-[1200px] mx-auto px-6 lg:px-10 flex gap-2 overflow-x-auto pb-3">
-          {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['suppliers', 'Партнёры'], ['settings', 'Настройки']] as const).map(([id, label]) => (
+          {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['suppliers', 'Партнёры'], ['settings', 'Настройки'], ['editor', 'Редактор']] as const).map(([id, label]) => (
             <button key={id} onClick={() => { setTab(id); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === id ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>{label}</button>
           ))}
         </div>
@@ -379,7 +431,37 @@ export default function Admin() {
           </section>
         )}
 
-        {tab === 'settings' && (
+        {tab === 'editor' && (
+       <section>
+         <div className="flex flex-wrap items-center gap-3 mb-4">
+           <h2 className="text-2xl font-semibold">Редактор сайта</h2>
+           <div className="flex flex-wrap gap-2 ml-auto">
+             <select className={inp + ' w-auto'} value={edPage} onChange={(e) => { setEdPage(e.target.value); setEdSel(null); }}>
+               <option value="/">Главная</option>
+               {restaurants.map((r) => (<option key={r.id} value={String(r.path).startsWith('/') ? String(r.path) : '/' + r.path}>{r.name}</option>))}
+             </select>
+             <button className={edDevice === 'desktop' ? btnA : btnG} onClick={() => setEdDevice('desktop')}>🖥 Веб</button>
+             <button className={edDevice === 'mobile' ? btnA : btnG} onClick={() => setEdDevice('mobile')}>📱 Мобилка</button>
+             <button className={btnG} onClick={() => { setEdKey(edKey + 1); setEdSel(null); }}>⟳ Обновить</button>
+           </div>
+         </div>
+         <p className="text-cream/50 text-xs mb-3">Кликай по подсвеченным элементам внутри рамки — ниже появится поле правки. Публикация = коммит → деплой ~1 минута.</p>
+         <div className="border border-cream/15 rounded-xl overflow-hidden bg-black/50 flex justify-center">
+           <iframe key={edKey + edDevice + edPage} src={edPage + (edPage.includes('?') ? '&' : '?') + 'edit=1'} title="Редактор" style={{ width: edDevice === 'mobile' ? 390 : '100%', height: '75vh', border: 0, background: '#0E0D0B' }} />
+         </div>
+         {edSel && (
+           <div className="mt-4 border border-amber/40 rounded-xl p-5 bg-cream/5">
+             <p className="text-amber text-xs uppercase tracking-widest mb-2">Правка: {edSel.path}</p>
+             <textarea className={inp} rows={3} value={edVal} onChange={(e) => setEdVal(e.target.value)} />
+             <div className="flex gap-2 mt-3">
+               <button className={btnA} disabled={busy} onClick={edSave}>{busy ? 'Отправляем...' : 'Сохранить и опубликовать'}</button>
+               <button className={btnG} onClick={() => setEdSel(null)}>Отмена</button>
+             </div>
+           </div>
+         )}
+       </section>
+     )}
+     {tab === 'settings' && (
           <section className="max-w-md">
             <h2 className="text-2xl font-semibold mb-6">Настройки</h2>
             <p className="text-cream/50 text-xs mb-3">GitHub-токен (хранится только в твоём браузере):</p>
