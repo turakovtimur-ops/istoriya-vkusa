@@ -1,12 +1,5 @@
-// НОВОСТИ ХОЛДИНГА
-// Обновлено через админку 2026-08-30T13:37:50.123Z
-export interface NewsItem {
-  id: string;
-  date: string;
-  tag: string;
-  title: string;
-  text: string;
-}
+// НОВОСТИ ХОЛДИНГА (обновлено через админку)
+export interface NewsItem { id: string; date: string; tag: string; title: string; text: string }
 export const news: NewsItem[] = [
   {
     "id": "menu-fall-2026",
@@ -20,7 +13,7 @@ export const news: NewsItem[] = [
     "date": "29 августа 2026",
     "tag": "Праздник",
     "title": "С Днём города, Геленджик!",
-    "text": "С новым годом дорогие Геленджичане, вас поздравляют Тимур"
+    "text": "С днем рождения наш любимый Геленджик! И поздравляем всех жителей"
   },
   {
     "id": "ny-2027",
