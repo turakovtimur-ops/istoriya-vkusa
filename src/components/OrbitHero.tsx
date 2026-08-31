@@ -98,7 +98,7 @@ export default function OrbitHero() {
 
       <div className="relative z-10 text-center px-6 pb-1 md:pb-2">
         <p className="text-amber text-[10px] md:text-xs tracking-[0.4em] uppercase mb-3 font-medium">Ресторанный холдинг</p>
-        <p className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tighter text-cream">Одна история — четыре вкуса</p>
+        <p className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tighter text-cream">Одна история —<br className="md:hidden" /> четыре вкуса</p>
         <p className="text-cream/60 font-light text-base md:text-xl mt-4">Ты непременно станешь частью нашей истории</p>
       </div>
 
