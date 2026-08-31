@@ -103,6 +103,7 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
       }
     ],
     "gallery": [
+      "/images/astoria/gallery/a1788169336115.jpg",
       "/images/astoria/gallery/a1788169339369.jpg",
       "/images/astoria/gallery/a1788169342288.jpg",
       "/images/astoria/gallery/a1788169344899.jpg",
@@ -125,7 +126,7 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
       "count": 606
     },
     "overrides": {
-      "image": "/images/astoria/hero-1788169534747.jpg"
+      "image": "/images/astoria/hero-1788169616175.jpg"
     }
   },
   "la-costa": {
