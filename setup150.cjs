@@ -1,4 +1,8 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+fs.writeFileSync(P('api/publish.ts'), `import type { VercelRequest, VercelResponse } from '@vercel/node';
 const OWNER = 'turakovtimur-ops';
 const REPO = 'istoriya-vkusa';
 const H = (t: string) => ({ Authorization: 'token ' + t, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'iv-admin' });
@@ -30,3 +34,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   return res.status(200).json({ ok: true });
 }
+`, 'utf-8');
+console.log('✓ api/publish.ts: надёжная публикация (как у новостей)');
+
+console.log('\n✅ Ритуал:');
+console.log('npm run build');
+console.log('git add -A && git commit -m "Админка: надёжная публикация без GitRPC-ошибок"');
+console.log('git pull --rebase');
+console.log('git push');
