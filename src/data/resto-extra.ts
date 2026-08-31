@@ -37,6 +37,9 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     "rating": {
       "score": "4.8",
       "count": 1261
+    },
+    "overrides": {
+      "image": "/images/kinza/hero-1788168822250.jpg"
     }
   },
   "nino": {
