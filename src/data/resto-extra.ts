@@ -113,7 +113,8 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
       "/images/astoria/gallery/a1788169362137.jpg",
       "/images/astoria/gallery/a1788169366001.jpg",
       "/images/astoria/gallery/a1788169409916.jpg",
-      "/images/astoria/gallery/a1788169412918.jpg"
+      "/images/astoria/gallery/a1788169412918.jpg",
+      "/images/astoria/gallery/a1788169417282.jpg"
     ],
     "theme": {
       "pageBg": "#8F7A55",
