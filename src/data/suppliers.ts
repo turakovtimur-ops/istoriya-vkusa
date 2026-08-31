@@ -39,14 +39,5 @@ export const suppliers: Supplier[] = [
     "accent": "#C2A076",
     "site": "https://admgel.ru/",
     "logo": "/images/suppliers/admgel.png"
-  },
-  {
-    "id": "s1788162080092",
-    "name": "Флагман",
-    "category": "Сервис и оборудование",
-    "desc": "Мы предлагаем полный спектр рекламных услуг: от визиток до сложных конструкций, включая дизайн, изготовление, монтаж и доставку. За годы работы заслужили положительные отзывы клиентов.",
-    "accent": "#5B4B8A",
-    "site": "https://gelengik.flagman-print.ru/",
-    "logo": "/images/suppliers/s1788162080092.jpg"
   }
 ];
