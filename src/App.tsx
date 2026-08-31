@@ -17,6 +17,7 @@ export default function App() {
       const a = t.closest ? (t.closest('a[href]') as HTMLAnchorElement | null) : null;
       if (!a) return;
       const href = a.getAttribute('href') || '';
+      if (a.target === '_blank' || /\.(pdf|jpe?g|png|webp|svg|xml|txt|ico)(\?.*)?$/i.test(href)) return;
       if (href.startsWith('#/')) {
         e.preventDefault();
         const to = href.slice(1) || '/';
