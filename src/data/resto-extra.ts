@@ -131,7 +131,7 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
       "count": 1105
     },
     "overrides": {
-      "image": "/images/la-costa/hero-1788168259530.jpg"
+      "image": "/images/la-costa/hero-1788168323195.jpg"
     }
   }
 };
