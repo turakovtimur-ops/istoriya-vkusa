@@ -21,7 +21,9 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
         "text": "Отличный ресторан. Очень вкусная еда, обстановка и персонал на высшем уровне. Хинкали превосходные. Отличный вид из зала на море."
       }
     ],
-    "gallery": [],
+    "gallery": [
+      "/images/kinza/gallery/a1788168619950.jpg"
+    ],
     "theme": {
       "pageBg": "#E6D9C5",
       "btn": "#76522D"
