@@ -67,7 +67,7 @@ export default function Reviews() {
           </motion.div>
         </div>
         <div className="mt-12 text-center">
-          <a href="https://kinza-rest-gel.ru/gbook/" target="_blank" rel="noopener noreferrer" className="btn-primary">Все отзывы</a>
+          <a href="https://www.istoriya-vkusa.ru/kinza/gbook/" target="_blank" rel="noopener noreferrer" className="btn-primary">Все отзывы</a>
         </div>
       </div>
     </section>
