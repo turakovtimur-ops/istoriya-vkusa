@@ -18,7 +18,7 @@ async function maxUpload(base64: string, name: string, log?: any): Promise<any |
   try {
     const ext = (name.split('.').pop() || '').toLowerCase();
     const type = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext) ? 'photo' : 'file';
-    const r1 = await fetch(B + '/uploads', { method: 'POST', headers: H, body: JSON.stringify({ type }) });
+    const r1 = await fetch(B + '/uploads?type=' + type, { method: 'POST', headers: H });
     const j1: any = await r1.json().catch(() => null);
     if (log) log.up1 = { status: r1.status, body: j1 };
     if (!r1.ok || !j1 || !j1.url) return null;

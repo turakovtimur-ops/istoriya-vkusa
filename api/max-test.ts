@@ -7,7 +7,7 @@ const TINY_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.query.key !== 'iv2026') return res.status(403).json({ error: 'forbidden' });
   const out: any = {};
-  const r1 = await fetch(B + '/uploads', { method: 'POST', headers: H, body: JSON.stringify({ type: 'photo' }) });
+  const r1 = await fetch(B + '/uploads?type=photo', { method: 'POST', headers: H });
   const j1: any = await r1.json().catch(() => null);
   out.up1 = { status: r1.status, body: j1 };
   if (r1.ok && j1 && j1.url) {
