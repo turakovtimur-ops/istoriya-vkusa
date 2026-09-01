@@ -70,6 +70,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!body || body.honeypot) return res.status(400).json({ error: 'spam' });
   const type = body.type;
   const data = body.data || {};
+  if (data.file && data.file.base64 && String(data.file.base64).length > 4200000) data.file = { name: data.file.name };
   if (!['booking', 'vacancy', 'partner', 'event'].includes(type)) return res.status(400).json({ error: 'bad_type' });
   let text = '';
   if (type === 'booking') text = fmtBooking(data);

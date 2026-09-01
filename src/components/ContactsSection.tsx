@@ -18,7 +18,7 @@ function loadYmaps(): Promise<any> {
   return new Promise((res, rej) => {
     if ((window as any).ymaps) return res((window as any).ymaps);
     const s = document.createElement('script');
-    s.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU';
+    s.src = 'https://api-maps.yandex.ru/2.1/?apikey=b3a02a6f-15cb-4575-b648-6c1a08e558f8&lang=ru_RU';
     s.onload = () => res((window as any).ymaps);
     s.onerror = rej;
     document.head.appendChild(s);
