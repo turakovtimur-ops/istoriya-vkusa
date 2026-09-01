@@ -1,4 +1,8 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+fs.writeFileSync(P('api/apply.ts'), `import type { VercelRequest, VercelResponse } from '@vercel/node';
 const TOKEN = 'f9LHodD0cOKR-mKoOWi0aFYaL4aNgu6pmTBXyo2vWrurD0uM1YY5Geysg9wP9A9cMQeJ6XYweiOEjkllaNEp';
 const CHAT_ID = -78445984835780;
 const B = 'https://botapi.max.ru';
@@ -55,7 +59,7 @@ async function maxSend(text: string, attachments: any[] | null) {
   return { ok: r.ok, status: r.status, j };
 }
 
-const L = (lines: string[]) => lines.join('\n');
+const L = (lines: string[]) => lines.join('\\n');
 const fmtDate = (s: string) => { const p = (s || '').split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : (s || '—'); };
 const fmtBooking = (d: any) => L(['🔴 БРОНЬ', 'Ресторан: ' + (d.restaurant || '—'), 'Имя: ' + d.name, 'Телефон: ' + d.phone, 'Дата: ' + fmtDate(d.date) + ' в ' + d.time, 'Гостей: ' + (d.guests || '—'), 'Комментарий: ' + (d.comment || '—')]);
 const fmtVacancy = (d: any) => L(['👔 ВАКАНСИЯ', 'Должность: ' + d.position, 'Заведение: ' + (d.place || 'Любой'), 'ФИО: ' + d.name, 'Телефон: ' + d.phone, 'Email: ' + (d.email || '—'), 'Опыт: ' + (d.experience || '—'), 'Занятость: ' + (d.employment || '—'), 'Медкнижка: ' + (d.medbook || '—'), 'Приступить: ' + (d.start || '—'), 'О себе: ' + (d.about || '—')]);
@@ -86,10 +90,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (r.ok) sent = true;
   }
   if (!sent) {
-    const t2 = text + (data.file && data.file.name ? '\n📎 Файл: ' + data.file.name : '');
+    const t2 = text + (data.file && data.file.name ? '\\n📎 Файл: ' + data.file.name : '');
     const r = await maxSend(t2, null);
     if (log) log.send_text = r.status;
     if (!r.ok) return res.status(r.status).json({ error: 'max_api', detail: r.j });
   }
   return res.status(200).json({ ok: true, file: att ? 'attached' : data.file ? 'name_only' : 'none', dbg: req.query.dbg === '1' ? log : undefined });
 }
+`, 'utf-8');
+console.log('✓ api/apply.ts: чистые карточки + дата ДД.ММ.ГГГГ + страховка доставки');
+
+console.log('\n✅ ВСЁ ОДНОЙ КОМАНДОЙ:');
+console.log('npm run build && git add -A && git commit -m "MAX: чистые карточки, дата, страховка" && git pull --rebase && git push');
