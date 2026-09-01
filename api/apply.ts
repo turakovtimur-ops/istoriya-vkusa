@@ -78,12 +78,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   else text = fmtEvent(data);
   const log: any = {};
   let att: any = null;
-  if (data.file && data.file.base64) att = await maxUpload(data.file.base64, data.file.name || 'file', log);
+  if (data.file && data.file.base64) {
+    for (let attempt = 0; attempt < 2 && !att; attempt++) att = await maxUpload(data.file.base64, data.file.name || 'file', log);
+  }
   let sent = false;
   if (att) {
-    const r = await maxSend(text, [att]);
-    if (log) log.send_att = r.status;
-    if (r.ok) sent = true;
+    for (let attempt = 0; attempt < 2 && !sent; attempt++) {
+      const r = await maxSend(text, [att]);
+      if (log) log['send_att_' + attempt] = r.status;
+      if (r.ok) sent = true;
+    }
   }
   if (!sent) {
     const t2 = text + (data.file && data.file.name ? '\n📎 Файл: ' + data.file.name : '');
