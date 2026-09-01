@@ -1,4 +1,8 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+fs.writeFileSync(P('api/max-test.ts'), `import type { VercelRequest, VercelResponse } from '@vercel/node';
 const TOKEN = 'f9LHodD0cOKR-mKoOWi0aFYaL4aNgu6pmTBXyo2vWrurD0uM1YY5Geysg9wP9A9cMQeJ6XYweiOEjkllaNEp';
 const CHAT_ID = -78445984835780;
 const B = 'https://botapi.max.ru';
@@ -46,3 +50,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   return res.status(200).json(out);
 }
+`, 'utf-8');
+console.log('✓ api/max-test.ts: расширенный тест форматов chat_id');
+
+console.log('\n✅ Ритуал:');
+console.log('npm run build');
+console.log('git add -A && git commit -m "MAX: тест hex-форматов"');
+console.log('git pull --rebase');
+console.log('git push');
+console.log('\n📋 Открой: https://www.istoriya-vkusa.ru/api/max-test?key=iv2026 и пришли JSON!');
