@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
 import { BookingForm } from '../types';
-
+const REST_NAMES: Record<string, string> = { kinza: 'Кинза', nino: 'Нино', astoria: 'Астория', 'la-costa': 'Ла Коста Берег' };
 interface Props { isOpen: boolean; onClose: () => void; }
-
 export default function BookingModal({ isOpen, onClose }: Props) {
-  const [form, setForm] = useState<BookingForm>({
-    name: '', phone: '', date: '', time: '', guests: 2, comment: ''
-  });
+  const [form, setForm] = useState<BookingForm>({ name: '', phone: '', date: '', time: '', guests: 2, comment: '' });
   const [submitted, setSubmitted] = useState(false);
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -19,7 +16,7 @@ export default function BookingModal({ isOpen, onClose }: Props) {
       await fetch('/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'booking', data: form, honeypot: '' }),
+        body: JSON.stringify({ type: 'booking', data: { ...form, restaurant: REST_NAMES[(window.location.pathname.split('/')[1] || '')] || '' }, honeypot: '' }),
       });
     } catch (e) { }
     setTimeout(() => {

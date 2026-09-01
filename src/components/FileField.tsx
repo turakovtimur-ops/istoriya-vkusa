@@ -3,16 +3,14 @@ interface Props {
   accept: string;
   required?: boolean;
   fileName: string;
-  onFile: (name: string) => void;
+  onFile: (name: string, file?: File) => void;
   hint?: string;
 }
-
 export default function FileField({ label, accept, required, fileName, onFile, hint }: Props) {
   return (
     <label className="block cursor-pointer">
       <span className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">
-        {label}
-        {required ? ' *' : ''}
+        {label}{required ? ' *' : ''}
       </span>
       <span className="flex items-center gap-3 border border-dashed border-graphite/40 px-4 py-3.5 hover:border-terra transition-colors bg-white/40">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-terra flex-none">
@@ -26,7 +24,7 @@ export default function FileField({ label, accept, required, fileName, onFile, h
           accept={accept}
           required={required}
           className="hidden"
-          onChange={(e) => onFile(e.target.files && e.target.files[0] ? e.target.files[0].name : '')}
+          onChange={(e) => { const f = e.target.files && e.target.files[0]; onFile(f ? f.name : '', f || undefined); }}
         />
       </span>
     </label>
