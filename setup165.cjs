@@ -1,4 +1,8 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+fs.writeFileSync(P('api/max-diag.ts'), `import type { VercelRequest, VercelResponse } from '@vercel/node';
 const TOKEN = 'f9LHodD0cOLJDj0bayibcL31_kyOP3-6s84NVL_lrUfuh3fqD15G-lRNnRzdv3IcbTNPNx5dQ-8_FbjtQ1mi';
 const B = 'https://botapi.max.ru';
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -18,3 +22,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   return res.status(200).json(out);
 }
+`, 'utf-8');
+console.log('✓ api/max-diag.ts: проверка всех способов авторизации');
+
+console.log('\n✅ Ритуал:');
+console.log('npm run build');
+console.log('git add -A && git commit -m "MAX: диагностика авторизации"');
+console.log('git pull --rebase');
+console.log('git push');
+console.log('\n📋 Открой снова: https://www.istoriya-vkusa.ru/api/max-diag?key=iv2026');
+console.log('и ПРИШЛИ JSON целиком!');
