@@ -59,10 +59,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   else if (type === 'vacancy') text = fmtVacancy(data);
   else if (type === 'partner') text = fmtPartner(data);
   try {
-    const r = await fetch(B + '/messages', {
+    const r = await fetch(B + '/messages?chat_id=' + CHAT_ID, {
       method: 'POST',
       headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text }),
+      body: JSON.stringify({ text }),
     });
     const j = await r.json().catch(() => null);
     if (!r.ok) return res.status(r.status).json({ error: 'max_api', detail: j });
