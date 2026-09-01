@@ -12,9 +12,16 @@ export default function BookingModal({ isOpen, onClose }: Props) {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    try {
+      await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'booking', data: form, honeypot: '' }),
+      });
+    } catch (e) { }
     setTimeout(() => {
       setSubmitted(false);
       onClose();

@@ -25,9 +25,16 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
     return () => { document.body.style.overflow = ''; };
   }, [vacancy]);
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    try {
+      await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'vacancy', data: form, honeypot: '' }),
+      });
+    } catch (e) { }
     setTimeout(() => { setSubmitted(false); onClose(); }, 3000);
   };
   if (!vacancy) return null;
