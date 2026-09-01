@@ -7,16 +7,22 @@ const TINY_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.query.key !== 'iv2026') return res.status(403).json({ error: 'forbidden' });
   const out: any = {};
-  const r1 = await fetch(B + '/uploads?type=photo', { method: 'POST', headers: H });
-  const j1: any = await r1.json().catch(() => null);
-  out.up1 = { status: r1.status, body: j1 };
-  if (r1.ok && j1 && j1.url) {
+  let j1: any = null;
+  let used = '';
+  for (const t of ['image', 'photo', 'file', 'video', 'audio']) {
+    const r1 = await fetch(B + '/uploads?type=' + t, { method: 'POST', headers: H });
+    const j = await r1.json().catch(() => null);
+    out['up1_' + t] = { status: r1.status, body: j };
+    if (r1.ok && j && j.url) { j1 = j; used = t; break; }
+  }
+  out.used = used;
+  if (j1) {
     const buf = Buffer.from(TINY_PNG, 'base64');
     const fd = new FormData();
     fd.append('file', new Blob([buf], { type: 'image/png' }), 'test.png');
     const r2 = await fetch(j1.url, { method: 'POST', body: fd });
     out.up2 = { status: r2.status, body: await r2.text().catch(() => null) };
-    const r3 = await fetch(B + '/messages?chat_id=' + CHAT_ID, { method: 'POST', headers: H, body: JSON.stringify({ text: '📎 Тест файла', attachments: [{ type: 'photo', payload: { token: j1.token } }] }) });
+    const r3 = await fetch(B + '/messages?chat_id=' + CHAT_ID, { method: 'POST', headers: H, body: JSON.stringify({ text: '📎 Тест файла', attachments: [{ type: used, payload: { token: j1.token } }] }) });
     out.send = { status: r3.status, body: await r3.json().catch(() => null) };
   }
   return res.status(200).json(out);

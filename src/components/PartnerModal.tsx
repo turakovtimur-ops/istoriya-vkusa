@@ -6,6 +6,7 @@ const labelCls = 'text-xs text-muted uppercase tracking-[0.2em] mb-2 block';
 export default function PartnerModal({ open, onClose }: Props) {
   const [form, setForm] = useState({ company: '', person: '', phone: '', email: '', category: 'Продукты и кухня', offer: '', comment: '' });
   const [fileName, setFileName] = useState('');
+  const [fileWarn, setFileWarn] = useState('');
   const [fileObj, setFileObj] = useState<File | null>(null);
   const toB64 = (f: File) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(f); });
   const [submitted, setSubmitted] = useState(false);
@@ -45,7 +46,8 @@ export default function PartnerModal({ open, onClose }: Props) {
           </div>
           <div><label className={labelCls}>Категория</label><select value={form.category} onChange={(e) => set('category', e.target.value)} className={inputCls}><option>Продукты и кухня</option><option>Напитки и бар</option><option>Оборудование и техника</option><option>Сервис и обслуживание</option><option>Другое</option></select></div>
           <div><label className={labelCls}>Что предлагаете *</label><textarea rows={3} required value={form.offer} onChange={(e) => set('offer', e.target.value)} placeholder="Коротко о продукте или услуге и условиях" className={inputCls + ' resize-none'} /></div>
-          <FileField label="Прайс или презентация (PDF, Excel)" accept=".pdf,.xls,.xlsx,.csv,.doc,.docx,.ppt,.pptx" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); }} />
+          <FileField label="Прайс или презентация (PDF, Excel, до 3 МБ)" accept=".pdf,.xls,.xlsx,.csv,.doc,.docx,.ppt,.pptx" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} />
+          {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
           <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Заявка отправлена!' : 'Отправить заявку'}</button>
         </form>

@@ -6,6 +6,7 @@ const labelCls = 'text-xs text-muted uppercase tracking-[0.2em] mb-2 block';
 export default function EventModal({ open, format, onClose }: Props) {
   const [form, setForm] = useState({ name: '', phone: '', format: '', date: '', guests: '', wishes: '' });
   const [fileName, setFileName] = useState('');
+  const [fileWarn, setFileWarn] = useState('');
   const [fileObj, setFileObj] = useState<File | null>(null);
   const toB64 = (f: File) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(f); });
   const [submitted, setSubmitted] = useState(false);
@@ -46,7 +47,8 @@ export default function EventModal({ open, format, onClose }: Props) {
             <div><label className={labelCls}>Количество гостей</label><input type="text" value={form.guests} onChange={(e) => set('guests', e.target.value)} placeholder="≈ 50" className={inputCls} /></div>
           </div>
           <div><label className={labelCls}>Пожелания</label><textarea rows={3} value={form.wishes} onChange={(e) => set('wishes', e.target.value)} placeholder="Повод, стиль, любимые блюда гостей — всё, что важно" className={inputCls + ' resize-none'} /></div>
-          <FileField label="Фото и примеры (как вы хотите видеть)" accept=".jpg,.jpeg,.png,.heic,.webp,.pdf" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); }} hint="Примеры сервировки, площадки, меню — всё подойдёт" />
+          <FileField label="Фото и примеры (как вы хотите видеть, до 3 МБ)" accept=".jpg,.jpeg,.png,.heic,.webp,.pdf" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} hint="Примеры сервировки, площадки, меню — всё подойдёт" />
+          {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
           <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Заявка отправлена!' : 'Отправить заявку'}</button>
         </form>

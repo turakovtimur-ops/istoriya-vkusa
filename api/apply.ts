@@ -17,18 +17,24 @@ const checkRate = (ip: string) => {
 async function maxUpload(base64: string, name: string, log?: any): Promise<any | null> {
   try {
     const ext = (name.split('.').pop() || '').toLowerCase();
-    const type = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext) ? 'photo' : 'file';
-    const r1 = await fetch(B + '/uploads?type=' + type, { method: 'POST', headers: H });
-    const j1: any = await r1.json().catch(() => null);
-    if (log) log.up1 = { status: r1.status, body: j1 };
-    if (!r1.ok || !j1 || !j1.url) return null;
+    const isImg = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic'].includes(ext);
+    const types = isImg ? ['image', 'photo', 'file'] : ['file', 'image'];
+    let j1: any = null;
+    let used = '';
+    for (const t of types) {
+      const r1 = await fetch(B + '/uploads?type=' + t, { method: 'POST', headers: H });
+      const j = await r1.json().catch(() => null);
+      if (log) log['up1_' + t] = { status: r1.status, body: j };
+      if (r1.ok && j && j.url) { j1 = j; used = t; break; }
+    }
+    if (!j1) return null;
     const buf = Buffer.from(base64, 'base64');
     const fd = new FormData();
     fd.append('file', new Blob([buf], { type: 'application/octet-stream' }), name);
     const r2 = await fetch(j1.url, { method: 'POST', body: fd });
     if (log) log.up2 = { status: r2.status };
     if (!r2.ok) return null;
-    return { type, payload: { token: j1.token } };
+    return { type: used, payload: { token: j1.token } };
   } catch (e: any) {
     if (log) log.err = e.message;
     return null;
@@ -58,7 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const log: any = {};
   let att: any = null;
   if (data.file && data.file.base64) att = await maxUpload(data.file.base64, data.file.name || 'file', log);
-  if (data.file && data.file.name && !att) text += '\n📎 Файл: ' + data.file.name;
+  if (data.file && data.file.name && !att) text += '\n📎 Файл: ' + data.file.name + ' (не прикрепился)';
   try {
     const payload: any = { text };
     if (att) payload.attachments = [att];

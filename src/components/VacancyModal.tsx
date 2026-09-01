@@ -8,6 +8,7 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
   const [mode, setMode] = useState<'form' | 'file'>('form');
   const [form, setForm] = useState({ name: '', phone: '', email: '', position: '', place: 'Любой', experience: 'Не требуется', employment: 'Полная занятость', medbook: 'Нет', start: '', about: '' });
   const [fileName, setFileName] = useState('');
+  const [fileWarn, setFileWarn] = useState('');
   const [fileObj, setFileObj] = useState<File | null>(null);
   const toB64 = (f: File) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(f); });
   const [submitted, setSubmitted] = useState(false);
@@ -61,14 +62,15 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
               </div>
               <div><label className={labelCls}>Когда готовы приступить</label><input type="text" value={form.start} onChange={(e) => set('start', e.target.value)} placeholder="Например: с 1 числа следующего месяца" className={inputCls} /></div>
               <div><label className={labelCls}>О себе</label><textarea rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Пара слов о себе и почему вам у нас понравится" className={inputCls + ' resize-none'} /></div>
-              <FileField label="Фото или резюме (необязательно)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); }} />
+              <FileField label="Фото или резюме (необязательно, до 3 МБ)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} />
             </>
           ) : (
             <>
-              <FileField label="Готовая анкета, резюме или фото" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.heic" required fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); }} hint="Прикрепите файл — и мы сами всё прочитаем" />
+              <FileField label="Готовая анкета, резюме или фото (до 3 МБ)" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.heic" required fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} hint="Прикрепите файл — и мы сами всё прочитаем" />
               <div><label className={labelCls}>Пара слов о себе</label><textarea rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Кем работали, что умеете — одной строкой" className={inputCls + ' resize-none'} /></div>
             </>
           )}
+          {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
           <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Анкета отправлена!' : 'Отправить'}</button>
         </form>
