@@ -13,6 +13,7 @@ export default function BookingModal({ isOpen, onClose }: Props) {
     e.preventDefault();
     setSubmitted(true);
     try {
+    if ((window as any).ym) (window as any).ym(112073069, 'reachGoal', 'booking_sent');
       await fetch('/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

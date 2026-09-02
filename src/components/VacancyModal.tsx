@@ -22,6 +22,7 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
     e.preventDefault();
     setSubmitted(true);
     let file;
+    if ((window as any).ym) (window as any).ym(112073069, 'reachGoal', 'vacancy_sent');
     if (fileObj && fileObj.size <= 3 * 1024 * 1024) file = { name: fileObj.name, base64: await toB64(fileObj) };
     try {
       await fetch('/api/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'vacancy', data: { ...form, file }, honeypot: '' }) });
