@@ -1,4 +1,8 @@
-{
+const fs = require('fs');
+const path = require('path');
+const P = (f) => path.join(__dirname, f);
+
+fs.writeFileSync(P('vercel.json'), `{
   "headers": [
     {
       "source": "/(.*)",
@@ -14,3 +18,8 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
+`, 'utf-8');
+console.log('✓ vercel.json: frame-ancestors — Метрике можно, чужим нельзя');
+
+console.log('\n✅ ОДНОЙ КОМАНДОЙ:');
+console.log('npm run build && git add -A && git commit -m "CSP: разрешить фреймы Метрике" && git pull --rebase && git push');
