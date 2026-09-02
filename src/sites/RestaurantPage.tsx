@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
+import RestaurantPromos from '../components/RestaurantPromos';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
@@ -168,7 +169,8 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
           </div>
         </section>
 
-        <section id="menu" className={'scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 border-y ' + lineB} style={{ background: secBg }}>
+        <RestaurantPromos restaurant={restaurant} dark={dark} />
+    <section id="menu" className={'scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 border-y ' + lineB} style={{ background: secBg }}>
           <div className="max-w-[1400px] mx-auto text-center reveal">
             <p className="text-xs uppercase tracking-[0.3em] mb-4 font-medium" style={{ color: accent }}>Меню</p>
             <h2 className={H2C + ' mb-6 ' + cHead}>Наше меню</h2>
