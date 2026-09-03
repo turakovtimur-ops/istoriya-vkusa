@@ -226,7 +226,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <div className="flex flex-wrap justify-center gap-4">
               {menus.map((m) => (
                 <a key={m.file} href={m.file} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>
+                  className="inline-flex items-center justify-center gap-2.5 md:gap-3 w-full md:flex-1 px-4 md:px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                   {m.label} (PDF)
                 </a>
