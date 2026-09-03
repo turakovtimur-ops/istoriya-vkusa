@@ -44,6 +44,32 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
   useDocumentMeta(restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса', restaurant.tagline);
+  useEffect(() => {
+    const rating = (extra0 as any).rating;
+    const hrs = (extra0.hours || '09:00–00:00').replace('–', '-');
+    const ld: any = {
+      '@context': 'https://schema.org',
+      '@type': 'Restaurant',
+      name: restaurant.name,
+      description: restaurant.tagline,
+      servesCuisine: restaurant.cuisine,
+      telephone: restaurant.phone,
+      url: 'https://www.istoriya-vkusa.ru' + restaurant.path,
+      address: { '@type': 'PostalAddress', streetAddress: restaurant.address, addressLocality: 'Геленджик', addressCountry: 'RU' },
+      geo: { '@type': 'GeoCoordinates', latitude: geo(restaurant.id)[0], longitude: geo(restaurant.id)[1] },
+      openingHours: 'Mo-Su ' + (hrs.endsWith('00:00') ? hrs.replace(/00:00$/, '24:00') : hrs),
+    };
+    if (rating) ld.aggregateRating = { '@type': 'AggregateRating', ratingValue: String(rating.score), reviewCount: String(rating.count) };
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'ld-json-resto';
+    s.textContent = JSON.stringify(ld);
+    document.head.appendChild(s);
+    let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }
+    link.href = 'https://www.istoriya-vkusa.ru' + restaurant.path;
+    return () => { const el = document.getElementById('ld-json-resto'); if (el) el.remove(); };
+  }, [restaurant.id]);
   
   const accent = restaurant.accent;
   const tel = 'tel:' + restaurant.phone.replace(/[^0-9+]/g, '');
