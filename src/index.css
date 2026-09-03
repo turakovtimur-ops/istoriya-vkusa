@@ -429,3 +429,7 @@ html, body { overflow-x: clip; }
 /* ===== setup161: режим правки ===== */
 body.edit-mode [data-e] { outline: 1px dashed rgba(194,160,118,0.55); outline-offset: 2px; cursor: pointer; }
 body.edit-mode [data-e]:hover { outline: 2px solid #C2A078; background: rgba(194,160,118,0.08); }
+
+/* Спутник Яндекс Еды */
+.eda-satellite img { transition: transform 0.3s ease; }
+.eda-satellite:hover img { transform: scale(1.15) rotate(-6deg); }

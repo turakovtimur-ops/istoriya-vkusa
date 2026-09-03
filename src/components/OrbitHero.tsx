@@ -14,9 +14,11 @@ const M_ORBITS = [1, 0.8, 0.62, 0.46];
 const M_RY = 0.42;
 const PHASES = [45, 135, 225, 315];
 const SPEED = 4;
+const SAT_URL = 'https://eda.yandex.ru/r/kinza_1721032873?placeSlug=kinza_l37w6';
 
 export default function OrbitHero() {
   const [angle, setAngle] = useState(0);
+const [satAngle, setSatAngle] = useState(0);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [dims, setDims] = useState({ R: 600, ryF: 0.3 });
   const [mobileR, setMobileR] = useState(150);
@@ -60,6 +62,7 @@ export default function OrbitHero() {
       const target = pausedRef.current !== null ? SPEED * 0.25 : isMobile ? SPEED * 0.5 : SPEED;
       curSpeed.current += (target - curSpeed.current) * 0.06;
       setAngle((a) => (a + curSpeed.current * dt) % 360);
+      setSatAngle((a) => (a + curSpeed.current * 5 * dt) % 360);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -79,6 +82,24 @@ export default function OrbitHero() {
   const svgH = R * ryF * 2 + 4;
   const cx = R + 2;
   const cy = R * ryF + 2;
+const ki = restaurants.findIndex((r) => r.id === 'kinza');
+const krad = ((PHASES[ki] + angle) * Math.PI) / 180;
+const kx = Math.cos(krad) * R * ORBITS[ki].r;
+const ky = Math.sin(krad) * R * ryF * ORBITS[ki].ry;
+const kdepth = (Math.sin(krad) + 1) / 2;
+const kscale = 0.7 + kdepth * 0.4;
+const srad = ((satAngle + 90) * Math.PI) / 180;
+const sR = 96;
+const sx = kx + Math.cos(srad) * sR * kscale;
+const sy = ky - 46 * kscale + Math.sin(srad) * sR * 0.5 * kscale;
+const sfront = Math.sin(srad) > 0;
+const sz = sfront ? 35 : 9;
+const sscale = kscale * (sfront ? 1 : 0.82);
+const mkx = Math.cos(krad) * mobileR * M_ORBITS[ki];
+const mky = Math.sin(krad) * mobileR * M_ORBITS[ki] * M_RY;
+const msx = mkx + Math.cos(srad) * 46;
+const msy = mky - 6 + Math.sin(srad) * 24;
+const msz = sfront ? 35 : 9;
 
   return (
     <section
