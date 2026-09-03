@@ -56,7 +56,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
       telephone: restaurant.phone,
       url: 'https://www.istoriya-vkusa.ru' + restaurant.path,
       address: { '@type': 'PostalAddress', streetAddress: restaurant.address, addressLocality: 'Геленджик', addressCountry: 'RU' },
-      geo: { '@type': 'GeoCoordinates', latitude: geo(restaurant.id)[0], longitude: geo(restaurant.id)[1] },
+      geo: { '@type': 'GeoCoordinates', latitude: geo(restaurant.id)[1], longitude: geo(restaurant.id)[0] },
       openingHours: 'Mo-Su ' + (hrs.endsWith('00:00') ? hrs.replace(/00:00$/, '24:00') : hrs),
     };
     if (rating) ld.aggregateRating = { '@type': 'AggregateRating', ratingValue: String(rating.score), reviewCount: String(rating.count) };
