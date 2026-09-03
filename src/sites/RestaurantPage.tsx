@@ -371,10 +371,10 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <p className="text-cream/60 text-sm mt-2">Ежедневно {extra.hours}</p>
             <div className="social-footer flex items-center gap-3 mt-5">
               <a href={SOCIAL_VK[restaurant.id]} target="_blank" rel="noopener noreferrer" aria-label={restaurant.name + ' во ВКонтакте'} title="ВКонтакте">
-                <img src="/images/social/vk.svg" alt="ВКонтакте" className="w-9 h-9 rounded-xl hover:scale-105 transition-transform" />
+                <img src="/images/social/vk.png" alt="ВКонтакте" className="w-9 h-9 rounded-xl hover:scale-105 transition-transform" />
               </a>
               <a href={MAX_LOYALTY_URL} target="_blank" rel="noopener noreferrer" aria-label="MAX — программа лояльности" title="MAX · программа лояльности">
-                <img src="/images/social/max.svg" alt="MAX" className="w-9 h-9 rounded-xl hover:scale-105 transition-transform" />
+                <img src="/images/social/max.png" alt="MAX" className="w-9 h-9 rounded-xl hover:scale-105 transition-transform" />
               </a>
             </div>
           </div>
