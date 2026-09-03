@@ -26,6 +26,14 @@ const GEO: Record<string, [number, number]> = {
   'la-costa': [38.07625, 44.559098],
 };
 const geo = (id: string) => GEO[id] || [38.0776, 44.5611];
+const SOCIAL_VK: Record<string, string> = {
+  kinza: 'https://vk.ru/kinzagelendzhik',
+  nino: 'https://vk.ru/ninogelendzhik',
+  astoria: 'https://vk.ru/astoriagelendzhik',
+  'la-costa': 'https://vk.ru/lacostabereg',
+};
+const MAX_LOYALTY_URL = 'https://max.ru/id2370015710_bot';
+const KINZA_EDA_URL = 'https://eda.yandex.ru/r/kinza_1721032873?placeSlug=kinza_l37w6';
 const FALLBACK_GALLERY = [
   'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&fm=webp',
   'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&fm=webp',
@@ -164,7 +172,15 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
             <p data-e={'pages.' + restaurant.id + '.tagline'} className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
-            <button onClick={modal.open} className="mt-8 self-start px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
+            <div className="mt-8 self-start flex flex-wrap items-center gap-4">
+            <button onClick={modal.open} className="px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
+            {restaurant.id === 'kinza' && (
+              <a href={KINZA_EDA_URL} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
+                <img src="/images/kinza/yandex-eda.png" alt="" className="w-6 h-6 rounded-md" />
+                Заказать доставку
+              </a>
+            )}
+          </div>
           </div>
         </section>
 
@@ -353,6 +369,14 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <p className="text-cream/80 text-sm">{restaurant.address} · {restaurant.beach}</p>
             <a href={tel} className="text-cream/80 hover:text-cream text-sm block mt-2">{restaurant.phone}</a>
             <p className="text-cream/60 text-sm mt-2">Ежедневно {extra.hours}</p>
+            <div className="social-footer flex items-center gap-3 mt-5">
+              <a href={SOCIAL_VK[restaurant.id]} target="_blank" rel="noopener noreferrer" aria-label={restaurant.name + ' во ВКонтакте'} title="ВКонтакте">
+                <img src="/images/social/vk.svg" alt="ВКонтакте" className="w-9 h-9 rounded-xl hover:scale-105 transition-transform" />
+              </a>
+              <a href={MAX_LOYALTY_URL} target="_blank" rel="noopener noreferrer" aria-label="MAX — программа лояльности" title="MAX · программа лояльности">
+                <img src="/images/social/max.svg" alt="MAX" className="w-9 h-9 rounded-xl hover:scale-105 transition-transform" />
+              </a>
+            </div>
           </div>
         </div>
         <div className="border-t border-cream/10 py-5 text-center px-6">
