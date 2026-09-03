@@ -6,7 +6,7 @@ const inputCls = 'w-full bg-transparent border-b border-graphite/30 py-3 focus:o
 const labelCls = 'text-xs text-muted uppercase tracking-[0.2em] mb-2 block';
 export default function VacancyModal({ vacancy, onClose }: Props) {
   const [mode, setMode] = useState<'form' | 'file'>('form');
-  const [form, setForm] = useState({ name: '', phone: '', email: '', position: '', place: 'Любой', experience: 'Не требуется', employment: 'Полная занятость', medbook: 'Нет', start: '', about: '' });
+  const [form, setForm] = useState({ name: '', phone: '', email: '', position: '', place: 'Любой', experience: 'Не требуется', employment: 'Полная занятость', medbook: 'Нет', citizenship: 'Российская Федерация', patent: '', job1: '', job2: '', start: '', about: '' });
   const [fileName, setFileName] = useState('');
   const [fileWarn, setFileWarn] = useState('');
   const [fileObj, setFileObj] = useState<File | null>(null);
@@ -51,6 +51,38 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
             <div><label className={labelCls}>Должность *</label><select required value={form.position} onChange={(e) => set('position', e.target.value)} className={inputCls}>{vacancies.map((v) => (<option key={v} value={v}>{v}</option>))}</select></div>
             <div><label className={labelCls}>Заведение</label><select value={form.place} onChange={(e) => set('place', e.target.value)} className={inputCls}><option>Любой</option>{restaurants.map((r) => (<option key={r.id}>{r.name}</option>))}<option>Природа (загородный комплекс)</option></select></div>
           </div>
+      <div className="grid md:grid-cols-2 gap-5">
+        <div>
+          <label className={labelCls}>Гражданство *</label>
+          <select required value={form.citizenship} onChange={(e) => set('citizenship', e.target.value)} className={inputCls}>
+            <option>Российская Федерация</option>
+            <option>Республика Белоруссия</option>
+            <option>Туркменистан</option>
+            <option>Армения</option>
+            <option>Казахстан</option>
+          </select>
+        </div>
+      </div>
+      {form.citizenship !== 'Российская Федерация' && (
+        <div className="border border-terra/30 bg-terra/5 p-5 space-y-4">
+          <p className="text-xs text-muted leading-relaxed">
+            {['Республика Белоруссия', 'Армения', 'Казахстан'].includes(form.citizenship)
+              ? 'ℹ️ Граждане стран ЕАЭС (Беларусь, Армения, Казахстан) работают в РФ без патента — на основании договора о ЕАЭС.'
+              : '⚠️ Гражданам Туркменистана для работы в РФ требуется патент на работу.'}
+          </p>
+          <div>
+            <label className={labelCls}>Патент / разрешение на работу в РФ</label>
+            <div className="flex flex-wrap gap-5 pt-1">
+              <label className="flex items-center gap-2 text-sm text-graphite cursor-pointer">
+                <input type="radio" name="patent" required checked={form.patent === 'Да, есть'} onChange={() => set('patent', 'Да, есть')} className="accent-terra" /> Да, есть
+              </label>
+              <label className="flex items-center gap-2 text-sm text-graphite cursor-pointer">
+                <input type="radio" name="patent" required checked={form.patent === 'Нет, готов(а) оформить'} onChange={() => set('patent', 'Нет, готов(а) оформить')} className="accent-terra" /> Нет, готов(а) оформить
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
           {mode === 'form' ? (
             <>
               <div className="grid md:grid-cols-2 gap-5">
@@ -61,7 +93,17 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
                 <div><label className={labelCls}>Занятость</label><select value={form.employment} onChange={(e) => set('employment', e.target.value)} className={inputCls}><option>Полная занятость</option><option>Частичная занятость</option><option>Сменный график</option><option>Подработка</option></select></div>
                 <div><label className={labelCls}>Медкнижка</label><select value={form.medbook} onChange={(e) => set('medbook', e.target.value)} className={inputCls}><option>Нет</option><option>Есть</option><option>В процессе оформления</option></select></div>
               </div>
-              <div><label className={labelCls}>Когда готовы приступить</label><input name="field" type="text" value={form.start} onChange={(e) => set('start', e.target.value)} placeholder="Например: с 1 числа следующего месяца" className={inputCls} /></div>
+              <div className="grid md:grid-cols-2 gap-5">
+        <div>
+          <label className={labelCls}>Последнее место работы · необязательно</label>
+          <input name="field" type="text" value={form.job1} onChange={(e) => set('job1', e.target.value)} placeholder="Заведение и должность" className={inputCls} />
+        </div>
+        <div>
+          <label className={labelCls}>До этого · необязательно</label>
+          <input name="field" type="text" value={form.job2} onChange={(e) => set('job2', e.target.value)} placeholder="Заведение и должность" className={inputCls} />
+        </div>
+      </div>
+      <div><label className={labelCls}>Когда готовы приступить</label><input name="field" type="text" value={form.start} onChange={(e) => set('start', e.target.value)} placeholder="Например: с 1 числа следующего месяца" className={inputCls} /></div>
               <div><label className={labelCls}>О себе</label><textarea name="field" rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Пара слов о себе и почему вам у нас понравится" className={inputCls + ' resize-none'} /></div>
               <FileField label="Фото или резюме (необязательно, до 3 МБ)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} />
             </>
