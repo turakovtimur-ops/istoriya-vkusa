@@ -180,6 +180,10 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
                 Заказать доставку
               </a>
             )}
+            <a href={MAX_LOYALTY_URL} target="_blank" rel="noopener noreferrer" className="loyalty-btn inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: 'rgba(17,17,17,0.55)', color: '#f5efe6', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <img src="/images/social/max.png" alt="" className="w-6 h-6 rounded-md" />
+              Система лояльности
+            </a>
           </div>
           </div>
         </section>
