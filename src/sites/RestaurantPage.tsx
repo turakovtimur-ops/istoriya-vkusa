@@ -172,16 +172,16 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
             <p data-e={'pages.' + restaurant.id + '.tagline'} className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
-            <div className="mt-8 self-start flex flex-wrap items-center gap-4">
-            <button onClick={modal.open} className="px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
+            <div className="mt-6 self-stretch md:self-start flex flex-col md:flex-row items-stretch md:items-center gap-2.5 md:gap-4 max-w-md md:max-w-none">
+            <button onClick={modal.open} className="px-6 md:px-10 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
             {restaurant.id === 'kinza' && (
-              <a href={KINZA_EDA_URL} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
-                <img src="/images/kinza/yandex-eda.png" alt="" className="w-6 h-6 rounded-md" />
+              <a href={KINZA_EDA_URL} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn inline-flex items-center justify-center gap-2.5 md:gap-3 px-6 md:px-8 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
+                <img src="/images/kinza/yandex-eda.png" alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-md" />
                 Заказать доставку
               </a>
             )}
-            <a href={MAX_LOYALTY_URL} target="_blank" rel="noopener noreferrer" className="loyalty-btn inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: 'rgba(17,17,17,0.55)', color: '#f5efe6', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)' }}>
-              <img src="/images/social/max.png" alt="" className="w-6 h-6 rounded-md" />
+            <a href={MAX_LOYALTY_URL} target="_blank" rel="noopener noreferrer" className="loyalty-btn inline-flex items-center justify-center gap-2.5 md:gap-3 px-6 md:px-8 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: 'rgba(17,17,17,0.55)', color: '#f5efe6', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <img src="/images/social/max.png" alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-md" />
               Система лояльности
             </a>
           </div>
