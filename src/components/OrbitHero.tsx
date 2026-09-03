@@ -168,6 +168,17 @@ const msz = sfront ? 35 : 9;
                 </a>
               );
             })}
+<a
+  key="eda-sat"
+  href={SAT_URL}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Кинза — доставка в Яндекс Еде"
+  className="absolute left-1/2 top-1/2 eda-satellite"
+  style={{ transform: 'translate(-50%, -50%) translate(' + msx + 'px, ' + msy + 'px)', zIndex: msz }}
+>
+  <img src="/images/kinza/yandex-eda.png" alt="" className="w-9 h-9 rounded-[22%] eda-logo" style={{ boxShadow: '0 0 18px rgba(255,214,10,0.5)' }} />
+</a>
           </div>
         </div>
       ) : (
@@ -259,6 +270,18 @@ const msz = sfront ? 35 : 9;
                 </a>
               );
             })}
+<a
+  key="eda-sat"
+  href={SAT_URL}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Кинза — доставка в Яндекс Еде"
+  title="Доставка · Яндекс Еда"
+  className="absolute left-1/2 top-1/2 eda-satellite"
+  style={{ transform: 'translate(-50%, -50%) translate(' + sx + 'px, ' + sy + 'px) scale(' + sscale + ')', zIndex: sz, opacity: 0.75 + kdepth * 0.25 }}
+>
+  <img src="/images/kinza/yandex-eda.png" alt="" className="w-12 h-12 lg:w-14 lg:h-14 rounded-[22%] eda-logo" style={{ boxShadow: '0 0 26px rgba(255,214,10,0.5), 0 8px 20px rgba(0,0,0,0.45)' }} />
+</a>
           </div>
         </div>
       )}
