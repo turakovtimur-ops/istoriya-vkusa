@@ -27,9 +27,9 @@ const GEO: Record<string, [number, number]> = {
 };
 const geo = (id: string) => GEO[id] || [38.0776, 44.5611];
 const FALLBACK_GALLERY = [
-  'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
-  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
-  'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80',
+  'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&fm=webp',
+  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&fm=webp',
+  'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80&fm=webp',
 ];
 const lum = (hex: string) => {
   const h = hex.replace('#', '');

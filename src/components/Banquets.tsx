@@ -37,21 +37,21 @@ export default function Banquets() {
             <div className="bg-cream/5 backdrop-blur-sm border border-cream/10 p-8 lg:p-12">
               <h3 className="font-serif text-3xl mb-8">Обсудить мероприятие</h3>
               <form onSubmit={handleSubmit} className="space-y-5">
-                <input type="text" placeholder="Имя" required value={form.name}
+                <input name="field" type="text" placeholder="Имя" required value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full bg-transparent border-b border-cream/30 py-4 text-cream placeholder:text-cream/50 focus:outline-none focus:border-terra transition-colors" />
-                <input type="tel" placeholder="Телефон" required value={form.phone}
+                <input name="field" type="tel" placeholder="Телефон" required value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   className="w-full bg-transparent border-b border-cream/30 py-4 text-cream placeholder:text-cream/50 focus:outline-none focus:border-terra transition-colors" />
                 <div className="grid grid-cols-2 gap-4">
-                  <input type="date" required value={form.date}
+                  <input name="field" type="date" required value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
                     className="w-full bg-transparent border-b border-cream/30 py-4 text-cream focus:outline-none focus:border-terra transition-colors" />
-                  <input type="number" placeholder="Гостей" min="1" required value={form.guests}
+                  <input name="field" type="number" placeholder="Гостей" min="1" required value={form.guests}
                     onChange={(e) => setForm({ ...form, guests: e.target.value })}
                     className="w-full bg-transparent border-b border-cream/30 py-4 text-cream placeholder:text-cream/50 focus:outline-none focus:border-terra transition-colors" />
                 </div>
-                <textarea placeholder="Комментарий" rows={3} value={form.comment}
+                <textarea name="field" placeholder="Комментарий" rows={3} value={form.comment}
                   onChange={(e) => setForm({ ...form, comment: e.target.value })}
                   className="w-full bg-transparent border-b border-cream/30 py-4 text-cream placeholder:text-cream/50 focus:outline-none focus:border-terra transition-colors resize-none" />
                 <button type="submit" className="btn-terra w-full mt-6">

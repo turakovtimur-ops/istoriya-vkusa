@@ -42,21 +42,21 @@ export default function BookingModal({ isOpen, onClose }: Props) {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Имя</label>
-              <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
+              <input name="field" type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
             </div>
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Телефон</label>
-              <input type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+7 (___) ___-__-__" className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
+              <input name="field" type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+7 (___) ___-__-__" className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Дата</label>
-              <input type="date" required value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} min={new Date().toISOString().split('T')[0]} className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
+              <input name="field" type="date" required value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} min={new Date().toISOString().split('T')[0]} className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
             </div>
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Время</label>
-              <input type="time" required value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
+              <input name="field" type="time" required value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite" />
             </div>
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Гостей</label>
@@ -70,7 +70,7 @@ export default function BookingModal({ isOpen, onClose }: Props) {
           </div>
           <div>
             <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Комментарий</label>
-            <textarea rows={3} value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })} placeholder="Пожелания, повод, особенности..." className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite resize-none" />
+            <textarea name="field" rows={3} value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })} placeholder="Пожелания, повод, особенности..." className="w-full bg-transparent border-b border-graphite/30 py-3 focus:outline-none focus:border-terra transition-colors text-graphite resize-none" />
           </div>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-8">
             {submitted ? '✓ Заявка принята!' : 'Забронировать'}

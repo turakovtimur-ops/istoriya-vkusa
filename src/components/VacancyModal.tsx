@@ -44,8 +44,8 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
         </div>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid md:grid-cols-2 gap-5">
-            <div><label className={labelCls}>ФИО *</label><input type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} /></div>
-            <div><label className={labelCls}>Телефон *</label><input type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>ФИО *</label><input name="field" type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>Телефон *</label><input name="field" type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} /></div>
           </div>
           <div className="grid md:grid-cols-2 gap-5">
             <div><label className={labelCls}>Должность *</label><select required value={form.position} onChange={(e) => set('position', e.target.value)} className={inputCls}>{vacancies.map((v) => (<option key={v} value={v}>{v}</option>))}</select></div>
@@ -54,25 +54,25 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
           {mode === 'form' ? (
             <>
               <div className="grid md:grid-cols-2 gap-5">
-                <div><label className={labelCls}>Email</label><input type="email" value={form.email} onChange={(e) => set('email', e.target.value)} className={inputCls} /></div>
+                <div><label className={labelCls}>Email</label><input name="field" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} className={inputCls} /></div>
                 <div><label className={labelCls}>Опыт работы</label><select value={form.experience} onChange={(e) => set('experience', e.target.value)} className={inputCls}><option>Не требуется</option><option>До 1 года</option><option>1–3 года</option><option>Более 3 лет</option></select></div>
               </div>
               <div className="grid md:grid-cols-2 gap-5">
                 <div><label className={labelCls}>Занятость</label><select value={form.employment} onChange={(e) => set('employment', e.target.value)} className={inputCls}><option>Полная занятость</option><option>Частичная занятость</option><option>Сменный график</option><option>Подработка</option></select></div>
                 <div><label className={labelCls}>Медкнижка</label><select value={form.medbook} onChange={(e) => set('medbook', e.target.value)} className={inputCls}><option>Нет</option><option>Есть</option><option>В процессе оформления</option></select></div>
               </div>
-              <div><label className={labelCls}>Когда готовы приступить</label><input type="text" value={form.start} onChange={(e) => set('start', e.target.value)} placeholder="Например: с 1 числа следующего месяца" className={inputCls} /></div>
-              <div><label className={labelCls}>О себе</label><textarea rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Пара слов о себе и почему вам у нас понравится" className={inputCls + ' resize-none'} /></div>
+              <div><label className={labelCls}>Когда готовы приступить</label><input name="field" type="text" value={form.start} onChange={(e) => set('start', e.target.value)} placeholder="Например: с 1 числа следующего месяца" className={inputCls} /></div>
+              <div><label className={labelCls}>О себе</label><textarea name="field" rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Пара слов о себе и почему вам у нас понравится" className={inputCls + ' resize-none'} /></div>
               <FileField label="Фото или резюме (необязательно, до 3 МБ)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} />
             </>
           ) : (
             <>
               <FileField label="Готовая анкета, резюме или фото (до 3 МБ)" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.heic" required fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} hint="Прикрепите файл — и мы сами всё прочитаем" />
-              <div><label className={labelCls}>Пара слов о себе</label><textarea rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Кем работали, что умеете — одной строкой" className={inputCls + ' resize-none'} /></div>
+              <div><label className={labelCls}>Пара слов о себе</label><textarea name="field" rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} placeholder="Кем работали, что умеете — одной строкой" className={inputCls + ' resize-none'} /></div>
             </>
           )}
           {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
-          <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
+          <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input name="field" type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Анкета отправлена!' : 'Отправить'}</button>
         </form>
       </div>

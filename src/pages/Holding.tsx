@@ -150,7 +150,7 @@ function PartnerPhoto({ p }: { p: Partner }) {
 
 function RestCardPhoto({ r }: { r: (typeof restaurants)[number] }) {
   const [stage, setStage] = useState(0);
-  const srcs = ([r.photo, r.image, 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80'] as (string | undefined)[]).filter(Boolean) as string[];
+  const srcs = ([r.photo, r.image, 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80&fm=webp'] as (string | undefined)[]).filter(Boolean) as string[];
   const src = srcs[Math.min(stage, srcs.length - 1)];
   return (
     <img

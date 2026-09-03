@@ -19,7 +19,7 @@ export default function FileField({ label, accept, required, fileName, onFile, h
         <span className={'text-sm truncate ' + (fileName ? 'text-graphite' : 'text-muted')}>
           {fileName || (hint ? hint : 'Нажмите, чтобы прикрепить файл')}
         </span>
-        <input
+        <input name="field"
           type="file"
           accept={accept}
           required={required}

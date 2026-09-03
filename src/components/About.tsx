@@ -30,7 +30,7 @@ export default function About() {
           </div>
           <div className="lg:col-span-7 reveal reveal-delay-2">
             <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1544124232-4c9e0db0a0b3?w=1200&q=85"
+              <img src="https://images.unsplash.com/photo-1544124232-4c9e0db0a0b3?w=1200&q=85&fm=webp"
                 alt="Интерьер ресторана Кинза"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-[2000ms]" loading="lazy" />
               <div className="absolute bottom-6 left-6 bg-cream/90 backdrop-blur-sm px-6 py-4">

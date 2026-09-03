@@ -39,18 +39,18 @@ export default function EventModal({ open, format, onClose }: Props) {
         <p className="text-muted font-light mb-8 text-sm">Расскажите о событии и прикрепите примеры — так мы предложим точнее.</p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid md:grid-cols-2 gap-5">
-            <div><label className={labelCls}>Имя *</label><input type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} /></div>
-            <div><label className={labelCls}>Телефон *</label><input type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>Имя *</label><input name="field" type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>Телефон *</label><input name="field" type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} /></div>
           </div>
           <div><label className={labelCls}>Формат</label><select value={form.format} onChange={(e) => set('format', e.target.value)} className={inputCls}><option>Выездной банкет</option><option>Кейтеринг</option><option>Праздники под ключ</option><option>Спонсорство и благотворительность</option><option>Другое</option></select></div>
           <div className="grid md:grid-cols-2 gap-5">
-            <div><label className={labelCls}>Дата и площадка</label><input type="text" value={form.date} onChange={(e) => set('date', e.target.value)} placeholder="Например: 15 августа, пляж" className={inputCls} /></div>
-            <div><label className={labelCls}>Количество гостей</label><input type="text" value={form.guests} onChange={(e) => set('guests', e.target.value)} placeholder="≈ 50" className={inputCls} /></div>
+            <div><label className={labelCls}>Дата и площадка</label><input name="field" type="text" value={form.date} onChange={(e) => set('date', e.target.value)} placeholder="Например: 15 августа, пляж" className={inputCls} /></div>
+            <div><label className={labelCls}>Количество гостей</label><input name="field" type="text" value={form.guests} onChange={(e) => set('guests', e.target.value)} placeholder="≈ 50" className={inputCls} /></div>
           </div>
-          <div><label className={labelCls}>Пожелания</label><textarea rows={3} value={form.wishes} onChange={(e) => set('wishes', e.target.value)} placeholder="Повод, стиль, любимые блюда гостей — всё, что важно" className={inputCls + ' resize-none'} /></div>
+          <div><label className={labelCls}>Пожелания</label><textarea name="field" rows={3} value={form.wishes} onChange={(e) => set('wishes', e.target.value)} placeholder="Повод, стиль, любимые блюда гостей — всё, что важно" className={inputCls + ' resize-none'} /></div>
           <FileField label="Фото и примеры (как вы хотите видеть, до 3 МБ)" accept=".jpg,.jpeg,.png,.heic,.webp,.pdf" fileName={fileName} onFile={(n, f) => { setFileName(n); setFileObj(f || null); setFileWarn(f && f.size > 3 * 1024 * 1024 ? 'Файл больше 3 МБ — он не прикрепится к заявке' : ''); }} hint="Примеры сервировки, площадки, меню — всё подойдёт" />
           {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
-          <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
+          <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input name="field" type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Заявка отправлена!' : 'Отправить заявку'}</button>
         </form>
       </div>

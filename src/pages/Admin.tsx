@@ -243,7 +243,7 @@ const edSave = async () => {
         <div className="w-full max-w-md glass-bar rounded-2xl p-8">
           <p className="text-amber text-xs tracking-[0.3em] uppercase mb-4">История Вкуса</p>
           <h1 className="text-3xl font-semibold tracking-tight mb-8">Управление</h1>
-          <input type="password" placeholder="Пароль" value={pwd} onChange={(e) => setPwd(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && login()} className={inp + ' mb-4'} />
+          <input name="field" type="password" placeholder="Пароль" value={pwd} onChange={(e) => setPwd(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && login()} className={inp + ' mb-4'} />
           <button onClick={login} className="w-full bg-amber text-night font-medium py-3 rounded-lg hover:opacity-90">Войти</button>
           {err && <p className="text-red-400 text-sm mt-4">{err}</p>}
         </div>
@@ -284,11 +284,11 @@ const edSave = async () => {
               {news.map((n, i) => (
                 <div key={n.id} className="border border-cream/15 rounded-xl p-5 bg-cream/5">
                   <div className="grid md:grid-cols-2 gap-3 mb-3">
-                    <input className={inp} value={n.date} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, date: e.target.value } : x))} />
-                    <input className={inp} value={n.tag} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, tag: e.target.value } : x))} />
+                    <input name="field" className={inp} value={n.date} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, date: e.target.value } : x))} />
+                    <input name="field" className={inp} value={n.tag} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, tag: e.target.value } : x))} />
                   </div>
-                  <input className={inp + ' mb-3 font-medium'} value={n.title} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, title: e.target.value } : x))} />
-                  <textarea className={inp} rows={3} value={n.text} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, text: e.target.value } : x))} />
+                  <input name="field" className={inp + ' mb-3 font-medium'} value={n.title} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, title: e.target.value } : x))} />
+                  <textarea name="field" className={inp} rows={3} value={n.text} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, text: e.target.value } : x))} />
                   <div className="flex justify-end mt-2"><button className="text-xs text-red-400 uppercase tracking-wider" onClick={() => setNews(news.filter((_, idx) => idx !== i))}>Удалить</button></div>
                 </div>
               ))}
@@ -307,7 +307,7 @@ const edSave = async () => {
                   <option value="all">Все рестораны</option>
                   {restaurants.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
                 </select>
-                <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addPromo(f); e.target.value = ''; }} className="text-xs" />
+                <input name="field" type="file" accept="image/*" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addPromo(f); e.target.value = ''; }} className="text-xs" />
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -330,7 +330,7 @@ const edSave = async () => {
             </select>
             <div className="border border-cream/15 rounded-xl p-5 bg-cream/5 mb-8">
               <p className="text-cream/50 text-xs mb-3">Добавить фото (до 3 МБ):</p>
-              <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addGal(f); e.target.value = ''; }} className="text-xs" />
+              <input name="field" type="file" accept="image/*" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addGal(f); e.target.value = ''; }} className="text-xs" />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {((extra[galRest] && extra[galRest].gallery) || []).map((src: string) => (
@@ -355,20 +355,20 @@ const edSave = async () => {
                 <p className="text-cream/50 text-xs uppercase tracking-widest">Главное фото (первый экран)</p>
                 <div className="flex items-center gap-3">
                   <img src={(cur.overrides && cur.overrides.image) || rest0.image} alt="" className="w-24 h-16 object-cover rounded-lg border border-cream/15" />
-                  <input type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) uploadHero(f); e.target.value = ''; }} />
+                  <input name="field" type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) uploadHero(f); e.target.value = ''; }} />
                 </div>
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Часы работы</p>
-                <input className={inp} value={cur.hours || ''} onChange={(e) => setHours(e.target.value)} placeholder="09:00–00:00" />
+                <input name="field" className={inp} value={cur.hours || ''} onChange={(e) => setHours(e.target.value)} placeholder="09:00–00:00" />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Телефон</p>
-                <input className={inp} defaultValue={rest0.phone} key={restSel + 'p'} onChange={(e) => setOv('phone', e.target.value)} />
+                <input name="field" className={inp} defaultValue={rest0.phone} key={restSel + 'p'} onChange={(e) => setOv('phone', e.target.value)} />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Адрес</p>
-                <input className={inp} defaultValue={rest0.address} key={restSel + 'a'} onChange={(e) => setOv('address', e.target.value)} />
+                <input name="field" className={inp} defaultValue={rest0.address} key={restSel + 'a'} onChange={(e) => setOv('address', e.target.value)} />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Пляж / ориентир</p>
-                <input className={inp} defaultValue={rest0.beach} key={restSel + 'b'} onChange={(e) => setOv('beach', e.target.value)} />
+                <input name="field" className={inp} defaultValue={rest0.beach} key={restSel + 'b'} onChange={(e) => setOv('beach', e.target.value)} />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Короткий слоган</p>
-                <textarea className={inp} rows={2} defaultValue={rest0.tagline} key={restSel + 't'} onChange={(e) => setOv('tagline', e.target.value)} />
+                <textarea name="field" className={inp} rows={2} defaultValue={rest0.tagline} key={restSel + 't'} onChange={(e) => setOv('tagline', e.target.value)} />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Описание (о ресторане)</p>
-                <textarea className={inp} rows={5} defaultValue={rest0.description} key={restSel + 'd'} onChange={(e) => setOv('description', e.target.value)} />
+                <textarea name="field" className={inp} rows={5} defaultValue={rest0.description} key={restSel + 'd'} onChange={(e) => setOv('description', e.target.value)} />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -378,8 +378,8 @@ const edSave = async () => {
                 <div className="space-y-3 max-h-[480px] overflow-y-auto pr-2">
                   {(cur.reviews || []).map((r: any, i: number) => (
                     <div key={i} className="border border-cream/15 rounded-lg p-3 bg-cream/5">
-                      <input className={inp + ' mb-2'} value={r.name} onChange={(e) => updReview(i, { name: e.target.value })} />
-                      <textarea className={inp} rows={3} value={r.text} onChange={(e) => updReview(i, { text: e.target.value })} />
+                      <input name="field" className={inp + ' mb-2'} value={r.name} onChange={(e) => updReview(i, { name: e.target.value })} />
+                      <textarea name="field" className={inp} rows={3} value={r.text} onChange={(e) => updReview(i, { text: e.target.value })} />
                       <div className="flex justify-end mt-1"><button className="text-xs text-red-400" onClick={() => delReview(i)}>Удалить</button></div>
                     </div>
                   ))}
@@ -396,7 +396,7 @@ const edSave = async () => {
             <div className="border border-cream/15 rounded-xl p-5 bg-cream/5 mb-8 space-y-3">
               <p className="text-cream/50 text-xs uppercase tracking-widest">Добавить компанию</p>
               <div className="grid md:grid-cols-2 gap-3">
-                <input className={inp} placeholder="Название компании" value={supForm.name} onChange={(e) => setSupForm({ ...supForm, name: e.target.value })} />
+                <input name="field" className={inp} placeholder="Название компании" value={supForm.name} onChange={(e) => setSupForm({ ...supForm, name: e.target.value })} />
                 <select className={inp} value={supForm.category} onChange={(e) => setSupForm({ ...supForm, category: e.target.value })}>
                   <option>Бар и напитки</option>
                   <option>Кухня и продукты</option>
@@ -404,10 +404,10 @@ const edSave = async () => {
                   <option>Сервис и оборудование</option>
                 </select>
               </div>
-              <input className={inp} placeholder="Сайт (https://...)" value={supForm.site} onChange={(e) => setSupForm({ ...supForm, site: e.target.value })} />
-              <textarea className={inp} rows={2} placeholder="Описание для тултипа (1–2 строки)" value={supForm.desc} onChange={(e) => setSupForm({ ...supForm, desc: e.target.value })} />
+              <input name="field" className={inp} placeholder="Сайт (https://...)" value={supForm.site} onChange={(e) => setSupForm({ ...supForm, site: e.target.value })} />
+              <textarea name="field" className={inp} rows={2} placeholder="Описание для тултипа (1–2 строки)" value={supForm.desc} onChange={(e) => setSupForm({ ...supForm, desc: e.target.value })} />
               <div className="flex items-center gap-3 flex-wrap">
-                <input type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addSup(f); e.target.value = ''; }} />
+                <input name="field" type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addSup(f); e.target.value = ''; }} />
                 <button className={btnG} onClick={() => addSup(null)}>Добавить без логотипа</button>
               </div>
               <p className="text-cream/40 text-xs">Логотип — квадратный, до 1 МБ. Компоний больше шести — садятся по две на орбиту, кольца не раздуваются.</p>
@@ -452,7 +452,7 @@ const edSave = async () => {
          {edSel && (
            <div className="mt-4 border border-amber/40 rounded-xl p-5 bg-cream/5">
              <p className="text-amber text-xs uppercase tracking-widest mb-2">Правка: {edSel.path}</p>
-             <textarea className={inp} rows={3} value={edVal} onChange={(e) => setEdVal(e.target.value)} />
+             <textarea name="field" className={inp} rows={3} value={edVal} onChange={(e) => setEdVal(e.target.value)} />
              <div className="flex gap-2 mt-3">
                <button className={btnA} disabled={busy} onClick={edSave}>{busy ? 'Отправляем...' : 'Сохранить и опубликовать'}</button>
                <button className={btnG} onClick={() => setEdSel(null)}>Отмена</button>
@@ -472,7 +472,7 @@ const edSave = async () => {
               </div>
             ) : (
               <div className="flex gap-2 mb-8">
-                <input type="password" className={inp} value={tokenInput} onChange={(e) => setTokenInput(e.target.value)} placeholder="ghp_..." />
+                <input name="field" type="password" className={inp} value={tokenInput} onChange={(e) => setTokenInput(e.target.value)} placeholder="ghp_..." />
                 <button className={btnG} onClick={() => { if (tokenInput.startsWith('ghp_')) { localStorage.setItem(LS_TOKEN, tokenInput); setToken(tokenInput); setTokenInput(''); setMsg('Токен сохранён'); } else setMsg('Токен начинается с ghp_'); }}>Сохранить</button>
               </div>
             )}
