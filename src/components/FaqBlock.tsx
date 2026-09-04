@@ -7,7 +7,7 @@ export default function FaqBlock() {
     <section id="faq" className="bg-night py-16 lg:py-24 px-6 lg:px-12">
       <div className="max-w-[900px] mx-auto">
         <p className="text-amber text-xs tracking-[0.3em] uppercase mb-3 font-medium text-center">Частые вопросы</p>
-        <h2 className="font-serif text-3xl lg:text-5xl font-medium text-cream text-center mb-10">Вопросы и ответы</h2>
+        <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-cream text-center mb-10">Вопросы и ответы</h2>
         <div className="space-y-3">
           {FAQ.map((f, i) => (
             <div key={i} className="border border-cream/15 bg-cream/5">
