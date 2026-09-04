@@ -4,6 +4,7 @@ import { PROMO_MEDIA, PromoMedia } from '../data/promos-media';
 import { RESTO_EXTRA } from '../data/resto-extra';
 import { restaurants } from '../data/holding';
 import { suppliers as initialSuppliers } from '../data/suppliers';
+import { FAQ_ITEMS } from '../data/faq';
 
 const LS_HASH = 'iv_admin_hash';
 const LS_TOKEN = 'iv_gh_token';
@@ -28,7 +29,7 @@ export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pwd, setPwd] = useState('');
   const [err, setErr] = useState('');
-  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'settings' | 'editor'>('news');
+  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'faq' | 'settings' | 'editor'>('news');
   const [token, setToken] = useState(localStorage.getItem(LS_TOKEN) || '');
   const [tokenInput, setTokenInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -208,6 +209,10 @@ const edSave = async () => {
 // ---------- партнёры ----------
   const [sups, setSups] = useState<any[]>(JSON.parse(JSON.stringify(initialSuppliers)));
   const [supForm, setSupForm] = useState({ name: '', category: 'Бар и напитки', desc: '', site: '' });
+// ---------- FAQ ----------
+const [faq, setFaq] = useState<any[]>(JSON.parse(JSON.stringify(FAQ_ITEMS)));
+const faqText = () => '// генерируется админкой\nexport interface FaqItem { q: string; a: string }\nexport const FAQ_ITEMS: FaqItem[] = ' + JSON.stringify(faq, null, 2) + ';\n';
+const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', text: faqText() }]);
   const PALETTE = ['#1E4E8C', '#7A2E3B', '#349C74', '#B85A3C', '#C2A076', '#5B4B8A', '#2C6E63'];
   const supText = (list: any[]) => 'export interface Supplier { id: string; name: string; category: string; desc: string; accent: string; logo?: string; site?: string; image?: string }\n' +
     '// партнёры холдинга — редактируется через админку\n' +
@@ -265,7 +270,7 @@ const edSave = async () => {
           <a href="#/" className="text-xs text-cream/60 hover:text-cream">← На сайт</a>
         </div>
         <div className="max-w-[1200px] mx-auto px-6 lg:px-10 flex gap-2 overflow-x-auto pb-3">
-          {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['suppliers', 'Партнёры'], ['settings', 'Настройки'], ['editor', 'Редактор']] as const).map(([id, label]) => (
+          {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['suppliers', 'Партнёры'], ['faq', 'FAQ'], ['settings', 'Настройки'], ['editor', 'Редактор']] as const).map(([id, label]) => (
             <button key={id} onClick={() => { setTab(id); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === id ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>{label}</button>
           ))}
         </div>
@@ -461,7 +466,25 @@ const edSave = async () => {
          )}
        </section>
      )}
-     {tab === 'settings' && (
+     {tab === 'faq' && (
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold">Вопросы и ответы (главная)</h2>
+          <button className={btnA} onClick={() => setFaq([...faq, { q: 'Новый вопрос', a: 'Ответ' }])}>+ Добавить</button>
+        </div>
+        <div className="space-y-4">
+          {faq.map((it, i) => (
+            <div key={i} className="border border-cream/15 rounded-xl p-5 bg-cream/5">
+              <input name="field" className={inp + ' mb-3 font-medium'} value={it.q} onChange={(e) => setFaq(faq.map((x, idx) => idx === i ? { ...x, q: e.target.value } : x))} />
+              <textarea name="field" className={inp} rows={3} value={it.a} onChange={(e) => setFaq(faq.map((x, idx) => idx === i ? { ...x, a: e.target.value } : x))} />
+              <div className="flex justify-end mt-2"><button className="text-xs text-red-400 uppercase tracking-wider" onClick={() => setFaq(faq.filter((_, idx) => idx !== i))}>Удалить</button></div>
+            </div>
+          ))}
+        </div>
+        <button className={btnA + ' mt-6 px-8 py-4'} disabled={busy} onClick={pubFaq}>{busy ? 'Отправляем...' : 'Опубликовать FAQ'}</button>
+      </section>
+    )}
+    {tab === 'settings' && (
           <section className="max-w-md">
             <h2 className="text-2xl font-semibold mb-6">Настройки</h2>
             <p className="text-cream/50 text-xs mb-3">GitHub-токен (хранится только в твоём браузере):</p>
