@@ -433,3 +433,5 @@ body.edit-mode [data-e]:hover { outline: 2px solid #C2A078; background: rgba(194
 /* Спутник Яндекс Еды */
 .eda-satellite img { transition: transform 0.3s ease; }
 .eda-satellite:hover img { transform: scale(1.15) rotate(-6deg); }
+
+img { -webkit-user-drag: none; user-select: none; }

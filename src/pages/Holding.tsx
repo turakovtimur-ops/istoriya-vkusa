@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import OrbitHero from '../components/OrbitHero';
+import FaqBlock from '../components/FaqBlock';
 import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
 import SuppliersBlock from '../components/SuppliersBlock';
@@ -479,6 +480,7 @@ export default function Holding() {
 
       <ContactsSection />
 
+      <FaqBlock />
       <footer className="py-12 border-t border-cream/10 bg-coal">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid md:grid-cols-3 gap-10">
           <div className="flex flex-col items-center text-center">
@@ -506,7 +508,7 @@ export default function Holding() {
           </div>
         </div>
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mt-12 pt-8 border-t border-cream/10">
-          <p className="text-cream/40 text-xs">© 2026 История Вкуса. Все права защищены.</p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full"><p className="text-cream/40 text-xs">© 2026 История Вкуса. Все права защищены.</p><p className="text-cream/40 text-xs md:text-right">Кастомная разработка и дизайн сайта — Тураков Тимур Рифхатович</p></div>
         </div>
       </footer>
 

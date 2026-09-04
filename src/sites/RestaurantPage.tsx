@@ -384,7 +384,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
           </div>
         </div>
         <div className="border-t border-cream/10 py-5 text-center px-6">
-          <a href="#/" className="text-[10px] uppercase tracking-[0.3em] text-cream/50 hover:text-cream transition-colors">© 2026 {restaurant.name} · Часть холдинга «История Вкуса»</a>
+          <a href="#/" className="text-[10px] uppercase tracking-[0.3em] text-cream/50 hover:text-cream transition-colors">© 2026 {restaurant.name} · Часть холдинга «История Вкуса» · Кастомная разработка и дизайн сайта — Тураков Тимур Рифхатович</a>
         </div>
       </footer>
       <BookingModal isOpen={modal.isOpen} onClose={modal.close} />
