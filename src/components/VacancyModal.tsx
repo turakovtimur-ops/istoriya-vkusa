@@ -18,6 +18,7 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
     return () => { document.body.style.overflow = ''; };
   }, [vacancy]);
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+const blocked = form.citizenship === 'Туркменистан' && form.patent === 'Нет, готов(а) оформить';
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
@@ -83,7 +84,14 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
           </div>
         </div>
       )}
-          {mode === 'form' ? (
+          {blocked ? (
+      <div className="border border-terra/40 bg-terra/10 p-6 text-center">
+        <div className="text-4xl mb-4">🤝</div>
+        <p className="text-graphite text-sm leading-relaxed">Мы очень рады, что вы обратились к нам! Рекомендуем вам оформить патент и заполнить анкету повторно.</p>
+      </div>
+    ) : (
+      <>
+      {mode === 'form' ? (
             <>
               <div className="grid md:grid-cols-2 gap-5">
                 <div><label className={labelCls}>Email</label><input name="field" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} className={inputCls} /></div>
@@ -116,6 +124,8 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
           {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
           <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input name="field" type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Анкета отправлена!' : 'Отправить'}</button>
+      </>
+    )}
         </form>
       </div>
     </div>

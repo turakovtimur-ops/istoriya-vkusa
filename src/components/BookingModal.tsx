@@ -20,17 +20,22 @@ export default function BookingModal({ isOpen, onClose }: Props) {
         body: JSON.stringify({ type: 'booking', data: { ...form, restaurant: REST_NAMES[(window.location.pathname.split('/')[1] || '')] || '' }, honeypot: '' }),
       });
     } catch (e) { }
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-      setForm({ name: '', phone: '', date: '', time: '', guests: 2, comment: '' });
-    }, 3000);
+    
   };
-  if (!isOpen) return null;
+  const handleClose = () => { onClose(); setSubmitted(false); setForm({ name: '', phone: '', date: '', time: '', guests: 2, comment: '' }); };
+const goMenu = () => {
+  const rest = (window.location.pathname.split('/')[1] || '');
+  handleClose();
+  setTimeout(() => {
+    const el = document.getElementById('menu') || (!rest ? document.getElementById('restorany') : null);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 120);
+};
+if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm modal-fade" onClick={onClose}>
+    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm modal-fade" onClick={handleClose}>
       <div onClick={(e) => e.stopPropagation()} className="modal-pop relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-cream p-8 lg:p-14">
-        <button onClick={onClose} className="absolute top-6 right-6 text-graphite hover:text-terra transition-colors z-10" aria-label="Закрыть">
+        <button onClick={handleClose} className="absolute top-6 right-6 text-graphite hover:text-terra transition-colors z-10" aria-label="Закрыть">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
           </svg>
@@ -38,7 +43,16 @@ export default function BookingModal({ isOpen, onClose }: Props) {
         <p className="text-terra text-xs tracking-[0.3em] uppercase mb-4 font-medium">Бронирование</p>
         <h2 className="font-serif text-4xl lg:text-5xl font-medium text-graphite mb-3 leading-tight">Забронировать стол</h2>
         <p className="text-muted font-light mb-10">Мы свяжемся с вами для подтверждения</p>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {submitted ? (
+      <div className="text-center py-6">
+        <div className="text-5xl mb-6">🙏</div>
+        <h2 className="font-serif text-3xl lg:text-4xl font-medium text-graphite mb-4 leading-tight">Спасибо, что выбрали нас!</h2>
+        <p className="text-muted font-light mb-8 leading-relaxed">Мы это ценим. Не переживайте — ваша бронь уже обрабатывается администраторами. В случае чего мы свяжемся с вами для подтверждения. Ожидайте звонка!</p>
+        <button onClick={goMenu} className="btn-terra w-full">Посмотреть меню</button>
+        <p className="text-xs text-muted text-center mt-4">Вы можете предварительно ознакомиться с нашим меню, чтобы вдохновиться нашими блюдами</p>
+      </div>
+    ) : (
+      <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Имя</label>
@@ -77,6 +91,7 @@ export default function BookingModal({ isOpen, onClose }: Props) {
           </button>
           <p className="text-xs text-muted text-center mt-4">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
         </form>
+    )}
       </div>
     </div>
   );
