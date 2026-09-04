@@ -508,7 +508,7 @@ export default function Holding() {
           </div>
         </div>
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mt-12 pt-8 border-t border-cream/10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full"><p className="text-cream/40 text-xs">© 2026 История Вкуса. Все права защищены.</p><p className="text-cream/40 text-xs md:text-right">Кастомная разработка и дизайн сайта — Тураков Тимур Рифхатович</p></div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full"><p className="text-cream/40 text-xs">© 2026 История Вкуса. Все права защищены.</p><p className="text-cream/40 text-xs">Кастомная разработка и дизайн сайта — Тураков Т. Р.</p></div>
         </div>
       </footer>
 

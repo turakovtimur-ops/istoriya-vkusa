@@ -26,7 +26,6 @@ export default function FaqBlock() {
             </div>
           ))}
         </div>
-        <p className="text-cream/40 text-xs text-center mt-10">Кастомная разработка и дизайн сайта — Тураков Тимур Рифхатович</p>
       </div>
     </section>
   );
