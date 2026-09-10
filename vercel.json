@@ -10,30 +10,6 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.istoriya-vkusa.ru"
-        }
-      ],
-      "destination": "https://istoriya-vkusa.vercel.app/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "istoriya-vkusa.ru"
-        }
-      ],
-      "destination": "https://istoriya-vkusa.vercel.app/:path*",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
