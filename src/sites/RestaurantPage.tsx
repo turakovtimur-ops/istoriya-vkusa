@@ -26,6 +26,7 @@ const GEO: Record<string, [number, number]> = {
   'la-costa': [38.07625, 44.559098],
 };
 const geo = (id: string) => GEO[id] || [38.0776, 44.5611];
+const ymGoal = (g: string) => { try { const w = window as any; if (w.ym) w.ym(112073069, 'reachGoal', g); } catch (e) {} };
 const SOCIAL_VK: Record<string, string> = {
   kinza: 'https://vk.ru/kinzagelendzhik',
   nino: 'https://vk.ru/ninogelendzhik',
@@ -51,7 +52,12 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
   const modal = useModal();
   const [burger, setBurger] = useState(false);
   useScrollAnimation();
-  useDocumentMeta(restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса', restaurant.tagline);
+  useDocumentMeta(
+  restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса',
+  restaurant.tagline,
+  'https://www.istoriya-vkusa.ru' + (((extra0 as any).overrides || {}).image || restaurant.photo || restaurant.image),
+  'https://www.istoriya-vkusa.ru' + restaurant.path
+);
   useEffect(() => {
     const rating = (extra0 as any).rating;
     const hrs = (extra0.hours || '09:00–00:00').replace('–', '-');
@@ -135,8 +141,8 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
               ))}
             </nav>
             <div className="hidden lg:flex items-center gap-5">
-              <a href={tel} className={'text-sm font-medium ' + cHead + ' hover:underline whitespace-nowrap'}>{restaurant.phone}</a>
-              <button onClick={modal.open} className="px-6 py-3 text-xs uppercase tracking-widest font-medium hover:opacity-90 transition-opacity" style={btnStyle}>Забронировать</button>
+              <a onClick={() => ymGoal('phone_click')} href={tel} className={'text-sm font-medium ' + cHead + ' hover:underline whitespace-nowrap'}>{restaurant.phone}</a>
+              <button onClick={() => { ymGoal('bron_open'); modal.open(); }} className="px-6 py-3 text-xs uppercase tracking-widest font-medium hover:opacity-90 transition-opacity" style={btnStyle}>Забронировать</button>
             </div>
             <button className="lg:hidden w-11 h-11 flex flex-col items-center justify-center gap-1.5" aria-label="Меню" onClick={() => setBurger(true)}>
               <span className={'block w-6 h-px ' + (dark ? 'bg-cream' : 'bg-graphite')} />
@@ -158,7 +164,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             ))}
           </nav>
           <div className="px-8 pb-10 pt-4" onClick={(e) => e.stopPropagation()}>
-            <a href={tel} className="inline-block text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1 mb-4">{restaurant.phone}</a>
+            <a onClick={() => ymGoal('phone_click')} href={tel} className="inline-block text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1 mb-4">{restaurant.phone}</a>
             <p className="text-cream/40 text-xs font-light">{restaurant.address} · {restaurant.beach}</p>
             <a href="#/" className="block mt-4 text-[10px] uppercase tracking-[0.3em] text-cream/50">← Вернуться в холдинг</a>
           </div>
@@ -173,9 +179,9 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
             <p data-e={'pages.' + restaurant.id + '.tagline'} className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
             <div className="mt-6 self-stretch md:self-start flex flex-col md:flex-row items-stretch gap-2.5 md:gap-4 w-full md:max-w-5xl">
-            <button onClick={modal.open} className="w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform text-center" style={btnStyle}>Забронировать стол</button>
+            <button onClick={() => { ymGoal('bron_open'); modal.open(); }} className="w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform text-center" style={btnStyle}>Забронировать стол</button>
             {restaurant.id === 'kinza' && (
-              <a href={KINZA_EDA_URL} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
+              <a onClick={() => ymGoal('eda_click')} href={KINZA_EDA_URL} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
                 <img src="/images/kinza/yandex-eda.png" alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-md" />
                 Заказать доставку
               </a>
@@ -202,7 +208,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
                 </div>
                 <div className="border-l-4 pl-4" style={{ borderColor: accent }}>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-1'}>Телефон</p>
-                  <a data-e={'pages.' + restaurant.id + '.phone'} href={tel} className={'font-medium ' + cHead + ' hover:underline'}>{restaurant.phone}</a>
+                  <a data-e={'pages.' + restaurant.id + '.phone'} onClick={() => ymGoal('phone_click')} href={tel} className={'font-medium ' + cHead + ' hover:underline'}>{restaurant.phone}</a>
                   <p data-e={'pages.' + restaurant.id + '.hours'} className={'text-sm ' + cMute + ' mt-1'}>Ежедневно {extra.hours}</p>
                 </div>
               </div>
@@ -277,7 +283,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
                   <p className={cSoft + ' pt-2'}>Оформление, торт, DJ, обслуживание</p>
                 </div>
               </div>
-              <a href={tel} className="inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Связаться с менеджером</a>
+              <a onClick={() => ymGoal('phone_click')} href={tel} className="inline-flex px-8 py-3 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Связаться с менеджером</a>
             </div>
             <div className="reveal">
               <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
@@ -332,17 +338,18 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Адрес</p>
                   <p data-e={'pages.' + restaurant.id + '.address'} className={'text-xl font-medium ' + cHead}>{restaurant.address}</p>
                   <p className={cMute + ' mt-1'}>{restaurant.beach}</p>
+              <a onClick={() => ymGoal('route_click')} href={'https://yandex.ru/maps/?text=' + encodeURIComponent(restaurant.name + ', ' + restaurant.address + ', Геленджик')} target="_blank" rel="noopener noreferrer" className={'inline-flex mt-3 px-6 py-2.5 text-xs uppercase tracking-widest font-medium border rounded-full transition-colors ' + (dark ? 'border-cream/30 text-cream hover:bg-cream hover:text-graphite' : 'border-graphite/30 text-graphite hover:bg-graphite hover:text-cream')}>Построить маршрут →</a>
                 </div>
                 <div>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Телефон</p>
-                  <a data-e={'pages.' + restaurant.id + '.phone'} href={tel} className={'text-xl font-medium ' + cHead + ' hover:underline block'}>{restaurant.phone}</a>
+                  <a data-e={'pages.' + restaurant.id + '.phone'} onClick={() => ymGoal('phone_click')} href={tel} className={'text-xl font-medium ' + cHead + ' hover:underline block'}>{restaurant.phone}</a>
                   <p className={cMute + ' mt-1'}>{restaurant.phoneFree}</p>
                 </div>
                 <div>
                   <p className={'text-xs uppercase tracking-widest ' + cMute + ' mb-2'}>Часы работы</p>
                   <p data-e={'pages.' + restaurant.id + '.hours'} className={'text-xl font-medium ' + cHead}>Ежедневно {extra.hours}</p>
                 </div>
-                <button onClick={modal.open} className="mt-2 px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
+                <button onClick={() => { ymGoal('bron_open'); modal.open(); }} className="mt-2 px-10 py-4 text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={btnStyle}>Забронировать стол</button>
               </div>
               <div className="rounded-lg overflow-hidden shadow-2xl">
                 <iframe
@@ -371,7 +378,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-cream/50 mb-4">Контакты</p>
             <p className="text-cream/80 text-sm">{restaurant.address} · {restaurant.beach}</p>
-            <a href={tel} className="text-cream/80 hover:text-cream text-sm block mt-2">{restaurant.phone}</a>
+            <a onClick={() => ymGoal('phone_click')} href={tel} className="text-cream/80 hover:text-cream text-sm block mt-2">{restaurant.phone}</a>
             <p className="text-cream/60 text-sm mt-2">Ежедневно {extra.hours}</p>
             <div className="social-footer flex items-center gap-3 mt-5">
               <a href={SOCIAL_VK[restaurant.id]} target="_blank" rel="noopener noreferrer" aria-label={restaurant.name + ' во ВКонтакте'} title="ВКонтакте">
@@ -388,7 +395,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
         </div>
       </footer>
       <BookingModal isOpen={modal.isOpen} onClose={modal.close} />
-      <button onClick={modal.open} aria-label="Забронировать стол" className="lg:hidden fixed bottom-5 right-4 z-40 rounded-full shadow-2xl shadow-black/40 flex items-center justify-center active:scale-95 transition-transform" style={{ ...btnStyle, width: 52, height: 52 }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></button>
+      <button onClick={() => { ymGoal('bron_open'); modal.open(); }} aria-label="Забронировать стол" className="lg:hidden fixed bottom-5 right-4 z-40 rounded-full shadow-2xl shadow-black/40 flex items-center justify-center active:scale-95 transition-transform" style={{ ...btnStyle, width: 52, height: 52 }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg></button>
     </div>
   );
 }
