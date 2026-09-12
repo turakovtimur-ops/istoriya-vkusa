@@ -17,8 +17,8 @@ export default function CustomCursor() {
     const move = (e: MouseEvent) => {
       x = e.clientX; y = e.clientY;
       const t = e.target as HTMLElement;
-      tsc = t.closest('a,button,[role="button"],summary') ? 1.5 : 1;
-      setOp(t.closest('input,textarea,select') ? '0' : '1');
+      tsc = t.closest('input,textarea,select') ? 0.7 : (t.closest('a,button,[role="button"],summary') ? 1.5 : 1);
+      setOp('1');
     };
     const loop = () => {
       rx += (x - rx) * 0.16; ry += (y - ry) * 0.16; sc += (tsc - sc) * 0.16;
