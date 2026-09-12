@@ -45,8 +45,8 @@ export default function CustomCursor() {
   if (!on) return null;
   return (
     <>
-      <div ref={dot} style={{ position: 'fixed', top: 0, left: 0, width: 6, height: 6, background: '#C2A076', borderRadius: 9999, pointerEvents: 'none', zIndex: 101, opacity: 0, boxShadow: '0 0 8px rgba(194,160,118,.8)' }} />
-      <div ref={ring} style={{ position: 'fixed', top: 0, left: 0, width: 36, height: 36, border: '1.5px solid rgba(194,160,118,.75)', borderRadius: 9999, pointerEvents: 'none', zIndex: 101, opacity: 0, boxShadow: '0 0 14px rgba(194,160,118,.35)', background: 'rgba(194,160,118,.06)' }} />
+      <div ref={dot} style={{ position: 'fixed', top: 0, left: 0, width: 6, height: 6, background: '#C2A076', borderRadius: 9999, pointerEvents: 'none', zIndex: 999999, opacity: 0, boxShadow: '0 0 8px rgba(194,160,118,.8)' }} />
+      <div ref={ring} style={{ position: 'fixed', top: 0, left: 0, width: 36, height: 36, border: '1.5px solid rgba(194,160,118,.75)', borderRadius: 9999, pointerEvents: 'none', zIndex: 999999, opacity: 0, boxShadow: '0 0 14px rgba(194,160,118,.35)', background: 'rgba(194,160,118,.06)' }} />
     </>
   );
 }
