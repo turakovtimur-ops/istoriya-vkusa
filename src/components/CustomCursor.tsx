@@ -12,13 +12,14 @@ export default function CustomCursor() {
     refresh();
     window.addEventListener('hashchange', refresh);
     if (!fine || reduced) return () => window.removeEventListener('hashchange', refresh);
+    document.documentElement.classList.add('iv-nocursor');
     let rx = window.innerWidth / 2, ry = window.innerHeight / 2, x = rx, y = ry, sc = 1, tsc = 1, raf = 0;
-    const setOp = (v: string) => { if (dot.current) dot.current.style.opacity = v; if (ring.current) ring.current.style.opacity = v; };
+    const show = (v: string) => { if (dot.current) dot.current.style.opacity = v; if (ring.current) ring.current.style.opacity = v; };
     const move = (e: MouseEvent) => {
       x = e.clientX; y = e.clientY;
       const t = e.target as HTMLElement;
       tsc = t.closest('input,textarea,select') ? 0.7 : (t.closest('a,button,[role="button"],summary') ? 1.5 : 1);
-      setOp('1');
+      show('1');
     };
     const loop = () => {
       rx += (x - rx) * 0.16; ry += (y - ry) * 0.16; sc += (tsc - sc) * 0.16;
@@ -28,11 +29,10 @@ export default function CustomCursor() {
     };
     raf = requestAnimationFrame(loop);
     window.addEventListener('mousemove', move);
-    const leave = () => setOp('0');
-    const enter = () => setOp('1');
+    const leave = () => show('0');
+    const enter = () => show('1');
     document.addEventListener('mouseleave', leave);
     document.addEventListener('mouseenter', enter);
-    document.documentElement.classList.add('iv-nocursor');
     return () => {
       window.removeEventListener('hashchange', refresh);
       window.removeEventListener('mousemove', move);

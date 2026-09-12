@@ -438,4 +438,5 @@ img { -webkit-user-drag: none; user-select: none; }
 
 @keyframes iv-spin { to { transform: rotate(360deg); } }
 .iv-spin { animation: iv-spin 1.4s linear infinite; transform-origin: 50% 50%; }
+
 .iv-nocursor, .iv-nocursor * { cursor: none !important; }
