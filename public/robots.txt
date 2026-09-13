@@ -3,4 +3,4 @@ Allow: /
 Disallow: /upravlenie
 Disallow: /api/
 
-Sitemap: https://www.istoriya-vkusa.ru/sitemap.xml
+Sitemap: https://istoriya-vkusa.ru/sitemap.xml
