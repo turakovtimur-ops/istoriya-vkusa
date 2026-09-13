@@ -55,8 +55,8 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
   useDocumentMeta(
   restaurant.name + ' — ' + restaurant.cuisine + ' | История Вкуса',
   restaurant.tagline,
-  'https://www.istoriya-vkusa.ru' + (((extra0 as any).overrides || {}).image || restaurant.photo || restaurant.image),
-  'https://www.istoriya-vkusa.ru' + restaurant.path
+  'https://istoriya-vkusa.ru' + (((extra0 as any).overrides || {}).image || restaurant.photo || restaurant.image),
+  'https://istoriya-vkusa.ru' + restaurant.path
 );
   useEffect(() => {
     const rating = (extra0 as any).rating;
@@ -68,7 +68,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
       description: restaurant.tagline,
       servesCuisine: restaurant.cuisine,
       telephone: restaurant.phone,
-      url: 'https://www.istoriya-vkusa.ru' + restaurant.path,
+      url: 'https://istoriya-vkusa.ru' + restaurant.path,
       address: { '@type': 'PostalAddress', streetAddress: restaurant.address, addressLocality: 'Геленджик', addressCountry: 'RU' },
       geo: { '@type': 'GeoCoordinates', latitude: geo(restaurant.id)[1], longitude: geo(restaurant.id)[0] },
       openingHours: 'Mo-Su ' + (hrs.endsWith('00:00') ? hrs.replace(/00:00$/, '24:00') : hrs),
@@ -81,7 +81,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
     document.head.appendChild(s);
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }
-    link.href = 'https://www.istoriya-vkusa.ru' + restaurant.path;
+    link.href = 'https://istoriya-vkusa.ru' + restaurant.path;
     return () => { const el = document.getElementById('ld-json-resto'); if (el) el.remove(); };
   }, [restaurant.id]);
   
