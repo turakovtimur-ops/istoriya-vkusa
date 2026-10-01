@@ -83,7 +83,7 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     }
   },
   "astoria": {
-    "hours": "09:00–00:00",
+    "hours": "10:00–00:00",
     "reviews": [
       {
         "name": "Алёна Ковалёва",
