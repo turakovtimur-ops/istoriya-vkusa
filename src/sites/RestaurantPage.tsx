@@ -103,7 +103,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
   const lineB = dark ? 'border-cream/15' : 'border-graphite/10';
   const secBg = custom ? (lightBg ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.14)') : accent + '14';
   const menus = [
-    { file: '/menus/' + restaurant.id + '-kuhnya.pdf', label: 'Кухня' },
+    { file: '/menus/' + restaurant.id + '-kuhnya.pdf?v=20261001', label: 'Кухня' },
     { file: '/menus/' + restaurant.id + '-bar.pdf', label: 'Бар' },
     { file: '/menus/' + restaurant.id + '-deserty.pdf', label: 'Десерты' },
   ];
