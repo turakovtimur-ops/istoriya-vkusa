@@ -82,11 +82,6 @@ export const PROMO_MEDIA: PromoMedia[] = [
     "src": "/images/promos/la-costa-4.jpg"
   },
   {
-    "id": "la-costa-5.jpg",
-    "restaurant": "la-costa",
-    "src": "/images/promos/la-costa-5.jpg"
-  },
-  {
     "id": "la-costa-8.jpg",
     "restaurant": "la-costa",
     "src": "/images/promos/la-costa-8.jpg"
