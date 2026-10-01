@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import MenuManager from '../components/MenuManager';
 import { news as initialNews, NewsItem } from '../data/news';
 import { PROMO_MEDIA, PromoMedia } from '../data/promos-media';
 import { RESTO_EXTRA } from '../data/resto-extra';
