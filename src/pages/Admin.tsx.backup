@@ -29,7 +29,7 @@ export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pwd, setPwd] = useState('');
   const [err, setErr] = useState('');
-  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'faq' | 'settings' | 'editor' | 'menus'>('news');
+  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'faq' | 'settings' | 'editor'>('news');
   const [token, setToken] = useState(localStorage.getItem(LS_TOKEN) || '');
   const [tokenInput, setTokenInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -484,8 +484,6 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
         <button className={btnA + ' mt-6 px-8 py-4'} disabled={busy} onClick={pubFaq}>{busy ? 'Отправляем...' : 'Опубликовать FAQ'}</button>
       </section>
     )}
-{tab === 'menus' && <MenuManager token={token} />}
-<button onClick={() => setTab('menus')} className={tab === 'menus' ? btnA : btnG}>Меню</button>
     {tab === 'settings' && (
           <section className="max-w-md">
             <h2 className="text-2xl font-semibold mb-6">Настройки</h2>
