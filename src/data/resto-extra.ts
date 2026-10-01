@@ -2,7 +2,7 @@
 export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number }; overrides?: Record<string, string> }
 export const RESTO_EXTRA: Record<string, RestoExtra> = {
   "kinza": {
-    "hours": "09:00–00:00",
+    "hours": "10:00–00:00",
     "reviews": [
       {
         "name": "Светлана Гончарова",
