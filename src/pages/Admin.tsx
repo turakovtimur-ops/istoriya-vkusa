@@ -274,6 +274,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
           {([['news', 'Новости'], ['promos', 'Акции'], ['gallery', 'Галереи'], ['resto', 'Рестораны'], ['suppliers', 'Партнёры'], ['faq', 'FAQ'], ['settings', 'Настройки'], ['editor', 'Редактор']] as const).map(([id, label]) => (
             <button key={id} onClick={() => { setTab(id); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === id ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>{label}</button>
           ))}
+<button onClick={() => { setTab('menus'); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === 'menus' ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>Меню</button>
         </div>
       </header>
 
