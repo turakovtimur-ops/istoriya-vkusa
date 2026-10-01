@@ -486,7 +486,6 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
       </section>
     )}
 {tab === 'menus' && <MenuManager token={token} />}
-<button onClick={() => setTab('menus')} className={tab === 'menus' ? btnA : btnG}>Меню</button>
     {tab === 'settings' && (
           <section className="max-w-md">
             <h2 className="text-2xl font-semibold mb-6">Настройки</h2>
