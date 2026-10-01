@@ -107,11 +107,6 @@ export const PROMO_MEDIA: PromoMedia[] = [
     "src": "/images/promos/nino-2.jpg"
   },
   {
-    "id": "nino-3.jpg",
-    "restaurant": "nino",
-    "src": "/images/promos/nino-3.jpg"
-  },
-  {
     "id": "nino-4.jpg",
     "restaurant": "nino",
     "src": "/images/promos/nino-4.jpg"
