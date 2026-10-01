@@ -52,11 +52,6 @@ export const PROMO_MEDIA: PromoMedia[] = [
     "src": "/images/promos/kinza-3.jpg"
   },
   {
-    "id": "kinza-4.jpg",
-    "restaurant": "kinza",
-    "src": "/images/promos/kinza-4.jpg"
-  },
-  {
     "id": "kinza-5.jpg",
     "restaurant": "kinza",
     "src": "/images/promos/kinza-5.jpg"
