@@ -81,7 +81,8 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     },
     "overrides": {
       "image": "/images/nino/hero-1788113157138.jpg"
-    }
+    },
+    "eda": "https://eda.yandex.ru/r/nino_1643281489?placeSlug=nino_6cwhx"
   },
   "astoria": {
     "hours": "10:00–00:00",
