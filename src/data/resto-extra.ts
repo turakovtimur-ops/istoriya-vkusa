@@ -2,6 +2,7 @@
 export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number }; overrides?: Record<string, string> }
 export const RESTO_EXTRA: Record<string, RestoExtra> = {
   "kinza": {
+    "eda": "https://eda.yandex.ru/r/kinza_1721032873?placeSlug=kinza_l37w6",
     "hours": "10:00–00:00",
     "reviews": [
       {

@@ -34,7 +34,7 @@ const SOCIAL_VK: Record<string, string> = {
   'la-costa': 'https://vk.ru/lacostabereg',
 };
 const MAX_LOYALTY_URL = 'https://max.ru/id2370015710_bot';
-const KINZA_EDA_URL = 'https://eda.yandex.ru/r/kinza_1721032873?placeSlug=kinza_l37w6';
+// убрано: теперь берём из RESTO_EXTRA
 const FALLBACK_GALLERY = [
   'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&fm=webp',
   'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&fm=webp',
@@ -180,8 +180,8 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
             <p data-e={'pages.' + restaurant.id + '.tagline'} className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
             <div className="mt-6 self-stretch md:self-start flex flex-col md:flex-row items-stretch gap-2.5 md:gap-4 w-full md:max-w-5xl">
             <button onClick={() => { ymGoal('bron_open'); modal.open(); }} className="w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform text-center" style={btnStyle}>Забронировать стол</button>
-            {restaurant.id === 'kinza' && (
-              <a onClick={() => ymGoal('eda_click')} href={KINZA_EDA_URL} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
+            {extra.eda && (
+              <a onClick={() => ymGoal('eda_click')} href={extra.eda} target="_blank" rel="noopener noreferrer" className="eda-delivery-btn w-full md:w-auto md:flex-1 inline-flex items-center justify-center gap-2.5 md:gap-3 px-4 py-3 md:py-4 text-xs md:text-sm uppercase tracking-widest font-medium shadow-lg hover:scale-105 transition-transform" style={{ background: '#FFD60A', color: '#221c14' }}>
                 <img src="/images/kinza/yandex-eda.png" alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-md" />
                 Заказать доставку
               </a>

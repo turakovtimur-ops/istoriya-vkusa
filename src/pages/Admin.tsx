@@ -108,7 +108,7 @@ export default function Admin() {
 
   // ---------- галереи + рестораны ----------
   const restoText = () => '// генерируется админкой\n' +
-    'export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number }; overrides?: Record<string, string> }\n' +
+    'export interface RestoExtra { hours: string; reviews: { name: string; text: string }[]; gallery: string[]; theme?: { pageBg?: string; btn?: string }; rating?: { score: string; count: number }; overrides?: Record<string, string>; eda?: string }\n' +
     'export const RESTO_EXTRA: Record<string, RestoExtra> = ' + JSON.stringify(extra, null, 2) + ';\n';
   const addGal = async (file: File) => {
     const e = extra[galRest]; if (!e) { setMsg('Нет данных ресторана'); return; }
@@ -365,6 +365,10 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                   <input name="field" type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) uploadHero(f); e.target.value = ''; }} />
                 </div>
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Часы работы</p>
+                <div className="mb-6 border border-cream/15 rounded-xl p-5 bg-cream/5">
+                  <p className="text-cream/50 text-xs mb-3">Ссылка доставки (Яндекс Еда, если есть):</p>
+                  <input name="field" className={inp} value={cur.eda || ''} onChange={(e) => { const val = e.target.value; if (val) cur.eda = val; else delete cur.eda; setExtra({ ...extra }); }} placeholder="https://eda.yandex.ru/r/..." />
+                </div>
                 <input name="field" className={inp} value={cur.hours || ''} onChange={(e) => setHours(e.target.value)} placeholder="09:00–00:00" />
                 <p className="text-cream/50 text-xs uppercase tracking-widest pt-2">Телефон</p>
                 <input name="field" className={inp} defaultValue={rest0.phone} key={restSel + 'p'} onChange={(e) => setOv('phone', e.target.value)} />
