@@ -84,10 +84,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   let sent = false;
   if (att) {
-    await new Promise(r => setTimeout(r, 2000));
     for (let attempt = 0; attempt < 2 && !sent; attempt++) {
       const r = await maxSend(text, [att]);
-      if (log) log["send_att_" + attempt] = { status: r.status, body: r.j }
+      if (log) log['send_att_' + attempt] = r.status;
       if (r.ok) sent = true;
     }
   }
