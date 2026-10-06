@@ -141,7 +141,7 @@ export const team: TeamMember[] = [
     name: 'Джульетта Атакуева',
     role: 'Управляющая',
     desc: 'Отвечает за гостеприимство во всех проектах «Истории Вкуса». Если ваш вечер прошёл идеально — это она.',
-    photo: '/images/team/manager.jpg',
+    photo: '/images/team/manager.webp',
   },
   {
     id: 'chef',
