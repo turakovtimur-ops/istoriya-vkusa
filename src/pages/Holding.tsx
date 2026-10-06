@@ -411,7 +411,7 @@ export default function Holding() {
               <time className="text-cream/40 text-xs">{nItem.date}</time>
             </div>
             <h3 className="text-xl font-semibold tracking-tight mb-3">{nItem.title}</h3>
-            <p className="text-cream/60 text-sm font-light leading-relaxed">{nItem.text}</p>
+            <p className="text-cream/60 text-sm font-light leading-relaxed whitespace-pre-line">{nItem.text}</p>
           </article>
         ))}
       </div>
