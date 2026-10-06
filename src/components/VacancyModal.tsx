@@ -12,6 +12,7 @@ export default function VacancyModal({ vacancy, onClose }: Props) {
   const [fileObj, setFileObj] = useState<File | null>(null);
   const toB64 = (f: File) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(f); });
   const [submitted, setSubmitted] = useState(false);
+  const [sendErr, setSendErr] = useState(false);
   useEffect(() => {
     if (vacancy) { setForm((f) => ({ ...f, position: vacancy })); document.body.style.overflow = 'hidden'; }
     else { document.body.style.overflow = ''; }
@@ -25,9 +26,12 @@ const blocked = form.citizenship === 'Туркменистан' && form.patent =
     let file;
     if ((window as any).ym) (window as any).ym(112073069, 'reachGoal', 'vacancy_sent');
     if (fileObj && fileObj.size <= 3 * 1024 * 1024) file = { name: fileObj.name, base64: await toB64(fileObj) };
+    let okSend = false;
     try {
-      await fetch('/api/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'vacancy', data: { ...form, file }, honeypot: '' }) });
+      const r = await fetch('/api/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'vacancy', data: { ...form, file }, honeypot: '' }) });
+      okSend = r.ok;
     } catch (e) { }
+    if (!okSend) { setSendErr(true); setSubmitted(false); return; }
     setTimeout(() => { setSubmitted(false); onClose(); }, 3000);
   };
   const progress = (() => {
@@ -172,6 +176,7 @@ const blocked = form.citizenship === 'Туркменистан' && form.patent =
           )}
           {fileWarn && <p className="text-red-500 text-xs">{fileWarn}</p>}
           <label className="flex items-start gap-3 text-xs text-muted cursor-pointer"><input name="field" type="checkbox" required className="mt-0.5 accent-terra" />Согласен на обработку персональных данных</label>
+          {sendErr && <p className="text-red-500 text-xs leading-relaxed">Не удалось отправить анкету. Если прикрепляли файл — уменьшите его и попробуйте снова, или позвоните нам: 8 800 201-57-57.</p>}
           <button type="submit" disabled={submitted} className="btn-terra w-full mt-2">{submitted ? '✓ Анкета отправлена!' : 'Отправить'}</button>
       </>
     )}
