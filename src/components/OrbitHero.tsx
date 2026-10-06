@@ -110,7 +110,7 @@ export default function OrbitHero() {
     const update = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const R = Math.max(280, Math.min(w * 0.44, w / 2 - 130, 1100));
+      const R = Math.max(280, Math.min(w * 0.44, w / 2 - 130, (h - 340) / 1.1, 1100));
       const ryF = Math.min(0.42, Math.max(0.16, (h - 560) / 2 / R));
       setDims({ R, ryF });
       setMobileR(Math.min(w * 0.36, 170));
