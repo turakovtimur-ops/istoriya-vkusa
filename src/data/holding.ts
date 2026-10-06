@@ -52,10 +52,10 @@ export interface TeamMember {
 
 export const holdingBrand = {
   name: 'История Вкуса',
-  logo: '/images/holding/istoriya-vkusa-icon.png',
+  logo: '/images/holding/istoriya-vkusa-icon.webp',
   fullLogo: '/images/holding/istoriya-vkusa-logo.png',
-  roundLogo: '/images/holding/istoriya-vkusa-round.png',
-    photo: '/images/holding/holding-photo.jpeg',
+  roundLogo: '/images/holding/istoriya-vkusa-round.webp',
+    photo: '/images/holding/holding-photo.webp',
   gold: '#C2A076',
   blue: '#5B6C8E',
 };
@@ -75,8 +75,8 @@ export const restaurants: HoldingRestaurant[] = [
     image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&q=80&fm=webp',
     accent: '#71B06B',
     logo: '/images/kinza/kinza-logo.png',
-    roundLogo: '/images/kinza/kinza-round.png',
-    photo: '/images/kinza/kinza-photo.jpeg',
+    roundLogo: '/images/kinza/kinza-round.webp',
+    photo: '/images/kinza/kinza-photo.webp',
     pattern: '/images/kinza/kinza-pattern.png',
   },
   {
@@ -93,8 +93,8 @@ export const restaurants: HoldingRestaurant[] = [
     image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80&fm=webp',
     accent: '#D84C3C',
     logo: '/images/nino/nino-logo.png',
-    roundLogo: '/images/nino/nino-round.png',
-    photo: '/images/nino/nino-photo.jpg',
+    roundLogo: '/images/nino/nino-round.webp',
+    photo: '/images/nino/nino-photo.webp',
     pattern: '/images/nino/nino-pattern.png',
   },
   {
@@ -111,8 +111,8 @@ export const restaurants: HoldingRestaurant[] = [
     image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80&fm=webp',
     accent: '#C2A076',
     logo: '/images/astoria/astoria-logo.png',
-    roundLogo: '/images/astoria/astoria-round.png',
-    photo: '/images/astoria/astoria-photo.jpg',
+    roundLogo: '/images/astoria/astoria-round.webp',
+    photo: '/images/astoria/astoria-photo.webp',
     pattern: '/images/astoria/astoria-pattern.png',
   },
   {
@@ -129,8 +129,8 @@ export const restaurants: HoldingRestaurant[] = [
     image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=900&q=80&fm=webp',
     accent: '#349C74',
     logo: '/images/la-costa/la-costa-logo.png',
-    roundLogo: '/images/la-costa/la-costa-round.png',
-    photo: '/images/la-costa/la-costa-photo.jpeg',
+    roundLogo: '/images/la-costa/la-costa-round.webp',
+    photo: '/images/la-costa/la-costa-photo.webp',
     pattern: '/images/la-costa/la-costa-pattern.png',
   },
 ];
@@ -148,14 +148,14 @@ export const team: TeamMember[] = [
     name: 'Рустам Эшматов',
     role: 'Бренд-шеф',
     desc: 'Автор меню и хранитель стандарта вкуса холдинга. Соединяет черноморский продукт с кавказским характером.',
-    photo: '/images/team/chef.jpg',
+    photo: '/images/team/chef.webp',
   },
   {
     id: 'bar',
     name: 'Константин Михеев',
     role: 'Бар-менеджер',
     desc: 'Куратор бара: от отборных грузинских вин до авторских коктейлей и домашних настоек. Подберёт пару к каждому блюду.',
-    photo: '/images/team/bar.jpg',
+    photo: '/images/team/bar.webp',
   },
 ];
 
@@ -187,7 +187,7 @@ export const partners: Partner[] = [
     address: 'Революционная ул., 37',
     phone: '8 (800) 101-90-10, доб. 1',
     site: 'https://brigantina-hotel.ru',
-    image: '/images/partners/brigantina.jpg',
+    image: '/images/partners/brigantina.webp',
   },
   {
     id: 'yantar',
@@ -197,7 +197,7 @@ export const partners: Partner[] = [
     address: 'Революционная ул., 11',
     phone: '8 (800) 101-90-10, доб. 2',
     site: 'https://yantar-otel.ru',
-    image: '/images/partners/yantar.jpg',
+    image: '/images/partners/yantar.webp',
   },
   {
     id: 'priroda',
@@ -207,7 +207,7 @@ export const partners: Partner[] = [
     address: 'М-4 «Дон», 1501-й км',
     phone: '8 (800) 201-57-57, доб. 5',
     site: 'https://prirodarest.ru',
-    image: '/images/partners/priroda.jpg',
+    image: '/images/partners/priroda.webp',
   },
 ];
 
