@@ -6,7 +6,7 @@ const inputCls = 'w-full bg-transparent border-b border-graphite/30 py-3 focus:o
 const labelCls = 'text-xs text-muted uppercase tracking-[0.2em] mb-2 block';
 export default function VacancyModal({ vacancy, onClose }: Props) {
   const [mode, setMode] = useState<'form' | 'file'>('form');
-  const [form, setForm] = useState({ name: '', phone: '', email: '', position: '', place: 'Любой', experience: 'Не требуется', employment: 'Полная занятость', medbook: 'Нет', citizenship: 'Российская Федерация', patent: '', job1: '', job2: '', start: '', about: '' });
+  const [form, setForm] = useState({ name: '', phone: '', age: '', email: '', position: '', place: 'Любой', experience: 'Не требуется', employment: 'Полная занятость', medbook: 'Нет', citizenship: 'Российская Федерация', patent: '', job1: '', job2: '', start: '', about: '' });
   const [fileName, setFileName] = useState('');
   const [fileWarn, setFileWarn] = useState('');
   const [fileObj, setFileObj] = useState<File | null>(null);
@@ -30,6 +30,42 @@ const blocked = form.citizenship === 'Туркменистан' && form.patent =
     } catch (e) { }
     setTimeout(() => { setSubmitted(false); onClose(); }, 3000);
   };
+  const progress = (() => {
+    const ageOk = form.age !== '' && Number(form.age) >= 14 && Number(form.age) <= 100;
+    const items: [boolean, number][] = mode === 'form' ? [
+      [form.name.trim().length > 1, 10],
+      [form.phone.trim().length >= 6, 10],
+      [ageOk, 10],
+      [form.position !== '', 10],
+      [true, 5],
+      [true, 5],
+      [true, 5],
+      [true, 5],
+      [form.job1.trim() !== '', 10],
+      [form.job2.trim() !== '', 5],
+      [form.start.trim() !== '', 5],
+      [form.about.trim().length >= 20, 10],
+      [form.email.trim() !== '', 5],
+      [!!fileObj, 5],
+    ] : [
+      [form.name.trim().length > 1, 10],
+      [form.phone.trim().length >= 6, 10],
+      [ageOk, 10],
+      [form.position !== '', 10],
+      [true, 5],
+      [!!fileObj, 35],
+      [form.about.trim().length >= 10, 20],
+    ];
+    return Math.min(100, items.reduce((sum, it) => sum + (it[0] ? it[1] : 0), 0));
+  })();
+  const progressMsg = progress >= 100
+    ? '💯 Анкета заполнена полностью — такие мы рассматриваем в первую очередь!'
+    : progress >= 80
+      ? '🔥 Отлично! Анкета заполнена на ' + progress + '%. Ещё чуть-чуть — и она попадёт в приоритет.'
+      : progress >= 40
+        ? '👍 Анкета заполнена на ' + progress + '%. Чем подробнее вы расскажете о себе, тем выше шанс попасть в команду.'
+        : '⚠️ Анкета заполнена на ' + progress + '%. Заполненность ниже 40% — такие анкеты мы можем не рассмотреть. Заполните поля, это займёт минуту.';
+
   if (!vacancy) return null;
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm modal-fade" onClick={onClose}>
@@ -43,10 +79,23 @@ const blocked = form.citizenship === 'Туркменистан' && form.patent =
           <button type="button" onClick={() => setMode('form')} className={'px-5 py-4 border text-left text-sm transition-all ' + (mode === 'form' ? 'border-terra bg-terra/10 text-graphite font-medium' : 'border-graphite/20 text-muted hover:border-graphite/50')}>✍️ Заполнить анкету<span className="block text-xs font-light mt-1 opacity-70">10 коротких вопросов</span></button>
           <button type="button" onClick={() => setMode('file')} className={'px-5 py-4 border text-left text-sm transition-all ' + (mode === 'file' ? 'border-terra bg-terra/10 text-graphite font-medium' : 'border-graphite/20 text-muted hover:border-graphite/50')}>📎 Приложить готовую анкету<span className="block text-xs font-light mt-1 opacity-70">Фото, резюме или файл анкеты</span></button>
         </div>
+        <div className="mb-6 border border-graphite/15 bg-white/40 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs uppercase tracking-[0.2em] text-muted">Заполненность анкеты</span>
+            <span className="text-sm font-medium text-terra">{progress}%</span>
+          </div>
+          <div className="h-2 bg-graphite/10 rounded-full overflow-hidden">
+            <div className="h-full bg-terra rounded-full transition-all duration-500" style={{ width: progress + '%' }} />
+          </div>
+          <p className="text-xs text-muted mt-2 leading-relaxed">{progressMsg}</p>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid md:grid-cols-2 gap-5">
             <div><label className={labelCls}>ФИО *</label><input name="field" type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} className={inputCls} /></div>
             <div><label className={labelCls}>Телефон *</label><input name="field" type="tel" required value={form.phone} onChange={(e) => set('phone', e.target.value)} className={inputCls} /></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5">
+            <div><label className={labelCls}>Возраст (полных лет) *</label><input name="field" type="number" min={14} max={100} required value={form.age} onChange={(e) => set('age', e.target.value)} placeholder="Например: 27" className={inputCls} /></div>
           </div>
           <div className="grid md:grid-cols-2 gap-5">
             <div><label className={labelCls}>Должность *</label><select required value={form.position} onChange={(e) => set('position', e.target.value)} className={inputCls}>{vacancies.map((v) => (<option key={v} value={v}>{v}</option>))}</select></div>
