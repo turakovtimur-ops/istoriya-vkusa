@@ -171,10 +171,10 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
         </div>
       )}
       <main>
-        <section className="relative h-[55vh] lg:h-[70vh] overflow-hidden">
+        <section className="relative min-h-[55vh] lg:h-[70vh] overflow-hidden">
           <img src={restaurant.image.startsWith('/images/') ? restaurant.image.replace(/\.(jpg|jpeg|png)$/i, '') + '-1600.webp' : restaurant.image} srcSet={restaurant.image.startsWith('/images/') ? restaurant.image.replace(/\.(jpg|jpeg|png)$/i, '') + '-800.webp 800w, ' + restaurant.image.replace(/\.(jpg|jpeg|png)$/i, '') + '-1600.webp 1600w' : undefined} sizes="100vw" alt={restaurant.name} loading="eager" className="absolute inset-0 w-full h-full object-cover kenburns" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
-          <div className="relative z-10 h-full flex flex-col justify-end pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
+          <div className="relative z-10 min-h-[55vh] lg:min-h-[70vh] flex flex-col justify-end pt-60 lg:pt-24 pb-12 lg:pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <p className="text-cream/60 text-xs lg:text-sm uppercase tracking-[0.3em] mb-3">{restaurant.cuisine}</p>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tighter text-cream mb-4">{restaurant.name}</h1>
             <p data-e={'pages.' + restaurant.id + '.tagline'} className="text-cream/80 text-lg lg:text-xl font-light max-w-2xl leading-relaxed">{restaurant.tagline}</p>
