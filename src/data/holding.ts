@@ -53,7 +53,7 @@ export interface TeamMember {
 export const holdingBrand = {
   name: 'История Вкуса',
   logo: '/images/holding/istoriya-vkusa-icon.webp',
-  fullLogo: '/images/holding/istoriya-vkusa-logo.png',
+  fullLogo: '/images/holding/istoriya-vkusa-logo.webp',
   roundLogo: '/images/holding/istoriya-vkusa-round.webp',
     photo: '/images/holding/holding-photo.webp',
   gold: '#C2A076',
