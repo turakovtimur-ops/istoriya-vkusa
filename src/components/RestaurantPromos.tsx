@@ -23,7 +23,7 @@ export default function RestaurantPromos({ restaurant, dark }: Props) {
   const accent = restaurant.accent;
   const cHead = dark ? 'text-cream' : 'text-graphite';
   const cSoft = dark ? 'text-cream/70' : 'text-graphite/70';
-  const cMute = dark ? 'text-cream/40' : 'text-graphite/40';
+  const cMute = dark ? 'text-cream/60' : 'text-graphite/40';
   const cardBorder = dark ? 'border-cream/10 hover:border-cream/30' : 'border-black/10 hover:border-black/25';
   return (
     <section id="promos" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12">

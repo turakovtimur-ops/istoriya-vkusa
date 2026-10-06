@@ -80,7 +80,7 @@ export default function SuppliersBlock({ onPartner }: { onPartner: () => void })
                 <div key={s.id + '-' + copy} className="w-[280px] flex-none border border-cream/10 bg-night p-6 hover:border-cream/30 transition-colors">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="w-2 h-2 rounded-full" style={{ background: s.accent }} />
-                    <span className="text-[9px] uppercase tracking-[0.25em] text-cream/40">{s.category}</span>
+                    <span className="text-[9px] uppercase tracking-[0.25em] text-cream/60">{s.category}</span>
                   </div>
                   <p className="text-xl font-semibold tracking-tight mb-1.5">{s.name}</p>
                   <p className="text-cream/50 text-xs font-light leading-relaxed">{s.desc}</p>

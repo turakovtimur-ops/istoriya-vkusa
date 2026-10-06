@@ -1,0 +1,10 @@
+{
+  "name": "История Вкуса",
+  "url": "https://istoriya-vkusa.ru/",
+  "description": "Ресторанный холдинг в Геленджике: Кинза, Нино, Астория, Ла Коста Берег, партнёрские отели.",
+  "language": "ru",
+  "resources": [
+    { "type": "website", "url": "https://istoriya-vkusa.ru/" },
+    { "type": "document", "url": "https://istoriya-vkusa.ru/llms.txt", "contentType": "text/markdown" }
+  ]
+}

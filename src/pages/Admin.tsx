@@ -266,7 +266,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
         <div className="max-w-[1200px] mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-amber text-xs tracking-[0.3em] uppercase">Админка</span>
-            <span className="text-cream/40 text-xs hidden md:block">История Вкуса</span>
+            <span className="text-cream/60 text-xs hidden md:block">История Вкуса</span>
           </div>
           <a href="#/" className="text-xs text-cream/60 hover:text-cream">← На сайт</a>
         </div>
@@ -346,7 +346,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                   <button onClick={() => delGal(src)} className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/70 text-red-400 text-xs">✕</button>
                 </div>
               ))}
-              {(!extra[galRest] || !(extra[galRest].gallery || []).length) && <p className="text-cream/40 text-sm">Фото нет — добавь первое.</p>}
+              {(!extra[galRest] || !(extra[galRest].gallery || []).length) && <p className="text-cream/60 text-sm">Фото нет — добавь первое.</p>}
             </div>
           </section>
         )}
@@ -421,7 +421,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                 <input name="field" type="file" accept="image/*" className="text-xs" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addSup(f); e.target.value = ''; }} />
                 <button className={btnG} onClick={() => addSup(null)}>Добавить без логотипа</button>
               </div>
-              <p className="text-cream/40 text-xs">Логотип — квадратный, до 1 МБ. Компоний больше шести — садятся по две на орбиту, кольца не раздуваются.</p>
+              <p className="text-cream/60 text-xs">Логотип — квадратный, до 1 МБ. Компоний больше шести — садятся по две на орбиту, кольца не раздуваются.</p>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               {sups.map((s) => (
@@ -506,7 +506,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                 <button className={btnG} onClick={() => { if (tokenInput.startsWith('ghp_')) { localStorage.setItem(LS_TOKEN, tokenInput); setToken(tokenInput); setTokenInput(''); setMsg('Токен сохранён'); } else setMsg('Токен начинается с ghp_'); }}>Сохранить</button>
               </div>
             )}
-            <p className="text-cream/40 text-xs leading-relaxed">Пароль входа хранится в этом браузере. Публикация = коммит в GitHub → деплой ~1 минута. Фото — до 3 МБ.</p>
+            <p className="text-cream/60 text-xs leading-relaxed">Пароль входа хранится в этом браузере. Публикация = коммит в GitHub → деплой ~1 минута. Фото — до 3 МБ.</p>
           </section>
         )}
       </main>

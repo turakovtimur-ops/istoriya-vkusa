@@ -165,7 +165,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
           </nav>
           <div className="px-8 pb-10 pt-4" onClick={(e) => e.stopPropagation()}>
             <a onClick={() => ymGoal('phone_click')} href={tel} className="inline-block text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1 mb-4">{restaurant.phone}</a>
-            <p className="text-cream/40 text-xs font-light">{restaurant.address} · {restaurant.beach}</p>
+            <p className="text-cream/60 text-xs font-light">{restaurant.address} · {restaurant.beach}</p>
             <a href="#/" className="block mt-4 text-[10px] uppercase tracking-[0.3em] text-cream/50">← Вернуться в холдинг</a>
           </div>
         </div>

@@ -8,7 +8,7 @@ export default function Footer() {
             <p className="text-cream/60 text-sm font-light leading-relaxed">Ресторан грузинской кухни<br />на берегу Чёрного моря</p>
           </div>
           <div>
-            <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Разделы</p>
+            <p className="text-xs text-cream/60 uppercase tracking-[0.3em] mb-4">Разделы</p>
             <ul className="space-y-2 text-cream/70 font-light">
               <li><a href="#about" className="hover:text-cream transition-colors">Ресторан</a></li>
               <li><a href="#menu" className="hover:text-cream transition-colors">Меню</a></li>
@@ -18,7 +18,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Контакты</p>
+            <p className="text-xs text-cream/60 uppercase tracking-[0.3em] mb-4">Контакты</p>
             <ul className="space-y-2 text-cream/70 font-light">
               <li>Геленджик</li>
               <li>ул. Революционная, 22а</li>
@@ -27,7 +27,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Соцсети</p>
+            <p className="text-xs text-cream/60 uppercase tracking-[0.3em] mb-4">Соцсети</p>
             <ul className="space-y-2 text-cream/70 font-light">
               <li><a href="https://www.instagram.com/kinza_rest_gel/" target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Instagram</a></li>
               <li><a href="https://vk.com/kinzagelendzhik" target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">VK</a></li>

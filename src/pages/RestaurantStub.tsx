@@ -23,7 +23,7 @@ export default function RestaurantStub({ path }: Props) {
       <div className="relative text-cream/60 text-sm space-y-1 mb-12">
         <p>{r.address} · {r.beach}</p>
         <a href={'tel:' + r.phone.replace(/[^+\d]/g, '')} className="hover:text-cream transition-colors">{r.phone}</a>
-        <p className="text-cream/40">{r.phoneFree}</p>
+        <p className="text-cream/60">{r.phoneFree}</p>
       </div>
       <a href="#/" className="btn-outline relative">← Вернуться в холдинг</a>
     </div>

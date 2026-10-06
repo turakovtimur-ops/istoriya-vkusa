@@ -157,7 +157,7 @@ export default function ContactsSection() {
                     <p className="text-cream/55 text-xs font-light mt-0.5">{r.address} · {r.beach}</p>
                     <p className="text-cream/70 text-xs mt-0.5">
                       <a href={'tel:' + r.phone.replace(/[^+\d]/g, '')} className="hover:text-amber transition-colors">{r.phone}</a>
-                      <span className="text-cream/40"> · {r.phoneFree}</span>
+                      <span className="text-cream/60"> · {r.phoneFree}</span>
                     </p>
                   </div>
                 </div>

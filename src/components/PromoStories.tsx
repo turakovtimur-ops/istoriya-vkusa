@@ -64,7 +64,7 @@ const touchX = useRef<number | null>(null);
               );
             })}
           </div>
-          <p className="text-cream/40 text-xs mt-2">Листай вбок · клик — полный экран</p>
+          <p className="text-cream/60 text-xs mt-2">Листай вбок · клик — полный экран</p>
         </>
       ) : (
         <div className="grid md:grid-cols-2 gap-6">

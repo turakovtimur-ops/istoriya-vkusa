@@ -97,7 +97,7 @@ function HoldingHeader() {
             <a href="tel:88002015757" className="inline-block text-sm tracking-[0.2em] uppercase text-amber border-b border-amber/40 pb-1 mb-4">
               8 800 201-57-57
             </a>
-            <p className="text-cream/40 text-xs font-light">Геленджик · ресторанный холдинг</p>
+            <p className="text-cream/60 text-xs font-light">Геленджик · ресторанный холдинг</p>
           </div>
         </div>
       )}
@@ -311,7 +311,7 @@ export default function Holding() {
             <button key={m.id} onClick={() => setTeamIdx(i)} aria-label={m.name} className={'w-2.5 h-2.5 rounded-full transition-colors ' + (i === teamIdx ? 'bg-amber' : 'bg-cream/25')} />
           ))}
         </div>
-        <p className="text-center text-cream/40 text-[9px] tracking-[0.3em] uppercase mt-3">Листайте</p>
+        <p className="text-center text-cream/60 text-[9px] tracking-[0.3em] uppercase mt-3">Листайте</p>
       </div>
         <div className="hidden md:grid md:grid-cols-3 gap-8">
             {team.map((t, i) => (
@@ -408,7 +408,7 @@ export default function Holding() {
           <article key={nItem.id} className="border border-cream/10 hover:border-cream/30 transition-colors p-7 flex flex-col reveal" style={{ transitionDelay: (i * 0.08) + 's' }}>
             <div className="flex items-center justify-between gap-3 mb-4">
               <span className="text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 rounded-full bg-amber/15 text-amber">{nItem.tag}</span>
-              <time className="text-cream/40 text-xs">{nItem.date}</time>
+              <time className="text-cream/60 text-xs">{nItem.date}</time>
             </div>
             <h3 className="text-xl font-semibold tracking-tight mb-3">{nItem.title}</h3>
             <p className="text-cream/60 text-sm font-light leading-relaxed whitespace-pre-line">{nItem.text}</p>
@@ -489,7 +489,7 @@ export default function Holding() {
             <p className="text-cream/50 text-sm font-light mt-1">Геленджик</p>
           </div>
           <div>
-            <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Рестораны</p>
+            <p className="text-xs text-cream/60 uppercase tracking-[0.3em] mb-4">Рестораны</p>
             <ul className="space-y-2 text-cream/70 font-light text-sm">
               {restaurants.map((r) => (
                 <li key={r.id}><a href={r.path} className="hover:text-cream transition-colors">{r.name}</a></li>
@@ -497,7 +497,7 @@ export default function Holding() {
             </ul>
           </div>
           <div>
-            <p className="text-xs text-cream/40 uppercase tracking-[0.3em] mb-4">Партнёры</p>
+            <p className="text-xs text-cream/60 uppercase tracking-[0.3em] mb-4">Партнёры</p>
             <ul className="space-y-2 text-cream/70 font-light text-sm">
               {partners.map((p) => (
                 <li key={p.id}>
@@ -508,7 +508,7 @@ export default function Holding() {
           </div>
         </div>
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mt-12 pt-8 border-t border-cream/10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full"><p className="text-cream/40 text-xs">© 2026 История Вкуса. Все права защищены.</p><p className="text-cream/40 text-xs">Кастомная разработка и дизайн сайта — Тураков Т. Р.</p></div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full"><p className="text-cream/60 text-xs">© 2026 История Вкуса. Все права защищены.</p><p className="text-cream/60 text-xs">Кастомная разработка и дизайн сайта — Тураков Т. Р.</p></div>
         </div>
       </footer>
 

@@ -318,7 +318,7 @@ export default function OrbitHero() {
       )}
 
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10">
-        <span className="text-cream/40 text-[9px] tracking-[0.3em] uppercase">Листайте</span>
+        <span className="text-cream/60 text-[9px] tracking-[0.3em] uppercase">Листайте</span>
         <div className="w-px h-6 bg-cream/25 animate-pulse" />
       </div>
     </section>
