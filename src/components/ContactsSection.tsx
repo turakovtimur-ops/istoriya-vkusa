@@ -51,11 +51,17 @@ export default function ContactsSection() {
     if (m && boundsRef.current) m.setBounds(boundsRef.current, { checkZoomRange: true, duration: 300 });
   };
 
+  const whenVisible = (el: HTMLElement | null) => new Promise<void>((res) => {
+    if (!el) { res(); return; }
+    const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); res(); } }, { rootMargin: '300px' });
+    io.observe(el);
+  });
+
   useEffect(() => {
     let cancelled = false;
     let map: any = null;
 
-    loadYmaps().then((ymaps) => {
+    whenVisible(mapRef.current).then(() => loadYmaps()).then((ymaps) => {
       if (cancelled || !mapRef.current) return;
       ymaps.ready(() => {
         if (cancelled || !mapRef.current) return;

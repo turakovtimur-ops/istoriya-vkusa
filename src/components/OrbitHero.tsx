@@ -206,7 +206,7 @@ export default function OrbitHero() {
                 key={r.id}
                 ref={(el) => { planetRefs.current[i] = el; }}
                 href={r.path}
-                className="absolute left-1/2 top-1/2 planet"
+                className="absolute left-1/2 top-1/2 planet" style={{ willChange: 'transform' }}
               >
                 <div className="flex flex-col items-center gap-1.5 w-20">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden" style={{ boxShadow: '0 0 26px ' + r.accent + '66' }}>
@@ -224,7 +224,7 @@ export default function OrbitHero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.name + ' — доставка в Яндекс Еде'}
-                className="absolute left-1/2 top-1/2 eda-satellite"
+                className="absolute left-1/2 top-1/2 eda-satellite" style={{ willChange: 'transform' }}
               >
                 <img src="/images/kinza/yandex-eda.webp" alt="" className="w-9 h-9 rounded-[22%] eda-logo" style={{ boxShadow: '0 0 18px rgba(255,214,10,0.5)' }} />
               </a>
@@ -286,7 +286,7 @@ export default function OrbitHero() {
                 key={r.id}
                 ref={(el) => { planetRefs.current[i] = el; }}
                 href={r.path}
-                className="absolute left-1/2 top-1/2 planet"
+                className="absolute left-1/2 top-1/2 planet" style={{ willChange: 'transform' }}
                 onMouseEnter={() => { pausedRef.current = i; setActive(i); }}
                 onMouseLeave={() => { pausedRef.current = null; setActive(null); }}
               >
@@ -314,7 +314,7 @@ export default function OrbitHero() {
                 rel="noopener noreferrer"
                 aria-label={s.name + ' — доставка в Яндекс Еде'}
                 title="Доставка · Яндекс Еда"
-                className="absolute left-1/2 top-1/2 eda-satellite"
+                className="absolute left-1/2 top-1/2 eda-satellite" style={{ willChange: 'transform' }}
               >
                 <img src="/images/kinza/yandex-eda.webp" alt="" className="w-12 h-12 lg:w-14 lg:h-14 rounded-[22%] eda-logo" style={{ boxShadow: '0 0 26px rgba(255,214,10,0.5), 0 8px 20px rgba(0,0,0,0.45)' }} />
               </a>
