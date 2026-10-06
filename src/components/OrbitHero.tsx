@@ -23,6 +23,7 @@ export default function OrbitHero() {
   const [active, setActive] = useState<number | null>(null);
   const pausedRef = useRef<number | null>(null);
   const curSpeed = useRef(0);
+  const frame = useRef(0);
   const angleRef = useRef(0);
   const satRef = useRef(0);
   const visibleRef = useRef(true);
@@ -134,7 +135,8 @@ export default function OrbitHero() {
         curSpeed.current += (target - curSpeed.current) * 0.06;
         angleRef.current = (angleRef.current + curSpeed.current * dt) % 360;
         satRef.current = (satRef.current + curSpeed.current * 5 * dt) % 360;
-        apply();
+        frame.current += 1;
+        if (frame.current % 2 === 0) apply();
       }
       raf = requestAnimationFrame(tick);
     };
