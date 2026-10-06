@@ -132,7 +132,7 @@
 .sun-glow {
   background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #F1F2F6 45%, #C6CAD5 100%);
   filter: drop-shadow(0 34px 60px rgba(0, 0, 0, 0.65));
-  box-shadow: 0 0 80px 20px rgba(194, 160, 118, 0.35), 0 0 220px 70px rgba(194, 160, 118, 0.12);
+  box-shadow: 0 0 90px 26px rgba(255, 214, 140, 0.45), 0 0 240px 90px rgba(194, 160, 118, 0.2);
   animation: sunPulse 6s ease-in-out infinite; will-change: transform, opacity;
 }
 @keyframes sunPulse {
@@ -441,3 +441,19 @@ img { -webkit-user-drag: none; user-select: none; }
 .iv-spin { animation: iv-spin 1.4s linear infinite; transform-origin: 50% 50%; }
 
 .iv-nocursor, .iv-nocursor * { cursor: none !important; }
+
+.sun-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 42%, rgba(255, 246, 220, 0.5) 0%, rgba(255, 214, 140, 0.18) 45%, rgba(255, 214, 140, 0) 70%);
+  mix-blend-mode: screen;
+  animation: sunCore 5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes sunCore {
+  0%, 100% { opacity: 0.35; transform: scale(0.92); }
+  50% { opacity: 0.85; transform: scale(1.06); }
+}

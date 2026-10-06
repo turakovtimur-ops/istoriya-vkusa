@@ -135,8 +135,7 @@ export default function OrbitHero() {
         curSpeed.current += (target - curSpeed.current) * 0.06;
         angleRef.current = (angleRef.current + curSpeed.current * dt) % 360;
         satRef.current = (satRef.current + curSpeed.current * 5 * dt) % 360;
-        frame.current += 1;
-        if (frame.current % 2 === 0) apply();
+        apply();
       }
       raf = requestAnimationFrame(tick);
     };
