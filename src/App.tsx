@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Holding from './pages/Holding';
-import Admin from './pages/Admin';
-import EditMode from './components/EditMode';
+import { lazy, Suspense } from 'react';
+const Admin = lazy(() => import('./pages/Admin'));
+const EditMode = lazy(() => import('./components/EditMode'));
 import RestaurantPage from './sites/RestaurantPage';
 import { restaurants } from './data/holding';
 
@@ -43,8 +44,12 @@ export default function App() {
   }, []);
 
   const clean = pathName.replace(/\/+$/, '') || '/';
-  if (clean === '/upravlenie') return (<><EditMode /><Admin /></>);
+  if (clean === '/upravlenie') return (<><Suspense fallback={null}><EditMode /></Suspense>
+      <Suspense fallback={null}><Admin /></Suspense>
+        </>);
   const rest = restaurants.find((r) => clean === r.path || clean === '/' + r.path || clean === '/' + r.id);
-  if (rest) return (<><EditMode /><RestaurantPage restaurant={rest} /></>);
-  return (<><EditMode /><Holding /></>);
+  if (rest) return (<><Suspense fallback={null}><EditMode /></Suspense>
+      <RestaurantPage restaurant={rest} /></>);
+  return (<><Suspense fallback={null}><EditMode /></Suspense>
+      <Holding /></>);
 }
