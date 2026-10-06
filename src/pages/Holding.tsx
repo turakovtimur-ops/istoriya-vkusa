@@ -484,7 +484,7 @@ export default function Holding() {
       <footer className="py-12 border-t border-cream/10 bg-coal">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid md:grid-cols-3 gap-10">
           <div className="flex flex-col items-center text-center">
-            <img src={holdingBrand.fullLogo} alt="История Вкуса" className="h-14 lg:h-16 w-auto object-contain" />
+            <img src={holdingBrand.fullLogo} alt="История Вкуса" className="h-14 lg:h-16 w-auto object-contain"  width="240" height="130"/>
             <p className="text-cream/50 text-sm font-light mt-3">Сеть ресторанов и отелей</p>
             <p className="text-cream/50 text-sm font-light mt-1">Геленджик</p>
           </div>
