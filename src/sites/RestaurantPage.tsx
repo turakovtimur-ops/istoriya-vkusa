@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import BookingModal from '../components/BookingModal';
 import NewsStories from '../components/NewsStories';
 import { news } from '../data/news';
+import { restaurants } from '../data/holding';
 import RestaurantPromos from '../components/RestaurantPromos';
 import { useModal } from '../hooks/useModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -328,15 +329,19 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
           </div>
         </section>
 
-              {news.some((n) => n.resto === r.id) && (
-        <section id="news" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
-          <div className="mb-10">
-            <p className="text-xs tracking-[0.3em] uppercase mb-3 font-medium" style={{ color: r.accent }}>События</p>
-            <h2 className="text-4xl md:text-5xl font-semibold tracking-tighter">Новости «{r.name}»</h2>
-          </div>
-          <NewsStories resto={r.id} onBook={() => modal.open()} />
-        </section>
-      )}
+              {(() => {
+        const rr = restaurants.find((x) => x.path === window.location.pathname);
+        if (!rr || !news.some((n) => n.resto === rr.id)) return null;
+        return (
+          <section id="news" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
+            <div className="mb-10">
+              <p className="text-xs tracking-[0.3em] uppercase mb-3 font-medium" style={{ color: rr.accent }}>События</p>
+              <h2 className="text-4xl md:text-5xl font-semibold tracking-tighter">Новости «{rr.name}»</h2>
+            </div>
+            <NewsStories resto={rr.id} onBook={() => modal.open()} />
+          </section>
+        );
+      })()}
         <section id="contacts" className={'scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 border-t ' + lineB}>
           <div className="max-w-[1400px] mx-auto">
             <div className="text-center mb-12 reveal">

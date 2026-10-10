@@ -187,6 +187,8 @@ function FloatingButtons() {
 
 
 export default function Holding() {
+  const [modalResto, setModalResto] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   useScrollAnimation();
   const [promoFilter, setPromoFilter] = useState('all');
   const [vacancy, setVacancy] = useState<string | null>(null);
