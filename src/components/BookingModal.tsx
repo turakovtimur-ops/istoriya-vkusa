@@ -17,7 +17,7 @@ export default function BookingModal({ isOpen, onClose, restaurant }: Props) {
       await fetch('/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'booking', data: { ...form, restaurant: restaurant || REST_NAMES[(window.location.pathname.split('/')[1] || '')] || '' }, honeypot: '' }),
+        body: JSON.stringify({ type: 'booking', data: { ...form, restaurant: REST_NAMES[restaurant || ''] || REST_NAMES[(window.location.pathname.split('/')[1] || '')] || restaurant || '' }, honeypot: '' }),
       });
     } catch (e) { }
     

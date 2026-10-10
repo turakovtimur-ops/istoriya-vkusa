@@ -322,6 +322,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                   </div>
                   <input name="field" className={inp + ' mb-3 font-medium'} value={n.title} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, title: e.target.value } : x))} />
                   <textarea name="field" className={inp} rows={3} value={n.text} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, text: e.target.value } : x))} />
+                  <p className={'text-[10px] mt-1 ' + (n.text.length > 600 ? 'text-red-400' : n.text.length > 450 ? 'text-amber' : 'text-cream/50')}>{n.text.length} / 600 символов — столько вмещает карточка на сайте без скролла</p>
                   <div className="mt-3">
                     <label className="text-[10px] uppercase tracking-[0.2em] text-cream/50 mb-1 block">Ресторан</label>
                     <select className={inp} value={n.resto || ''} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, resto: e.target.value || undefined } : x))}>
@@ -333,7 +334,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                     <label className="text-[10px] uppercase tracking-[0.2em] text-cream/50 mb-2 block">Плакат-афиша</label>
                     {n.poster ? (
                       <div className="flex items-center gap-3">
-                        <img src={n.poster} alt="poster" className="w-20 aspect-[1080/1534] object-cover rounded" />
+                        <img src={n.poster} alt="poster" className="w-20 aspect-[3/4] object-contain rounded bg-night" />
                         <button className="text-xs text-red-400 uppercase tracking-wider" onClick={() => delNewsPoster(i)}>Удалить</button>
                       </div>
                     ) : (
