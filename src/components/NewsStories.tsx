@@ -7,7 +7,7 @@ interface Props { resto?: string; onBook?: (restoId: string) => void; }
 
 export default function NewsStories({ resto, onBook }: Props) {
   const [view, setView] = useState<number | null>(null);
-  const items = news.filter((n) => (resto ? n.resto === resto : true));
+  const items = news.filter((n) => (resto ? n.resto === resto : true)).filter((n) => !n.dateEnd || new Date(n.dateEnd + 'T23:59:59') >= new Date());
 
   useEffect(() => {
     if (view === null) return;

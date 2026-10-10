@@ -16,12 +16,34 @@ const sha256 = async (msg: string) => {
   const hash = await crypto.subtle.digest('SHA-256', buf);
   return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, '0')).join('');
 };
-const fileToB64 = (f: File) => new Promise<string>((res, rej) => {
-  const r = new FileReader();
-  r.onload = () => res(String(r.result).split(',')[1]);
-  r.onerror = rej;
-  r.readAsDataURL(f);
-});
+const compressImage = (file: File, maxDim = 1600, q = 0.85) => new Promise<Blob>((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = img.width, h = img.height;
+      const k = Math.min(1, maxDim / Math.max(w, h));
+      w = Math.round(w * k); h = Math.round(h * k);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      if (!ctx) { rej(new Error('no ctx')); return; }
+      ctx.drawImage(img, 0, 0, w, h);
+      c.toBlob((b) => { if (b) res(b); else rej(new Error('toBlob')); }, 'image/webp', q);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('decode')); };
+    img.src = url;
+  });
+  const blobToB64 = (b: Blob) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(b); });
+  const fileToB64 = async (f: File) => {
+    if (f.type && f.type.startsWith('image/')) {
+      try {
+        const b = await compressImage(f);
+        if (b && b.size < f.size) return await blobToB64(b);
+      } catch (e) { }
+    }
+    return blobToB64(f);
+  };
 const inp = 'w-full bg-cream/5 border border-cream/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber';
 const btnA = 'px-4 py-2 text-xs uppercase tracking-wider bg-amber text-night rounded-full hover:opacity-90';
 const btnG = 'px-4 py-2 bg-cream/10 rounded-lg text-xs hover:bg-cream/20';
@@ -79,7 +101,7 @@ export default function Admin() {
 
   // ---------- новости ----------
   const newsText = () => '// НОВОСТИ ХОЛДИНГА (обновлено через админку)\n' +
-    'export interface NewsItem { id: string; date: string; tag: string; title: string; text: string; resto?: string; poster?: string }\n' +
+    'export interface NewsItem { id: string; date: string; tag: string; title: string; text: string; resto?: string; poster?: string; dateEnd?: string }\n' +
     'export const news: NewsItem[] = ' + JSON.stringify(news, null, 2) + ';\n';
 
   // ---------- постеры новостей ----------
@@ -114,7 +136,7 @@ export default function Admin() {
     'export interface PromoMedia { id: string; restaurant: string; src: string }\n' +
     'export const PROMO_MEDIA: PromoMedia[] = ' + JSON.stringify(list, null, 2) + ';\n';
   const addPromo = async (file: File) => {
-    const name = (promoRest === 'all' ? 'all' : promoRest) + '-a' + Date.now() + '.jpg';
+    const name = (promoRest === 'all' ? 'all' : promoRest) + '-a' + Date.now() + '.webp';
     const b64 = await fileToB64(file);
     const list = [...promos, { id: name, restaurant: promoRest, src: '/images/promos/' + name }];
     setPromos(list);
@@ -138,7 +160,7 @@ export default function Admin() {
     'export const RESTO_EXTRA: Record<string, RestoExtra> = ' + JSON.stringify(extra, null, 2) + ';\n';
   const addGal = async (file: File) => {
     const e = extra[galRest]; if (!e) { setMsg('Нет данных ресторана'); return; }
-    const name = 'a' + Date.now() + '.jpg';
+    const name = 'a' + Date.now() + '.webp';
     const src = '/images/' + galRest + '/gallery/' + name;
     e.gallery = [...(e.gallery || []), src];
     setExtra({ ...extra });
@@ -159,7 +181,7 @@ export default function Admin() {
   };
   const uploadHero = async (file: File) => {
     const e = extra[restSel] || (extra[restSel] = { hours: '09:00–00:00', reviews: [], gallery: [] });
-    const name = 'hero-' + Date.now() + '.jpg';
+    const name = 'hero-' + Date.now() + '.webp';
     e.overrides = e.overrides || {};
     e.overrides.image = '/images/' + restSel + '/' + name;
     setExtra({ ...extra });
@@ -319,6 +341,11 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                   <div className="grid md:grid-cols-2 gap-3 mb-3">
                     <input name="field" className={inp} value={n.date} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, date: e.target.value } : x))} />
                     <input name="field" className={inp} value={n.tag} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, tag: e.target.value } : x))} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="text-[10px] uppercase tracking-[0.2em] text-cream/50 mb-1 block">Дата окончания события · необязательно</label>
+                    <input name="field" type="date" className={inp} value={n.dateEnd || ''} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, dateEnd: e.target.value || undefined } : x))} />
+                    <p className="text-[10px] text-cream/50 mt-1">Укажешь — новость скроется с сайта на следующий день после даты. Пусто — висит постоянно.{n.dateEnd && new Date(n.dateEnd + 'T23:59:59') < new Date() ? ' · СРОК ВЫШЕЛ — скрыта на сайте' : ''}</p>
                   </div>
                   <input name="field" className={inp + ' mb-3 font-medium'} value={n.title} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, title: e.target.value } : x))} />
                   <textarea name="field" className={inp} rows={3} value={n.text} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, text: e.target.value } : x))} />
