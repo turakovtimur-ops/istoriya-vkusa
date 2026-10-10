@@ -1,5 +1,5 @@
 // НОВОСТИ ХОЛДИНГА (обновлено через админку)
-export interface NewsItem { id: string; date: string; tag: string; title: string; text: string }
+export interface NewsItem { id: string; date: string; tag: string; title: string; text: string; resto?: string; poster?: string }
 export const news: NewsItem[] = [
   {
     "id": "n1791294279199",

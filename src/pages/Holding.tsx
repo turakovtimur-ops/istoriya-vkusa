@@ -5,6 +5,8 @@ import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
 import SuppliersBlock from '../components/SuppliersBlock';
 import PromoStories from '../components/PromoStories';
+import NewsStories from '../components/NewsStories';
+import BookingModal from '../components/BookingModal';
 import EventsBlock from '../components/EventsBlock';
 import { news } from '../data/news';
 import ContactsSection from '../components/ContactsSection';
@@ -403,18 +405,7 @@ export default function Holding() {
         <p className="text-amber text-xs tracking-[0.3em] uppercase mb-6 font-medium">Новости</p>
         <h2 data-e="ui.newsTitle" className="text-4xl md:text-6xl font-semibold tracking-tighter">{ui.newsTitle}</h2>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {news.slice(0, 6).map((nItem, i) => (
-          <article key={nItem.id} className="border border-cream/10 hover:border-cream/30 transition-colors p-7 flex flex-col reveal" style={{ transitionDelay: (i * 0.08) + 's' }}>
-            <div className="flex items-center justify-between gap-3 mb-4">
-              <span className="text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 rounded-full bg-amber/15 text-amber">{nItem.tag}</span>
-              <time className="text-cream/60 text-xs">{nItem.date}</time>
-            </div>
-            <h3 className="text-xl font-semibold tracking-tight mb-3">{nItem.title}</h3>
-            <p className="text-cream/60 text-sm font-light leading-relaxed whitespace-pre-line">{nItem.text}</p>
-          </article>
-        ))}
-      </div>
+      <NewsStories onBook={(r) => { setModalResto(r); setModalOpen(true); }} />
     </div>
   </section>
   <section id="promos" className="py-16 lg:py-24 bg-coal">
@@ -481,6 +472,7 @@ export default function Holding() {
       <ContactsSection />
 
       <FaqBlock />
+      <BookingModal isOpen={modalOpen} restaurant={modalResto} onClose={() => { setModalOpen(false); setModalResto(null); }} />
       <footer className="py-12 border-t border-cream/10 bg-coal">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid md:grid-cols-3 gap-10">
           <div className="flex flex-col items-center text-center">

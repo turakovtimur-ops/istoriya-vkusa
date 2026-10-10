@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BookingForm } from '../types';
 const REST_NAMES: Record<string, string> = { kinza: 'Кинза', nino: 'Нино', astoria: 'Астория', 'la-costa': 'Ла Коста Берег' };
-interface Props { isOpen: boolean; onClose: () => void; }
-export default function BookingModal({ isOpen, onClose }: Props) {
+interface Props { isOpen: boolean; onClose: () => void; restaurant?: string | null; }
+export default function BookingModal({ isOpen, onClose, restaurant }: Props) {
   const [form, setForm] = useState<BookingForm>({ name: '', phone: '', date: '', time: '', guests: 2, comment: '' });
   const [submitted, setSubmitted] = useState(false);
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function BookingModal({ isOpen, onClose }: Props) {
       await fetch('/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'booking', data: { ...form, restaurant: REST_NAMES[(window.location.pathname.split('/')[1] || '')] || '' }, honeypot: '' }),
+        body: JSON.stringify({ type: 'booking', data: { ...form, restaurant: restaurant || REST_NAMES[(window.location.pathname.split('/')[1] || '')] || '' }, honeypot: '' }),
       });
     } catch (e) { }
     
@@ -53,6 +53,10 @@ if (!isOpen) return null;
       </div>
     ) : (
       <form onSubmit={handleSubmit} className="space-y-6">
+          {restaurant ? (
+            <p className="text-sm text-graphite/70">Ресторан: <span className="font-medium text-graphite">{REST_NAMES[restaurant] || restaurant}</span></p>
+          ) : null}
+
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="text-xs text-muted uppercase tracking-[0.2em] mb-2 block">Имя</label>

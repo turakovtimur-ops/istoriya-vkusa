@@ -79,8 +79,34 @@ export default function Admin() {
 
   // ---------- новости ----------
   const newsText = () => '// НОВОСТИ ХОЛДИНГА (обновлено через админку)\n' +
-    'export interface NewsItem { id: string; date: string; tag: string; title: string; text: string }\n' +
+    'export interface NewsItem { id: string; date: string; tag: string; title: string; text: string; resto?: string; poster?: string }\n' +
     'export const news: NewsItem[] = ' + JSON.stringify(news, null, 2) + ';\n';
+
+  // ---------- постеры новостей ----------
+  const addNewsPoster = async (file: File, idx: number) => {
+    const n = news[idx];
+    const name = (n.resto || 'holding') + '-n' + Date.now() + '.webp';
+    const b64 = await fileToB64(file);
+    const list = news.map((x, i) => i === idx ? { ...x, poster: '/images/news/' + name } : x);
+    setNews(list);
+    await publish('админка: постер ' + name, [
+      { path: 'public/images/news/' + name, base64: b64 },
+      { path: 'src/data/news.ts', text: newsText() }
+    ]);
+    setMsg('✓ Постер загружен');
+  };
+  const delNewsPoster = async (idx: number) => {
+    const n = news[idx];
+    if (!n.poster) return;
+    const list = news.map((x, i) => i === idx ? { ...x, poster: undefined } : x);
+    setNews(list);
+    await publish('админка: -постер ' + n.poster, [
+      { path: n.poster.replace(/^\//, ''), del: true },
+      { path: 'src/data/news.ts', text: newsText() }
+    ]);
+    setMsg('Постер удалён');
+  };
+
   const pubNews = () => publish('админка: новости', [{ path: 'src/data/news.ts', text: newsText() }]);
 
   // ---------- акции ----------
@@ -285,7 +311,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
           <section>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold">Новости</h2>
-              <button className={btnA} onClick={() => setNews([{ id: 'n' + Date.now(), date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }), tag: 'Новость', title: 'Заголовок', text: 'Текст' }, ...news])}>+ Добавить</button>
+              <button className={btnA} onClick={() => setNews([{ id: 'n' + Date.now(), date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }), tag: 'Новость', title: 'Заголовок', text: 'Текст', resto: '' }, ...news])}>+ Добавить</button>
             </div>
             <div className="space-y-4">
               {news.map((n, i) => (
@@ -296,6 +322,24 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
                   </div>
                   <input name="field" className={inp + ' mb-3 font-medium'} value={n.title} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, title: e.target.value } : x))} />
                   <textarea name="field" className={inp} rows={3} value={n.text} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, text: e.target.value } : x))} />
+                  <div className="mt-3">
+                    <label className="text-[10px] uppercase tracking-[0.2em] text-cream/50 mb-1 block">Ресторан</label>
+                    <select className={inp} value={n.resto || ''} onChange={(e) => setNews(news.map((x, idx) => idx === i ? { ...x, resto: e.target.value || undefined } : x))}>
+                      <option value="">Общая (холдинг)</option>
+                      {restaurants.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+                    </select>
+                  </div>
+                  <div className="mt-3 border border-cream/10 rounded-lg p-3">
+                    <label className="text-[10px] uppercase tracking-[0.2em] text-cream/50 mb-2 block">Плакат-афиша</label>
+                    {n.poster ? (
+                      <div className="flex items-center gap-3">
+                        <img src={n.poster} alt="poster" className="w-20 aspect-[1080/1534] object-cover rounded" />
+                        <button className="text-xs text-red-400 uppercase tracking-wider" onClick={() => delNewsPoster(i)}>Удалить</button>
+                      </div>
+                    ) : (
+                      <input name="field" type="file" accept="image/*" onChange={(e) => { const f = e.target.files && e.target.files[0]; if (f) addNewsPoster(f, i); e.target.value = ''; }} className="text-xs" />
+                    )}
+                  </div>
                   <div className="flex justify-end mt-2"><button className="text-xs text-red-400 uppercase tracking-wider" onClick={() => setNews(news.filter((_, idx) => idx !== i))}>Удалить</button></div>
                 </div>
               ))}
