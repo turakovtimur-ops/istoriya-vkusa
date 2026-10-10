@@ -21,8 +21,10 @@ export default function NewsStories({ resto, onBook }: Props) {
   }, [view, items.length]);
 
   useEffect(() => {
-    document.body.style.overflow = view !== null ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    const lock = view !== null ? 'hidden' : '';
+    document.body.style.overflow = lock;
+    document.documentElement.style.overflow = lock;
+    return () => { document.body.style.overflow = ''; document.documentElement.style.overflow = ''; };
   }, [view]);
 
   if (items.length === 0) return null;
@@ -80,8 +82,8 @@ export default function NewsStories({ resto, onBook }: Props) {
           </div>
 
           <div className="md:h-full md:flex md:items-center md:justify-center px-3 pb-6 md:p-6">
-            <div className="relative bg-coal rounded-2xl overflow-hidden shadow-2xl md:w-full md:max-w-5xl md:max-h-[88vh] md:grid md:grid-cols-[1fr_1.1fr]" onClick={(e) => e.stopPropagation()}>
-              <div className="p-3 md:p-0 md:h-full bg-night">
+            <div className="relative bg-coal rounded-2xl overflow-hidden shadow-2xl md:w-full md:max-w-5xl md:h-[88vh] md:grid md:grid-cols-[1fr_1.1fr]" onClick={(e) => e.stopPropagation()}>
+              <div className="p-3 md:p-0 md:h-full md:min-h-0 bg-night">
                 {cur.poster ? (
                   <img src={cur.poster} alt={cur.title} className="w-full h-auto md:h-full md:w-full object-contain rounded-xl md:rounded-none" />
                 ) : (
