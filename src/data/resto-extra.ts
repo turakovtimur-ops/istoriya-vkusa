@@ -131,7 +131,7 @@ export const RESTO_EXTRA: Record<string, RestoExtra> = {
     }
   },
   "la-costa": {
-    "hours": "10:00–02:00",
+    "hours": "ПН-ЧТ, ВС 10:00-00:00 ПТ-СБ 10:00-02:00 (DJ)",
     "reviews": [
       {
         "name": "Александр К.",
