@@ -3,7 +3,7 @@ export interface RestoExtra { hours: string; reviews: { name: string; text: stri
 export const RESTO_EXTRA: Record<string, RestoExtra> = {
   "kinza": {
     "eda": "https://eda.yandex.ru/r/kinza_1721032873?placeSlug=kinza_l37w6",
-    "hours": "10:00–00:00                Каждый ЧТ, ПТ, СБ - музыкальное сопровождение",
+    "hours": "10:00–00:00 Каждый ЧТ, ПТ, СБ - музыкальное сопровождение",
     "reviews": [
       {
         "name": "Светлана Гончарова",
