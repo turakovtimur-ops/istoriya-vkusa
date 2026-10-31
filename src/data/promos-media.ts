@@ -150,5 +150,10 @@ export const PROMO_MEDIA: PromoMedia[] = [
     "id": "astoria-a1793467731082.webp",
     "restaurant": "astoria",
     "src": "/images/promos/astoria-a1793467731082.webp"
+  },
+  {
+    "id": "astoria-a1793467739724.webp",
+    "restaurant": "astoria",
+    "src": "/images/promos/astoria-a1793467739724.webp"
   }
 ];
