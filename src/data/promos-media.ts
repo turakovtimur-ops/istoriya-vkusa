@@ -135,5 +135,10 @@ export const PROMO_MEDIA: PromoMedia[] = [
     "id": "kinza-a1793467689572.webp",
     "restaurant": "kinza",
     "src": "/images/promos/kinza-a1793467689572.webp"
+  },
+  {
+    "id": "nino-a1793467709537.webp",
+    "restaurant": "nino",
+    "src": "/images/promos/nino-a1793467709537.webp"
   }
 ];
