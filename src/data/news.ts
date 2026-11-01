@@ -2,6 +2,14 @@
 export interface NewsItem { id: string; date: string; tag: string; title: string; text: string; resto?: string; poster?: string; dateEnd?: string }
 export const news: NewsItem[] = [
   {
+    "id": "n1793512518842",
+    "date": "1 ноября 2026 г.",
+    "tag": "Новость",
+    "title": "Заголовок",
+    "text": "Текст",
+    "resto": "la-costa"
+  },
+  {
     "id": "n1791294279199",
     "date": "17 ноября 2026 г.",
     "tag": "Новость",
