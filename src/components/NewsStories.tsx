@@ -97,7 +97,7 @@ export default function NewsStories({ resto, onBook }: Props) {
                   <span className="text-cream/60 text-xs md:ml-auto">{cur.date}</span>
                 </div>
                 <h2 className="font-serif text-2xl md:text-4xl font-medium text-cream leading-tight mb-5">{cur.title}</h2>
-                <p className="text-cream/80 text-sm md:text-base font-light leading-relaxed whitespace-pre-line md:flex-1 md:min-h-0 md:overflow-hidden">{cur.text}</p>
+                <p className="text-cream/80 text-sm md:text-base font-light leading-relaxed whitespace-pre-line md:flex-1 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:pr-2">{cur.text}</p>
                 {curR && onBook && (
                   <button onClick={() => { setView(null); onBook(cur.resto!); }} className="hidden md:inline-flex mt-6 btn-terra self-start">Забронировать в «{curR.name}»</button>
                 )}
