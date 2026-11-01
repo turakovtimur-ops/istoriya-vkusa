@@ -129,6 +129,20 @@ export default function Admin() {
     setMsg('Постер удалён');
   };
 
+  const syncNews = async () => {
+    if (!token) return;
+    try {
+      const r = await fetch('/api/read?path=' + encodeURIComponent('src/data/news.ts'), { headers: { 'x-gh-token': token } });
+      if (!r.ok) return;
+      const { text } = await r.json();
+      const m = text.match(/export const news: NewsItem\[\] = (\[[\s\S]*?\]);/);
+      if (!m) return;
+      const parsed = JSON.parse(m[1]);
+      if (Array.isArray(parsed)) setNews(parsed);
+      setMsg('✓ Список синхронизирован с GitHub');
+    } catch (e) { setMsg('Не удалось синхронизировать: ' + String(e)); }
+  };
+
   const pubNews = () => publish('админка: новости', [{ path: 'src/data/news.ts', text: newsText() }]);
 
   // ---------- акции ----------
