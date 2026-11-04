@@ -284,7 +284,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
                   <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: accent }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                   </div>
-                  <p className={cSoft + ' pt-2'}>До 80 гостей</p>
+                  <p className={cSoft + ' pt-2'}>{({ kinza: 'До 120 гостей', nino: 'До 80 гостей', astoria: 'До 250 гостей', 'la-costa': 'До 180 гостей' } as Record<string, string>)[restaurant.id] || 'До 80 гостей'}</p>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: accent }}>
