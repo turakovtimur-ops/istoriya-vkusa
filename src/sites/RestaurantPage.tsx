@@ -227,7 +227,7 @@ export default function RestaurantPage({ restaurant: restaurantProp }: Props) {
         <RestaurantPromos restaurant={restaurant} dark={dark} />
           {(() => {
         const rr = restaurants.find((x) => x.path === window.location.pathname);
-        if (!rr || !news.some((n) => n.resto === rr.id)) return null;
+        if (!rr || !news.some((n) => !n.resto || n.resto === rr.id)) return null;
         return (
           <section id="news" className="scroll-mt-40 py-16 lg:py-24 px-6 lg:px-12 max-w-[1400px] mx-auto">
             <div className="mb-10">
