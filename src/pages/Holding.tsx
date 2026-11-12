@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import OrbitHero from '../components/OrbitHero';
+import NewYear, { NewYearBanner } from '../components/NewYear';
 import FaqBlock from '../components/FaqBlock';
 import VacancyModal from '../components/VacancyModal';
 import PartnerModal from '../components/PartnerModal';
@@ -254,6 +255,7 @@ export default function Holding() {
       <HoldingHeader />
       <h1 className="sr-only">История Вкуса — рестораны и отели в Геленджике</h1>
       <OrbitHero />
+      <NewYearBanner />
 
       <section id="history" className="py-16 lg:py-24 bg-coal">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 grid lg:grid-cols-12 gap-14">
@@ -506,6 +508,7 @@ export default function Holding() {
         </div>
       </footer>
 
+      <NewYear />
       <FloatingButtons />
 
 
