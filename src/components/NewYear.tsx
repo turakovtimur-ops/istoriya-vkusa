@@ -6,7 +6,7 @@ export function nyActive() {
   if (q === '1') return true;
   if (q === '0') return false;
   const n = new Date(); const m = n.getMonth(); const d = n.getDate();
-  return (m === 10 && d >= 25) || m === 11 || (m === 0 && d <= 15);
+  return m === 10 || m === 11 || (m === 0 return (m === 10 && d >= 25) || m === 11 || (m === 0 && d <= 15);return (m === 10 && d >= 25) || m === 11 || (m === 0 && d <= 15); d <= 20);
 }
 
 function Snow({ off }: { off: boolean }) {
