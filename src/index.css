@@ -488,8 +488,6 @@ img { -webkit-user-drag: none; user-select: none; }
 .ny-stage.down .ny-dust { animation: nyDust .3s ease-out; }
 @keyframes nyDust { 0% { opacity: .8; transform: translateY(0) scale(.6); } 100% { opacity: 0; transform: translateY(-16px) scale(1.6); } }
 .ny-frost { position: fixed; inset: 0; pointer-events: none; z-index: 40; background: radial-gradient(42% 34% at 0% 0%, rgba(191,216,230,.10), transparent 70%), radial-gradient(42% 34% at 100% 0%, rgba(191,216,230,.10), transparent 70%), radial-gradient(50% 40% at 0% 100%, rgba(191,216,230,.07), transparent 70%), radial-gradient(50% 40% at 100% 100%, rgba(191,216,230,.07), transparent 70%); box-shadow: inset 0 0 140px rgba(140,180,210,.07); }
-.ny-garland { position: absolute; top: 92px; left: 0; width: 100%; height: 120px; z-index: 5; pointer-events: none; }
-.ny-bulb { animation: nyTw 3.2s ease-in-out infinite; }
 @keyframes nyTw { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
 .ny-winter h1 { background-image: linear-gradient(180deg, #FFFFFF 0%, #F0F7FC 40%, #BFD8E6 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; -webkit-text-fill-color: transparent; }
 .ny-orn { display: flex; align-items: center; gap: 18px; max-width: 1200px; margin: 0 auto; padding: 0 24px; color: #BFD8E6; opacity: .8; }
@@ -505,3 +503,12 @@ img { -webkit-user-drag: none; user-select: none; }
 .ny-cell { text-align: center; min-width: 74px; padding: 14px 10px; border-radius: 14px; background: rgba(10,26,20,.55); border: 1px solid rgba(217,164,65,.25); }
 .ny-num { font-size: 30px; font-weight: 700; color: #D9A441; font-variant-numeric: tabular-nums; }
 .ny-capt { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(245,241,232,.55); margin-top: 4px; }
+
+/* ===== NY MOBILE FIX ===== */
+@media (max-width: 860px) {
+  .ny-banner2 { padding: 28px 18px; } /* ny-count-mobile */
+  .ny-count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; }
+  .ny-cell { min-width: 0; padding: 10px 4px; }
+  .ny-num { font-size: 22px; }
+  .ny-capt { font-size: 9px; letter-spacing: .12em; }
+}

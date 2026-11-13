@@ -104,28 +104,6 @@ function Snow() {
   return <canvas ref={ref} className="fixed inset-0 z-40 pointer-events-none" aria-hidden="true" />;
 }
 
-/* ---------- гирлянда-боке ---------- */
-function Garland() {
-  const cols = ['#FFD98A', '#BFD8E6', '#FFD98A', '#E8B4B8'];
-  let d = 'M0,14';
-  const bulbs: { x: number; y: number; c: string; dl: string }[] = [];
-  for (let x = 0, i = 0; x < 1440; x += 180, i++) {
-    d += ' Q' + (x + 90) + ',86 ' + (x + 180) + ',14';
-    bulbs.push({ x: x + 90, y: 52, c: cols[i % 4], dl: (i * 0.37) + 's' });
-  }
-  return (
-    <svg className="ny-garland" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-      <path d={d} stroke="rgba(217,164,65,.5)" strokeWidth="1.5" fill="none" />
-      {bulbs.map((b, i) => (
-        <g key={i}>
-          <line x1={b.x} y1={b.y - 12} x2={b.x} y2={b.y - 5} stroke="rgba(217,164,65,.5)" strokeWidth="1.5" />
-          <circle className="ny-bulb" cx={b.x} cy={b.y} r="4.5" fill={b.c} style={{ animationDelay: b.dl, filter: 'drop-shadow(0 0 8px ' + b.c + ')' }} />
-        </g>
-      ))}
-    </svg>
-  );
-}
-
 /* ---------- баннер банкетов с обратным отсчётом ---------- */
 export function NewYearBanner() {
   const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
@@ -190,7 +168,6 @@ export default function NewYear() {
     <div className={off ? 'ny-off' : ''}>
       {active && <GoatLoader />}
       {active && !off && <Snow />}
-      {active && !off && <Garland />}
       {active && !off && <div className="ny-frost" />}
       {active && (
         <button onClick={toggle} aria-pressed={!off} title={off ? 'Включить зимнюю атмосферу' : 'Выключить зимнюю атмосферу'} className="fixed bottom-6 left-6 z-50 glass-bar rounded-full w-11 h-11 flex items-center justify-center text-cream/80 hover:text-cream transition-colors relative">
