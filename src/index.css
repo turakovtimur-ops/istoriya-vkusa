@@ -471,13 +471,13 @@ img { -webkit-user-drag: none; user-select: none; }
 
 
 /* ===== NY WINTER V4 ===== */
-.ny-loader { position: fixed; inset: 0; z-index: 100; background: radial-gradient(120% 90% at 50% 45%, #A01E19 0%, #8C1712 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .8s ease, visibility .8s; }
+.ny-loader { position: fixed; inset: 0; z-index: 100; background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27160%27%20height=%27160%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.9%27%20numOctaves=%272%27/%3E%3CfeColorMatrix%20type=%27saturate%27%20values=%270%27/%3E%3C/filter%3E%3Crect%20width=%27160%27%20height=%27160%27%20filter=%27url(%23n)%27%20opacity=%270.07%27/%3E%3C/svg%3E"), radial-gradient(120% 90% at 50% 40%, #B3271E 0%, #8C1712 55%, #6E0F0C 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .8s ease, visibility .8s; }
 .ny-loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
 .ny-year { font-size: clamp(44px, 6vw, 72px); font-weight: 300; letter-spacing: .35em; color: #D9A441; margin-bottom: 2vh; }
 .ny-capline { margin-top: 2vh; font-size: 11px; letter-spacing: .4em; text-transform: uppercase; color: rgba(245,241,232,.65); }
 .ny-stage { position: relative; width: 100%; flex: 0 0 62vh; transition: transform .12s; }
 .ny-stage.down { transform: translateY(3px); }
-.ny-frame { position: absolute; left: 50%; top: 50%; height: 92%; opacity: 0; -webkit-mask-image: radial-gradient(75% 75% at 50% 50%, #000 55%, transparent 98%); mask-image: radial-gradient(75% 75% at 50% 50%, #000 55%, transparent 98%); }
+.ny-frame { position: absolute; left: 50%; top: 50%; height: 92%; opacity: 0; }
 .ny-frame.on { opacity: 1; }
 .ny-f-up { transform: translate(-50%, -50%) scale(1.24) translateY(-3%); }
 .ny-f-down { transform: translate(-50%, -50%); }

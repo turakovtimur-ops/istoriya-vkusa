@@ -36,8 +36,8 @@ function GoatLoader() {
     <div className={'ny-loader' + (hiding ? ' hide' : '')}>
       <div className="ny-year">2027</div>
       <div className={'ny-stage' + (down ? ' down' : '')}>
-        <img className={'ny-frame ny-f-up' + (down ? '' : ' on')} src="/images/goat-up.jpg" alt="" />
-        <img className={'ny-frame ny-f-down' + (down ? ' on' : '')} src="/images/goat-down.jpg" alt="" />
+        <img className={'ny-frame ny-f-up' + (down ? '' : ' on')} src="/images/goat-up.png" alt="" />
+        <img className={'ny-frame ny-f-down' + (down ? ' on' : '')} src="/images/goat-down.png" alt="" />
         <span className="ny-dust d1" />
         <span className="ny-dust d2" />
         <span className="ny-dust d3" />
