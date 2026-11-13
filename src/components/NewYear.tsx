@@ -59,31 +59,6 @@ function Snow({ off }: { off: boolean }) {
   return <canvas ref={ref} className="fixed inset-0 z-40 pointer-events-none" aria-hidden="true" />;
 }
 
-function Sprig({ flip = false }: { flip?: boolean }) {
-  const pts = Array.from({ length: 9 }, (_, i) => { const t = i / 8; return { x: 16 + t * 150, y: 10 + t * 112, a: 40 + t * 12 }; });
-  const baubles = [{ x: 66, y: 62, r: 7, c: '#C0392B' }, { x: 112, y: 96, r: 6, c: '#D9A441' }, { x: 148, y: 128, r: 5, c: '#C0392B' }];
-  return (
-    <svg viewBox="0 0 200 170" className="w-full h-auto" style={flip ? { transform: 'scaleX(-1)' } : undefined} aria-hidden="true">
-      <path d="M12 6 C 60 38, 118 82, 172 128" stroke="#3E7A5C" strokeWidth="3" fill="none" strokeLinecap="round" />
-      {pts.map((p, i) => (
-        <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.a})`} stroke={i % 2 ? '#2E6B4F' : '#3E7A5C'} strokeWidth="2.2" strokeLinecap="round" fill="none">
-          <path d="M0 0 L-24 8 M0 0 L-20 16 M0 0 L-12 22 M0 0 L24 8 M0 0 L20 16 M0 0 L12 22" />
-        </g>
-      ))}
-      {baubles.map((b, i) => (
-        <g key={i} className="ny-bauble" style={{ animationDelay: `${i * 0.7}s` }}>
-          <line x1={b.x} y1={b.y - 14} x2={b.x} y2={b.y - b.r - 2} stroke="#D9A441" strokeWidth="1" />
-          <rect x={b.x - 2} y={b.y - b.r - 4} width="4" height="4" rx="1" fill="#D9A441" />
-          <circle cx={b.x} cy={b.y} r={b.r} fill={b.c} />
-          <circle cx={b.x - b.r / 3} cy={b.y - b.r / 3} r={b.r / 3.5} fill="#F7F3EA" opacity=".55" />
-        </g>
-      ))}
-      {[[40, 30], [88, 66], [134, 104], [164, 124]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="2.2" fill="#FFD98A" className="ny-light" style={{ animationDelay: `${i * 0.6}s` }} />
-      ))}
-    </svg>
-  );
-}
 
 function Tree() {
   return (
@@ -123,13 +98,21 @@ export function NewYearBanner() {
 
 export default function NewYear() {
   const [off, setOff] = useState(() => localStorage.getItem('iv-ny-off') === '1' || window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  useEffect(() => {
+    const on = nyActive() && !off;
+    const els = Array.from(document.querySelectorAll('h1, h2'));
+    els.forEach((el, i) => {
+      el.classList.toggle('ny-snowcap', on);
+      el.classList.toggle('ny-cap-a', on && i % 2 === 0);
+      el.classList.toggle('ny-cap-b', on && i % 2 === 1);
+    });
+    return () => els.forEach((el) => el.classList.remove('ny-snowcap', 'ny-cap-a', 'ny-cap-b'));
+  }, [off]);
   if (!nyActive()) return null;
   const toggle = () => setOff(v => { localStorage.setItem('iv-ny-off', v ? '0' : '1'); return !v; });
   return (
     <div className={off ? 'ny-off' : ''}>
       <Snow off={off} />
-      <div className="fixed top-0 left-0 z-40 w-[130px] md:w-[200px] pointer-events-none opacity-90"><Sprig /></div>
-      <div className="fixed top-0 right-0 z-40 w-[130px] md:w-[200px] pointer-events-none opacity-90"><Sprig flip /></div>
       <button onClick={toggle} aria-pressed={!off} title={off ? 'Включить новогоднюю анимацию' : 'Выключить новогоднюю анимацию'} className="fixed bottom-6 left-6 z-50 glass-bar rounded-full w-11 h-11 flex items-center justify-center text-cream/80 hover:text-cream transition-colors relative">
         <span className={'text-lg leading-none ' + (off ? 'opacity-40' : '')}>❄</span>
         {off && <span className="absolute w-6 h-[1.5px] bg-cream/70 rotate-45 rounded-full" />}

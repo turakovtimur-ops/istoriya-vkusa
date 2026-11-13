@@ -468,3 +468,19 @@ img { -webkit-user-drag: none; user-select: none; }
 @keyframes nySway { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
 .ny-banner { background: radial-gradient(120% 140% at 85% -20%, rgba(217,164,65,.22), transparent 55%), linear-gradient(115deg, #0F2E22 0%, #1E5B3F 52%, #123528 100%); box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(247,243,234,.08); }
 @media (prefers-reduced-motion: reduce) { .ny-light, .ny-bauble { animation: none; } }
+
+/* ===== СНЕЖНЫЕ ШАПКИ НА ЗАГОЛОВКАХ ===== */
+.ny-snowcap { position: relative; }
+.ny-snowcap::before {
+  content: '';
+  position: absolute;
+  left: -0.12em;
+  right: -0.12em;
+  top: -0.30em;
+  height: 0.52em;
+  pointer-events: none;
+  z-index: 6;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20600%2060'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0,60%20L0,36%20Q14,20%2032,30%20Q46,10%2068,26%20Q86,6%20108,24%20Q128,10%20148,26%20Q168,4%20193,22%20Q213,12%20233,26%20Q253,6%20278,24%20Q298,12%20318,26%20Q338,4%20363,22%20Q383,10%20403,26%20Q423,8%20448,24%20Q468,12%20488,26%20Q508,6%20533,24%20Q553,14%20573,28%20Q588,20%20600,32%20L600,60%20Z'%20fill='%23ffffff'/%3E%3Cpath%20d='M0,60%20L0,46%20Q50,38%20100,46%20T200,46%20T300,46%20T400,46%20T500,46%20T600,46%20L600,60%20Z'%20fill='%23dcebf4'%20opacity='0.85'/%3E%3Cpath%20d='M0,60%20L0,52%20Q75,46%20150,52%20T300,52%20T450,52%20T600,52%20L600,60%20Z'%20fill='%23c2d9e8'%20opacity='0.65'/%3E%3Cpath%20d='M84,56%20q5,12%2010,0%20z%20M262,56%20q5,14%2010,0%20z%20M438,56%20q5,11%2010,0%20z'%20fill='%23ffffff'/%3E%3Cpath%20d='M40,30%20q20,-8%2040,0%20M180,26%20q20,-8%2040,0%20M340,26%20q20,-8%2040,0%20M480,28%20q20,-8%2040,0'%20stroke='%23eef6fb'%20stroke-width='3'%20fill='none'%20opacity='0.9'%20stroke-linecap='round'/%3E%3C/svg%3E") 50% 100% / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 4px rgba(90, 130, 165, 0.30));
+}
+.ny-cap-b::before { transform: scaleX(-1); }
