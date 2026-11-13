@@ -15,7 +15,6 @@ function GoatLoader() {
   const [hiding, setHiding] = useState(false);
   const [gone, setGone] = useState(false);
   useEffect(() => {
-    try { sessionStorage.setItem('iv-ny-seen', '1'); } catch (e) {}
     let alive = true;
     const timers: ReturnType<typeof setTimeout>[] = [];
     const cycle = () => {
@@ -165,13 +164,11 @@ export function NewYearBanner() {
 /* ---------- корень зимы ---------- */
 export default function NewYear() {
   const [off, setOff] = useState(() => localStorage.getItem('iv-ny-off') === '1' || window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const [seen] = useState(() => { try { return sessionStorage.getItem('iv-ny-seen') === '1'; } catch (e) { return false; } });
   const active = nyActive();
 
   useEffect(() => {
     const on = nyActive() && !off;
-    const h1 = document.querySelector('h1') as HTMLElement | null;
-    if (h1) h1.classList.toggle('ny-ice', on);
+    document.body.classList.toggle('ny-winter', on);
     const orn = '<div class="ny-orn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M19.1 4.9L4.9 19.1M12 6l-2-2M12 6l2-2M12 18l-2 2M12 18l2 2M6 12l-2-2M6 12l-2 2M18 12l2-2M18 12l2 2"/></svg></div>';
     ['#team', '#news', '#events'].forEach((sel) => {
       const el = document.querySelector(sel);
@@ -183,7 +180,7 @@ export default function NewYear() {
     });
     return () => {
       document.querySelectorAll('.ny-orn').forEach((n) => n.remove());
-      if (h1) h1.classList.remove('ny-ice');
+      document.body.classList.remove('ny-winter');
     };
   }, [off]);
 
@@ -191,7 +188,7 @@ export default function NewYear() {
 
   return (
     <div className={off ? 'ny-off' : ''}>
-      {active && !seen && <GoatLoader />}
+      {active && <GoatLoader />}
       {active && !off && <Snow />}
       {active && !off && <Garland />}
       {active && !off && <div className="ny-frost" />}

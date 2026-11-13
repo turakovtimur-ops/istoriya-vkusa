@@ -1,7 +1,9 @@
+import { nyActive } from '../components/NewYear';
 import { useEffect, useState } from 'react';
 import { holdingBrand } from '../data/holding';
 
 export default function Preloader() {
+  if (nyActive()) return null;
   const [gone, setGone] = useState(false);
   const [hide, setHide] = useState(false);
   useEffect(() => {

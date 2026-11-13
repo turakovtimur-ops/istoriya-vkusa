@@ -488,10 +488,10 @@ img { -webkit-user-drag: none; user-select: none; }
 .ny-stage.down .ny-dust { animation: nyDust .3s ease-out; }
 @keyframes nyDust { 0% { opacity: .8; transform: translateY(0) scale(.6); } 100% { opacity: 0; transform: translateY(-16px) scale(1.6); } }
 .ny-frost { position: fixed; inset: 0; pointer-events: none; z-index: 40; background: radial-gradient(42% 34% at 0% 0%, rgba(191,216,230,.10), transparent 70%), radial-gradient(42% 34% at 100% 0%, rgba(191,216,230,.10), transparent 70%), radial-gradient(50% 40% at 0% 100%, rgba(191,216,230,.07), transparent 70%), radial-gradient(50% 40% at 100% 100%, rgba(191,216,230,.07), transparent 70%); box-shadow: inset 0 0 140px rgba(140,180,210,.07); }
-.ny-garland { position: absolute; top: 0; left: 0; width: 100%; height: 120px; z-index: 5; pointer-events: none; }
+.ny-garland { position: absolute; top: 92px; left: 0; width: 100%; height: 120px; z-index: 5; pointer-events: none; }
 .ny-bulb { animation: nyTw 3.2s ease-in-out infinite; }
 @keyframes nyTw { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
-.ny-ice { background-image: linear-gradient(180deg, #FFFFFF 0%, #F0F7FC 40%, #BFD8E6 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; -webkit-text-fill-color: transparent; }
+.ny-winter h1 { background-image: linear-gradient(180deg, #FFFFFF 0%, #F0F7FC 40%, #BFD8E6 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; -webkit-text-fill-color: transparent; }
 .ny-orn { display: flex; align-items: center; gap: 18px; max-width: 1200px; margin: 0 auto; padding: 0 24px; color: #BFD8E6; opacity: .8; }
 .ny-orn::before, .ny-orn::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(191,216,230,.35), transparent); }
 .ny-orn svg { width: 22px; height: 22px; }
