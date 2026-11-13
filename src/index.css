@@ -469,18 +469,39 @@ img { -webkit-user-drag: none; user-select: none; }
 .ny-banner { background: radial-gradient(120% 140% at 85% -20%, rgba(217,164,65,.22), transparent 55%), linear-gradient(115deg, #0F2E22 0%, #1E5B3F 52%, #123528 100%); box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(247,243,234,.08); }
 @media (prefers-reduced-motion: reduce) { .ny-light, .ny-bauble { animation: none; } }
 
-/* ===== СНЕЖНЫЕ ШАПКИ НА ЗАГОЛОВКАХ ===== */
-.ny-snowcap { position: relative; }
-.ny-snowcap::before {
-  content: '';
-  position: absolute;
-  left: -0.12em;
-  right: -0.12em;
-  top: -0.30em;
-  height: 0.52em;
-  pointer-events: none;
-  z-index: 6;
-  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20600%2060'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0,60%20L0,36%20Q14,20%2032,30%20Q46,10%2068,26%20Q86,6%20108,24%20Q128,10%20148,26%20Q168,4%20193,22%20Q213,12%20233,26%20Q253,6%20278,24%20Q298,12%20318,26%20Q338,4%20363,22%20Q383,10%20403,26%20Q423,8%20448,24%20Q468,12%20488,26%20Q508,6%20533,24%20Q553,14%20573,28%20Q588,20%20600,32%20L600,60%20Z'%20fill='%23ffffff'/%3E%3Cpath%20d='M0,60%20L0,46%20Q50,38%20100,46%20T200,46%20T300,46%20T400,46%20T500,46%20T600,46%20L600,60%20Z'%20fill='%23dcebf4'%20opacity='0.85'/%3E%3Cpath%20d='M0,60%20L0,52%20Q75,46%20150,52%20T300,52%20T450,52%20T600,52%20L600,60%20Z'%20fill='%23c2d9e8'%20opacity='0.65'/%3E%3Cpath%20d='M84,56%20q5,12%2010,0%20z%20M262,56%20q5,14%2010,0%20z%20M438,56%20q5,11%2010,0%20z'%20fill='%23ffffff'/%3E%3Cpath%20d='M40,30%20q20,-8%2040,0%20M180,26%20q20,-8%2040,0%20M340,26%20q20,-8%2040,0%20M480,28%20q20,-8%2040,0'%20stroke='%23eef6fb'%20stroke-width='3'%20fill='none'%20opacity='0.9'%20stroke-linecap='round'/%3E%3C/svg%3E") 50% 100% / 100% 100% no-repeat;
-  filter: drop-shadow(0 3px 4px rgba(90, 130, 165, 0.30));
-}
-.ny-cap-b::before { transform: scaleX(-1); }
+
+/* ===== NY WINTER V4 ===== */
+.ny-loader { position: fixed; inset: 0; z-index: 100; background: radial-gradient(120% 90% at 50% 45%, #A01E19 0%, #8C1712 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .8s ease, visibility .8s; }
+.ny-loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.ny-year { font-size: clamp(44px, 6vw, 72px); font-weight: 300; letter-spacing: .35em; color: #D9A441; margin-bottom: 2vh; }
+.ny-capline { margin-top: 2vh; font-size: 11px; letter-spacing: .4em; text-transform: uppercase; color: rgba(245,241,232,.65); }
+.ny-stage { position: relative; width: 100%; flex: 0 0 62vh; transition: transform .12s; }
+.ny-stage.down { transform: translateY(3px); }
+.ny-frame { position: absolute; left: 50%; top: 50%; height: 92%; opacity: 0; -webkit-mask-image: radial-gradient(75% 75% at 50% 50%, #000 55%, transparent 98%); mask-image: radial-gradient(75% 75% at 50% 50%, #000 55%, transparent 98%); }
+.ny-frame.on { opacity: 1; }
+.ny-f-up { transform: translate(-50%, -50%) scale(1.24) translateY(-3%); }
+.ny-f-down { transform: translate(-50%, -50%); }
+.ny-dust { position: absolute; border-radius: 50%; background: rgba(243,239,230,.85); opacity: 0; pointer-events: none; }
+.ny-dust.d1 { left: 44%; bottom: 20%; width: 10px; height: 10px; }
+.ny-dust.d2 { left: 47%; bottom: 17%; width: 7px; height: 7px; }
+.ny-dust.d3 { left: 41%; bottom: 17%; width: 6px; height: 6px; }
+.ny-stage.down .ny-dust { animation: nyDust .3s ease-out; }
+@keyframes nyDust { 0% { opacity: .8; transform: translateY(0) scale(.6); } 100% { opacity: 0; transform: translateY(-16px) scale(1.6); } }
+.ny-frost { position: fixed; inset: 0; pointer-events: none; z-index: 40; background: radial-gradient(42% 34% at 0% 0%, rgba(191,216,230,.10), transparent 70%), radial-gradient(42% 34% at 100% 0%, rgba(191,216,230,.10), transparent 70%), radial-gradient(50% 40% at 0% 100%, rgba(191,216,230,.07), transparent 70%), radial-gradient(50% 40% at 100% 100%, rgba(191,216,230,.07), transparent 70%); box-shadow: inset 0 0 140px rgba(140,180,210,.07); }
+.ny-garland { position: absolute; top: 0; left: 0; width: 100%; height: 120px; z-index: 5; pointer-events: none; }
+.ny-bulb { animation: nyTw 3.2s ease-in-out infinite; }
+@keyframes nyTw { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+.ny-ice { background-image: linear-gradient(180deg, #FFFFFF 0%, #F0F7FC 40%, #BFD8E6 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; -webkit-text-fill-color: transparent; }
+.ny-orn { display: flex; align-items: center; gap: 18px; max-width: 1200px; margin: 0 auto; padding: 0 24px; color: #BFD8E6; opacity: .8; }
+.ny-orn::before, .ny-orn::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(191,216,230,.35), transparent); }
+.ny-orn svg { width: 22px; height: 22px; }
+.ny-banner2 { position: relative; z-index: 10; max-width: 1100px; margin: 40px auto 0; width: calc(100% - 48px); border-radius: 24px; padding: 40px 44px; background: radial-gradient(120% 140% at 85% -20%, rgba(217,164,65,.20), transparent 55%), linear-gradient(115deg, #0F2E22 0%, #1E5B3F 52%, #123528 100%); border: 1px solid rgba(217,164,65,.35); box-shadow: 0 24px 70px rgba(0,0,0,.45); display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: center; }
+@media (max-width: 860px) { .ny-banner2 { grid-template-columns: 1fr; text-align: center; } .ny-count, .ny-cta { justify-content: center; } }
+.ny-banner2 h3 { font-size: clamp(22px, 3vw, 34px); font-weight: 700; margin-bottom: 10px; color: #F5F1E8; }
+.ny-banner2 p { color: rgba(245,241,232,.72); font-weight: 300; }
+.ny-cta { margin-top: 22px; display: flex; gap: 14px; flex-wrap: wrap; }
+.ny-ghost { border: 1px solid rgba(245,241,232,.25); color: rgba(245,241,232,.85); padding: 14px 26px; border-radius: 999px; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; }
+.ny-count { display: flex; gap: 14px; }
+.ny-cell { text-align: center; min-width: 74px; padding: 14px 10px; border-radius: 14px; background: rgba(10,26,20,.55); border: 1px solid rgba(217,164,65,.25); }
+.ny-num { font-size: 30px; font-weight: 700; color: #D9A441; font-variant-numeric: tabular-nums; }
+.ny-capt { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(245,241,232,.55); margin-top: 4px; }
