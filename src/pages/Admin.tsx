@@ -69,18 +69,15 @@ export default function Admin() {
   // реквизиты
   const [restSel, setRestSel] = useState(restaurants[0].id);
 
-  useEffect(() => { if (localStorage.getItem(LS_HASH)) setAuthed(true); }, []);
+  useEffect(() => { fetch('/api/session').then((r) => r.json()).then((j) => { if (j && j.authed) setAuthed(true); }).catch(() => {}); }, []);
 
   const login = async () => {
     setErr('');
-    const stored = localStorage.getItem(LS_HASH);
-    const hash = await sha256(pwd);
-    if (!stored) {
-      if (pwd === '89322663995') { localStorage.setItem(LS_HASH, hash); setAuthed(true); return; }
-      setErr('Первый вход: пароль 89322663995'); return;
-    }
-    if (hash !== stored) { setErr('Неверный пароль'); return; }
-    setAuthed(true);
+    try {
+      const r = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
+      if (r.ok) { setAuthed(true); setPwd(''); return; }
+      setErr(r.status === 429 ? 'Слишком много попыток — подожди 10 минут' : 'Неверный пароль');
+    } catch (e: any) { setErr('Сеть: ' + e.message); }
   };
 
   const publish = async (message: string, changes: Change[]) => {
