@@ -48,11 +48,60 @@ const inp = 'w-full bg-cream/5 border border-cream/15 rounded-lg px-3 py-2 text-
 const btnA = 'px-4 py-2 text-xs uppercase tracking-wider bg-amber text-night rounded-full hover:opacity-90';
 const btnG = 'px-4 py-2 bg-cream/10 rounded-lg text-xs hover:bg-cream/20';
 
+function PromoPanel({ token, setMsg }: { token: string; setMsg: (s: string) => void }) {
+  const [items, setItems] = useState<any[]>([]);
+  const [q, setQ] = useState('');
+  const [resto, setResto] = useState('Кинза');
+  const load = async () => {
+    try {
+      const r = await fetch('/api/promo/list', { headers: { 'x-gh-token': token } });
+      if (!r.ok) { setMsg('Промокоды: нет доступа — сохрани токен во вкладке «Настройки»'); return; }
+      const j = await r.json();
+      setItems(j.items || []);
+    } catch (e: any) { setMsg('Сеть: ' + e.message); }
+  };
+  useEffect(() => { load(); }, []);
+  const act = async (code: string, kind: 'redeem' | 'void') => {
+    const r = await fetch('/api/promo/' + kind, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-gh-token': token }, body: JSON.stringify({ code, resto }) });
+    setMsg(r.ok ? (kind === 'redeem' ? 'Погашен ' + code + ' · ' + resto : 'Аннулирован ' + code) : 'Ошибка ' + r.status);
+    load();
+  };
+  const f = items.filter((x) => !q || x.code.includes(q.toUpperCase()) || String(x.phone).includes(q.replace(/\D/g, '')));
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap gap-3 items-center">
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Поиск: код или телефон" className="bg-white/60 border border-graphite/10 rounded-xl px-4 py-2 text-sm text-graphite" />
+        <select value={resto} onChange={(e) => setResto(e.target.value)} className="bg-white/60 border border-graphite/10 rounded-xl px-3 py-2 text-sm text-graphite">
+          <option>Кинза</option><option>Нино</option><option>Астория</option><option>La Costa Берег</option>
+        </select>
+        <button onClick={load} className="btn-terra rounded-full px-5 py-2 text-xs">Обновить</button>
+      </div>
+      <div className="space-y-2">
+        {f.length === 0 && <p className="text-sm text-graphite/60">Кодов пока нет.</p>}
+        {f.map((x) => (
+          <div key={x.code} className="flex flex-wrap items-center gap-3 border border-graphite/10 rounded-xl px-4 py-3 bg-white/40">
+            <span className="font-mono font-semibold text-graphite">{x.code}</span>
+            <span className="text-xs text-graphite/60">+7 {String(x.phone).slice(1,4)} ••• ••-{String(x.phone).slice(9)}</span>
+            <span className="text-xs text-graphite/60">выдан {new Date(x.createdAt).toLocaleDateString('ru-RU')}</span>
+            <span className={'text-xs font-semibold ' + (x.usedAt ? 'text-red-600' : x.voided ? 'text-graphite/50' : 'text-green-700')}>
+              {x.usedAt ? 'погашен ' + new Date(x.usedAt).toLocaleDateString('ru-RU') + ' · ' + x.usedResto : x.voided ? 'аннулирован' : 'активен'}
+            </span>
+            {!x.usedAt && !x.voided && (<>
+              <button onClick={() => act(x.code, 'redeem')} className="ml-auto btn-terra rounded-full px-4 py-1.5 text-xs">Погасить</button>
+              <button onClick={() => act(x.code, 'void')} className="btn-outline rounded-full px-4 py-1.5 text-xs">Аннулировать</button>
+            </>)}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pwd, setPwd] = useState('');
   const [err, setErr] = useState('');
-  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'faq' | 'settings' | 'editor' | 'menus'>('news');
+  const [tab, setTab] = useState<'news' | 'promos' | 'gallery' | 'resto' | 'suppliers' | 'faq' | 'settings' | 'editor' | 'menus' | 'promo'>('news');
   const [token, setToken] = useState(localStorage.getItem(LS_TOKEN) || '');
   const [tokenInput, setTokenInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -574,6 +623,12 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
       </section>
     )}
 {tab === 'menus' && <MenuManager token={token} />}
+    {tab === 'promo' && (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-semibold text-graphite">Промокоды −10%</h2>
+        <PromoPanel token={token} setMsg={setMsg} />
+      </div>
+    )}
     {tab === 'settings' && (
           <section className="max-w-md">
             <h2 className="text-2xl font-semibold mb-6">Настройки</h2>
