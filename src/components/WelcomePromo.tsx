@@ -8,6 +8,7 @@ export default function WelcomePromo() {
   const [state, setState] = useState<'form' | 'card' | 'used' | 'err'>('form');
   const [qr, setQr] = useState('');
   const [preview, setPreview] = useState('');
+  const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [errText, setErrText] = useState('');
   const fired = useRef(false);
@@ -66,7 +67,7 @@ export default function WelcomePromo() {
     const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
   };
-  const copy = () => { if (navigator.clipboard) navigator.clipboard.writeText(code); };
+  const copy = () => { if (navigator.clipboard) navigator.clipboard.writeText(code).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }).catch(() => {}); };
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={close}>
@@ -85,11 +86,11 @@ export default function WelcomePromo() {
         </>)}
         {state === 'card' && (<>
           <p className="text-terra text-xs tracking-[0.3em] uppercase mb-3">Ваш промокод</p>
-          <div className="text-center mb-4 text-4xl font-bold tracking-widest text-terra">{code}</div>
+          <div className="text-center mb-4 font-bold tracking-wider text-terra whitespace-nowrap text-[clamp(20px,6.5vw,36px)]">{code}</div>
           {qr && <img src={qr} alt="QR промокода" className="w-40 h-40 mx-auto mb-4 rounded-xl bg-white p-2" />}
           <div className="grid grid-cols-2 gap-3">
             <button onClick={saveImage} className="btn-terra rounded-full">Сохранить картинкой</button>
-            <button onClick={copy} className="btn-outline rounded-full">Скопировать</button>
+            <button onClick={copy} className={"rounded-full border px-4 py-3 font-medium transition active:scale-95 " + (copied ? "border-terra text-terra bg-terra/10" : "border-graphite/30 text-graphite hover:bg-graphite/5")}>{copied ? 'Скопировано ✓' : 'Скопировать'}</button>
           </div>
           <button onClick={openPreview} className="w-full mt-3 text-xs text-graphite/60 underline">Не сохраняется? Открыть картинку для сохранения вручную</button>
           <p className="text-xs text-graphite/60 mt-4">Одноразовый, без срока, во всех ресторанах сети. Не суммируется с акциями и банкетами.</p>
