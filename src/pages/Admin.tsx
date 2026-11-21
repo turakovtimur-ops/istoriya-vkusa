@@ -383,6 +383,7 @@ const pubFaq = () => publish('админка: FAQ', [{ path: 'src/data/faq.ts', 
             <button key={id} onClick={() => { setTab(id); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === id ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>{label}</button>
           ))}
 <button onClick={() => { setTab('menus'); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + (tab === 'menus' ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>Меню</button>
+<button onClick={() => { setTab('promo' as any); setMsg(''); }} className={'px-4 py-2 text-xs uppercase tracking-wider rounded-full flex-none ' + ((tab as string) === 'promo' ? 'bg-amber text-night' : 'bg-cream/10 text-cream/70')}>Промокоды</button>
         </div>
       </header>
 
