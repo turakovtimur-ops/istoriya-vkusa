@@ -20,7 +20,7 @@ export default function WelcomePromo() {
     window.addEventListener('scroll', onScroll);
     return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
   }, []);
-  useEffect(() => { if (code) QRCode.toDataURL(code, { margin: 1, width: 320 }).then(setQr).catch(() => setQr('')); }, [code]);
+  useEffect(() => { if (code) QRCode.toDataURL('https://istoriya-vkusa.ru/scan.html?c=' + encodeURIComponent(code), { margin: 1, width: 320 }).then(setQr).catch(() => setQr('')); }, [code]);
   const close = () => { setOpen(false); localStorage.setItem(LS, '1'); };
   const submit = async (e: React.FormEvent) => {
     e.preventDefault(); setBusy(true);

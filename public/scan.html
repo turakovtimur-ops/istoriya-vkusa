@@ -1,0 +1,68 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Промокод · История Вкуса</title>
+<style>
+:root{--bg:#0b0a08;--cream:#F5F2EA;--amber:#C2A076;--terra:#C0603A;--green:#3f9d6f;--red:#c65445;--gray:#8a8378}
+*{box-sizing:border-box;margin:0}
+body{min-height:100svh;background:var(--bg);color:var(--cream);font:16px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(90% 60% at 50% -10%,rgba(194,160,118,.16),transparent 60%),radial-gradient(60% 50% at 90% 110%,rgba(192,96,58,.14),transparent 60%);pointer-events:none}
+body::after{content:'';position:fixed;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--terra);color:#fff}
+.card{position:relative;z-index:1;width:100%;max-width:420px;border:1px solid rgba(194,160,118,.35);border-radius:26px;background:linear-gradient(165deg,rgba(194,160,118,.12),rgba(255,255,255,.03));backdrop-filter:blur(10px);padding:34px 26px;text-align:center;animation:rise .6s cubic-bezier(.2,.7,.2,1) both;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.brand{color:var(--amber);letter-spacing:.3em;font-size:11px;font-weight:700;margin-bottom:18px}
+.badge{display:inline-block;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:16px;border:1px solid}
+.b-active{color:var(--green);border-color:rgba(63,157,111,.5);background:rgba(63,157,111,.12)}
+.b-not_yet{color:var(--amber);border-color:rgba(194,160,118,.5);background:rgba(194,160,118,.12)}
+.b-used,.b-not_found{color:var(--red);border-color:rgba(198,84,69,.5);background:rgba(198,84,69,.12)}
+.b-voided{color:var(--gray);border-color:rgba(138,131,120,.5);background:rgba(138,131,120,.12)}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:clamp(26px,8vw,38px);font-weight:700;letter-spacing:.06em;color:var(--cream);margin-bottom:6px;word-break:break-all}
+.meta{color:rgba(245,242,234,.6);font-size:12.5px;margin-bottom:22px;min-height:18px}
+.btn{display:block;width:100%;border-radius:999px;padding:15px 18px;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1px solid transparent;transition:transform .15s,background .2s;margin-bottom:10px}
+.btn:active{transform:scale(.97)}
+.btn-copy{background:var(--terra);color:#fff}
+.btn-copy.done{background:var(--green)}
+.btn-max{background:transparent;color:var(--cream);border-color:rgba(245,242,234,.3)}
+.btn-max:hover{background:rgba(245,242,234,.08)}
+.hint{color:rgba(245,242,234,.55);font-size:12px;margin-top:14px}
+.foot{margin-top:18px;padding-top:14px;border-top:1px solid rgba(245,242,234,.12);color:rgba(245,242,234,.45);font-size:11px}
+</style></head><body>
+<div class="card">
+  <div class="brand">ИСТОРИЯ ВКУСА</div>
+  <div class="badge b-active" id="badge">ПРОВЕРЯЕМ…</div>
+  <div class="code" id="code">—</div>
+  <div class="meta" id="meta"></div>
+  <button class="btn btn-copy" id="copy">Скопировать код</button>
+  <button class="btn btn-max" id="max">Отправить боту в MAX</button>
+  <div class="hint" id="hint">Скопируй код и отправь боту в чат заявок — или нажми кнопку выше.</div>
+  <div class="foot">Промокод одноразовый · действует со следующего дня · не суммируется с акциями</div>
+</div>
+<script>
+(function(){
+  var code = new URLSearchParams(location.search).get('c') || '';
+  document.getElementById('code').textContent = code || '—';
+  var badge = document.getElementById('badge'), meta = document.getElementById('meta'), hint = document.getElementById('hint');
+  var LABEL = { active:'АКТИВЕН', not_yet:'ДЕЙСТВУЕТ С ЗАВТРА', used:'УЖЕ ПОГАШЕН', voided:'АННУЛИРОВАН', not_found:'НЕ НАЙДЕН' };
+  fetch('/api/promo/status?code=' + encodeURIComponent(code)).then(function(r){return r.json();}).then(function(j){
+    badge.textContent = LABEL[j.status] || '—';
+    badge.className = 'badge b-' + (j.status || 'not_found');
+    var m = '';
+    if (j.createdAt) m += 'выдан ' + new Date(j.createdAt).toLocaleDateString('ru-RU');
+    if (j.usedAt) m += ' · погашен ' + new Date(j.usedAt).toLocaleDateString('ru-RU') + ' · ' + (j.usedResto || '');
+    meta.textContent = m;
+    if (j.status === 'used') hint.textContent = 'Код одноразовый и уже использован. Скидка не применяется.';
+    if (j.status === 'not_yet') hint.textContent = 'Код оформлен сегодня — сработает завтра. Сегодня скидка не применяется.';
+    if (j.status === 'voided' || j.status === 'not_found') hint.textContent = 'Код недействителен. Скидка не применяется.';
+  }).catch(function(){ badge.textContent='НЕТ СВЯЗИ'; badge.className='badge b-voided'; });
+  function copy(){ return navigator.clipboard.writeText(code).catch(function(){ var t=document.createElement('textarea'); t.value=code; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }); }
+  var cb = document.getElementById('copy');
+  cb.onclick = function(){ copy().then(function(){ cb.textContent='Скопировано ✓'; cb.classList.add('done'); setTimeout(function(){ cb.textContent='Скопировать код'; cb.classList.remove('done'); },2000); }); };
+  document.getElementById('max').onclick = function(){
+    copy().then(function(){ return fetch('/api/promo/meta').then(function(r){return r.json();}).catch(function(){return {bot:null};}); }).then(function(m){
+      if (m && m.bot) { location.href = 'https://max.ru/' + m.bot + '?start=' + encodeURIComponent(code); }
+      else { hint.textContent = 'Код скопирован. Открой MAX и отправь его боту в чат заявок.'; }
+    });
+  };
+})();
+</script>
+</body></html>
