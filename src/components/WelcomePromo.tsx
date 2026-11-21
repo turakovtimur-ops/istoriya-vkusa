@@ -8,6 +8,7 @@ export default function WelcomePromo() {
   const [state, setState] = useState<'form' | 'card' | 'used' | 'err'>('form');
   const [qr, setQr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [errText, setErrText] = useState('');
   const fired = useRef(false);
   useEffect(() => {
     if (localStorage.getItem(LS)) return;
@@ -26,8 +27,8 @@ export default function WelcomePromo() {
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.code) { setCode(j.code); setState('card'); }
       else if (j.used) setState('used');
-      else setState('err');
-    } catch { setState('err'); }
+      else { setErrText(j.error === 'day_limit' ? 'С этого адреса сегодня уже выдано 2 промокода. Попробуйте завтра или с другого интернета.' : j.error === 'rate_limit' ? 'Слишком много попыток — подождите 10 минут.' : j.error === 'bad_phone' ? 'Проверьте номер телефона.' : 'Не получилось. Попробуйте позже.'); setState('err'); }
+    } catch { setErrText('Нет связи с сервером. Попробуйте позже.'); setState('err'); }
     finally { setBusy(false); }
   };
   const saveImage = async () => {
@@ -57,7 +58,7 @@ export default function WelcomePromo() {
           <h2 className="text-3xl font-semibold mb-3">Рады видеть вас в «Истории Вкуса»!</h2>
           <p className="text-graphite/70 mb-6">Дарим −10% на первый визит в любой ресторан сети. Оставьте телефон — пришлём персональный промокод.</p>
           {state === 'used' && <p className="text-terra font-medium mb-4">Ваш промокод уже использован. Повторно коды не выдаём.</p>}
-          {state === 'err' && <p className="text-terra font-medium mb-4">Не получилось. Проверьте номер или попробуйте позже.</p>}
+          {state === 'err' && <p className="text-terra font-medium mb-4">{errText}</p>}
           <form onSubmit={submit} className="space-y-4">
             <input name="field" required type="tel" placeholder="+7 (___) ___-__-__" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full bg-white/70 border border-graphite/15 rounded-xl px-4 py-3 focus:outline-none focus:border-terra" />
             <button disabled={busy} type="submit" className="btn-terra w-full rounded-full">{busy ? 'Секунду…' : 'Получить промокод'}</button>
