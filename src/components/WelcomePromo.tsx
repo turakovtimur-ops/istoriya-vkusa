@@ -7,6 +7,7 @@ export default function WelcomePromo() {
   const [code, setCode] = useState('');
   const [state, setState] = useState<'form' | 'card' | 'used' | 'err'>('form');
   const [qr, setQr] = useState('');
+  const [preview, setPreview] = useState('');
   const [busy, setBusy] = useState(false);
   const [errText, setErrText] = useState('');
   const fired = useRef(false);
@@ -31,7 +32,7 @@ export default function WelcomePromo() {
     } catch { setErrText('Нет связи с сервером. Попробуйте позже.'); setState('err'); }
     finally { setBusy(false); }
   };
-  const saveImage = async () => {
+  const buildCanvas = async () => {
     const c = document.createElement('canvas'); c.width = 1080; c.height = 1350;
     const x = c.getContext('2d')!;
     const g = x.createLinearGradient(0, 0, 1080, 1350); g.addColorStop(0, '#171310'); g.addColorStop(1, '#0b0a08'); x.fillStyle = g; x.fillRect(0, 0, 1080, 1350);
@@ -45,7 +46,25 @@ export default function WelcomePromo() {
     x.fillStyle = 'rgba(245,242,234,.7)'; x.font = '400 32px Arial';
     x.fillText('Промокод одноразовый · без срока · не суммируется с акциями', 540, 1080);
     x.fillText('Покажи эту картинку администратору', 540, 1140);
-    const a = document.createElement('a'); a.download = 'promo-' + code + '.png'; a.href = c.toDataURL('image/png'); a.click();
+    return c;
+  };
+  const openPreview = async () => { const c = await buildCanvas(); setPreview(c.toDataURL('image/png')); };
+  const saveImage = async () => {
+    const c = await buildCanvas();
+    const blob: Blob | null = await new Promise((res) => c.toBlob(res, 'image/png'));
+    if (!blob) { openPreview(); return; }
+    const name = 'promo-' + code + '.png';
+    const file = new File([blob], name, { type: 'image/png' });
+    const nav = navigator as any;
+    if (nav.canShare && nav.canShare({ files: [file] })) {
+      try { await nav.share({ files: [file], title: 'Промокод −10%' }); return; }
+      catch (e: any) { if (e && e.name === 'AbortError') return; }
+    }
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS) { setPreview(URL.createObjectURL(blob)); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
   };
   const copy = () => { if (navigator.clipboard) navigator.clipboard.writeText(code); };
   if (!open) return null;
@@ -72,9 +91,17 @@ export default function WelcomePromo() {
             <button onClick={saveImage} className="btn-terra rounded-full">Сохранить картинкой</button>
             <button onClick={copy} className="btn-outline rounded-full">Скопировать</button>
           </div>
+          <button onClick={openPreview} className="w-full mt-3 text-xs text-graphite/60 underline">Не сохраняется? Открыть картинку для сохранения вручную</button>
           <p className="text-xs text-graphite/60 mt-4">Одноразовый, без срока, во всех ресторанах сети. Не суммируется с акциями и банкетами.</p>
         </>)}
       </div>
+      {preview && (
+        <div className="fixed inset-0 z-[500] bg-black/95 flex flex-col items-center justify-center p-6" onClick={() => setPreview('')}>
+          <img src={preview} alt="Промокод" className="max-h-[70vh] rounded-2xl shadow-2xl" />
+          <p className="text-cream text-sm text-center mt-4">Зажми палец на картинке → «Сохранить в Фото» (iPhone) или «Скачать изображение» (Android)</p>
+          <button className="mt-4 text-cream/70 text-xs underline" onClick={() => setPreview('')}>Закрыть</button>
+        </div>
+      )}
     </div>
   );
 }
