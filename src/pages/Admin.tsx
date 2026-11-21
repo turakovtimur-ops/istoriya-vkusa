@@ -63,7 +63,8 @@ function PromoPanel({ token, setMsg }: { token: string; setMsg: (s: string) => v
   useEffect(() => { load(); }, []);
   const act = async (code: string, kind: 'redeem' | 'void') => {
     const r = await fetch('/api/promo/' + kind, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-gh-token': token }, body: JSON.stringify({ code, resto }) });
-    setMsg(r.ok ? (kind === 'redeem' ? 'Погашен ' + code + ' · ' + resto : 'Аннулирован ' + code) : 'Ошибка ' + r.status);
+    const j = await r.json().catch(() => ({}));
+    setMsg(r.ok ? (kind === 'redeem' ? 'Погашен ' + code + ' · ' + resto : 'Аннулирован ' + code) : (j.reason === 'not_yet' ? 'Код выдан сегодня — действует со следующего дня' : 'Ошибка ' + r.status));
     load();
   };
   const f = items.filter((x) => !q || x.code.includes(q.toUpperCase()) || String(x.phone).includes(q.replace(/\D/g, '')));
@@ -84,9 +85,9 @@ function PromoPanel({ token, setMsg }: { token: string; setMsg: (s: string) => v
             <span className="text-xs text-graphite/60">+7 {String(x.phone).slice(1,4)} ••• ••-{String(x.phone).slice(9)}</span>
             <span className="text-xs text-graphite/60">выдан {new Date(x.createdAt).toLocaleDateString('ru-RU')}</span>
             <span className={'text-xs font-semibold ' + (x.usedAt ? 'text-red-600' : x.voided ? 'text-graphite/50' : 'text-green-700')}>
-              {x.usedAt ? 'погашен ' + new Date(x.usedAt).toLocaleDateString('ru-RU') + ' · ' + x.usedResto : x.voided ? 'аннулирован' : 'активен'}
+              {x.usedAt ? 'погашен ' + new Date(x.usedAt).toLocaleDateString('ru-RU') + ' · ' + x.usedResto : x.voided ? 'аннулирован' : (new Date(x.createdAt).toDateString() === new Date().toDateString() ? 'действует с завтра' : 'активен')}
             </span>
-            {!x.usedAt && !x.voided && (<>
+            {!x.usedAt && !x.voided && new Date(x.createdAt).toDateString() !== new Date().toDateString() && (<>
               <button onClick={() => act(x.code, 'redeem')} className="ml-auto btn-terra rounded-full px-4 py-1.5 text-xs">Погасить</button>
               <button onClick={() => act(x.code, 'void')} className="btn-outline rounded-full px-4 py-1.5 text-xs">Аннулировать</button>
             </>)}

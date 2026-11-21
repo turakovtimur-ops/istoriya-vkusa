@@ -45,8 +45,8 @@ export default function WelcomePromo() {
     x.font = '700 78px Arial'; x.fillStyle = '#C2A076'; x.fillText(code, 540, 520);
     if (qr) { const img = new Image(); img.src = qr; await new Promise((r) => { img.onload = r; }); x.drawImage(img, 340, 580, 400, 400); }
     x.fillStyle = 'rgba(245,242,234,.7)'; x.font = '400 32px Arial';
-    x.fillText('Промокод одноразовый · без срока · не суммируется с акциями', 540, 1080);
-    x.fillText('Покажи эту картинку администратору', 540, 1140);
+    x.fillText('Промокод одноразовый · без срока · действует со следующего дня', 540, 1080);
+    x.fillText('Покажи картинку администратору · не суммируется с акциями', 540, 1140);
     return c;
   };
   const openPreview = async () => { const c = await buildCanvas(); setPreview(c.toDataURL('image/png')); };
@@ -93,7 +93,7 @@ export default function WelcomePromo() {
             <button onClick={copy} className={"rounded-full border px-4 py-3 font-medium transition active:scale-95 " + (copied ? "border-terra text-terra bg-terra/10" : "border-graphite/30 text-graphite hover:bg-graphite/5")}>{copied ? 'Скопировано ✓' : 'Скопировать'}</button>
           </div>
           <button onClick={openPreview} className="w-full mt-3 text-xs text-graphite/60 underline">Не сохраняется? Открыть картинку для сохранения вручную</button>
-          <p className="text-xs text-graphite/60 mt-4">Одноразовый, без срока, во всех ресторанах сети. Не суммируется с акциями и банкетами.</p>
+          <p className="text-xs text-graphite/60 mt-4">Одноразовый, без срока, во всех ресторанах сети. Действует со следующего дня после получения. Не суммируется с акциями и банкетами.</p>
         </>)}
       </div>
       {preview && (
