@@ -82,7 +82,7 @@ function PromoPanel({ token, setMsg }: { token: string; setMsg: (s: string) => v
         {f.map((x) => (
           <div key={x.code} className="flex flex-wrap items-center gap-3 border border-graphite/10 rounded-xl px-4 py-3 bg-white/40">
             <span className="font-mono font-semibold text-graphite">{x.code}</span>
-            <span className="text-xs text-graphite/60">+${x.phone.slice(0,1)} (${x.phone.slice(1,4)}) ${x.phone.slice(4,7)}-${x.phone.slice(7,9)}-${x.phone.slice(9,11)}</span>
+            <span className="text-xs text-graphite/60">{`+${x.phone.slice(0,1)} (${x.phone.slice(1,4)}) ${x.phone.slice(4,7)}-${x.phone.slice(7,9)}-${x.phone.slice(9,11)}`}</span>
             <span className="text-xs text-graphite/60">выдан {new Date(x.createdAt).toLocaleDateString('ru-RU')}</span>
             <span className={'text-xs font-semibold ' + (x.usedAt ? 'text-red-600' : x.voided ? 'text-graphite/50' : 'text-green-700')}>
               {x.usedAt ? 'погашен ' + new Date(x.usedAt).toLocaleDateString('ru-RU') + ' · ' + x.usedResto : x.voided ? 'аннулирован' : (new Date(x.createdAt).toDateString() === new Date().toDateString() ? 'действует с завтра' : 'активен')}
