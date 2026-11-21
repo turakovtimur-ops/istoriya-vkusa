@@ -1,0 +1,79 @@
+import { useEffect, useRef, useState } from 'react';
+import QRCode from 'qrcode';
+const LS = 'iv_promo_shown';
+export default function WelcomePromo() {
+  const [open, setOpen] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const [state, setState] = useState<'form' | 'card' | 'used' | 'err'>('form');
+  const [qr, setQr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const fired = useRef(false);
+  useEffect(() => {
+    if (localStorage.getItem(LS)) return;
+    const show = () => { if (fired.current || localStorage.getItem(LS)) return; fired.current = true; setOpen(true); };
+    const t = setTimeout(show, 20000);
+    const onScroll = () => { if (window.scrollY > 120) { show(); window.removeEventListener('scroll', onScroll); } };
+    window.addEventListener('scroll', onScroll);
+    return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
+  }, []);
+  useEffect(() => { if (code) QRCode.toDataURL(code, { margin: 1, width: 320 }).then(setQr).catch(() => setQr('')); }, [code]);
+  const close = () => { setOpen(false); localStorage.setItem(LS, '1'); };
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault(); setBusy(true);
+    try {
+      const r = await fetch('/api/promo/issue', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.code) { setCode(j.code); setState('card'); }
+      else if (j.used) setState('used');
+      else setState('err');
+    } catch { setState('err'); }
+    finally { setBusy(false); }
+  };
+  const saveImage = async () => {
+    const c = document.createElement('canvas'); c.width = 1080; c.height = 1350;
+    const x = c.getContext('2d')!;
+    const g = x.createLinearGradient(0, 0, 1080, 1350); g.addColorStop(0, '#171310'); g.addColorStop(1, '#0b0a08'); x.fillStyle = g; x.fillRect(0, 0, 1080, 1350);
+    x.strokeStyle = 'rgba(194,160,118,.5)'; x.lineWidth = 3; x.strokeRect(40, 40, 1000, 1270);
+    x.textAlign = 'center';
+    x.fillStyle = '#C2A076'; x.font = '600 34px Arial'; x.fillText('ИСТОРИЯ ВКУСА', 540, 150);
+    x.fillStyle = '#F5F2EA'; x.font = '700 96px Arial'; x.fillText('−10%', 540, 300);
+    x.font = '400 40px Arial'; x.fillStyle = 'rgba(245,242,234,.85)'; x.fillText('на первый визит в любой ресторан сети', 540, 370);
+    x.font = '700 78px Arial'; x.fillStyle = '#C2A076'; x.fillText(code, 540, 520);
+    if (qr) { const img = new Image(); img.src = qr; await new Promise((r) => { img.onload = r; }); x.drawImage(img, 340, 580, 400, 400); }
+    x.fillStyle = 'rgba(245,242,234,.7)'; x.font = '400 32px Arial';
+    x.fillText('Промокод одноразовый · без срока · не суммируется с акциями', 540, 1080);
+    x.fillText('Покажи эту картинку администратору', 540, 1140);
+    const a = document.createElement('a'); a.download = 'promo-' + code + '.png'; a.href = c.toDataURL('image/png'); a.click();
+  };
+  const copy = () => { if (navigator.clipboard) navigator.clipboard.writeText(code); };
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={close}>
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-md rounded-3xl bg-cream p-8 text-graphite shadow-2xl">
+        <button onClick={close} aria-label="Закрыть" className="absolute top-4 right-4 text-graphite/60 hover:text-terra">✕</button>
+        {state !== 'card' && (<>
+          <p className="text-terra text-xs tracking-[0.3em] uppercase mb-3">Добро пожаловать</p>
+          <h2 className="text-3xl font-semibold mb-3">Рады видеть вас в «Истории Вкуса»!</h2>
+          <p className="text-graphite/70 mb-6">Дарим −10% на первый визит в любой ресторан сети. Оставьте телефон — пришлём персональный промокод.</p>
+          {state === 'used' && <p className="text-terra font-medium mb-4">Ваш промокод уже использован. Повторно коды не выдаём.</p>}
+          {state === 'err' && <p className="text-terra font-medium mb-4">Не получилось. Проверьте номер или попробуйте позже.</p>}
+          <form onSubmit={submit} className="space-y-4">
+            <input name="field" required type="tel" placeholder="+7 (___) ___-__-__" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full bg-white/70 border border-graphite/15 rounded-xl px-4 py-3 focus:outline-none focus:border-terra" />
+            <button disabled={busy} type="submit" className="btn-terra w-full rounded-full">{busy ? 'Секунду…' : 'Получить промокод'}</button>
+          </form>
+        </>)}
+        {state === 'card' && (<>
+          <p className="text-terra text-xs tracking-[0.3em] uppercase mb-3">Ваш промокод</p>
+          <div className="text-center mb-4 text-4xl font-bold tracking-widest text-terra">{code}</div>
+          {qr && <img src={qr} alt="QR промокода" className="w-40 h-40 mx-auto mb-4 rounded-xl bg-white p-2" />}
+          <div className="grid grid-cols-2 gap-3">
+            <button onClick={saveImage} className="btn-terra rounded-full">Сохранить картинкой</button>
+            <button onClick={copy} className="btn-outline rounded-full">Скопировать</button>
+          </div>
+          <p className="text-xs text-graphite/60 mt-4">Одноразовый, без срока, во всех ресторанах сети. Не суммируется с акциями и банкетами.</p>
+        </>)}
+      </div>
+    </div>
+  );
+}
