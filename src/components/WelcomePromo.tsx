@@ -5,6 +5,7 @@ export default function WelcomePromo() {
   const [open, setOpen] = useState(false);
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
+  const [activeAt, setActiveAt] = useState<Date | null>(null);
   const [state, setState] = useState<'form' | 'card' | 'used' | 'err'>('form');
   const [qr, setQr] = useState('');
   const [preview, setPreview] = useState('');
@@ -27,7 +28,7 @@ export default function WelcomePromo() {
     try {
       const r = await fetch('/api/promo/issue', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
       const j = await r.json().catch(() => ({}));
-      if (r.ok && j.code) { setCode(j.code); setState('card'); }
+      if (r.ok && j.code) { setCode(j.code); setActiveAt(new Date(Date.now() + 6*3600*1000)); setState('card'); }
       else if (j.used) setState('used');
       else { setErrText(j.error === 'day_limit' ? 'С этого адреса сегодня уже выдано 2 промокода. Попробуйте завтра или с другого интернета.' : j.error === 'rate_limit' ? 'Слишком много попыток — подождите 10 минут.' : j.error === 'bad_phone' ? 'Проверьте номер телефона.' : 'Не получилось. Попробуйте позже.'); setState('err'); }
     } catch { setErrText('Нет связи с сервером. Попробуйте позже.'); setState('err'); }
@@ -45,6 +46,8 @@ export default function WelcomePromo() {
     x.font = '700 78px Arial'; x.fillStyle = '#C2A076'; x.fillText(code, 540, 520);
     if (qr) { const img = new Image(); img.src = qr; await new Promise((r) => { img.onload = r; }); x.drawImage(img, 340, 580, 400, 400); }
     x.fillStyle = 'rgba(245,242,234,.7)'; x.font = '400 32px Arial';
+    const _act = new Date(Date.now() + 6*3600*1000);
+    x.fillText('Активируется ' + _act.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}) + ' ' + _act.toLocaleDateString('ru-RU'), 540, 1020);
     x.fillText('Промокод одноразовый · без срока · действует со следующего дня', 540, 1080);
     x.fillText('Покажи картинку администратору · не суммируется с акциями', 540, 1140);
     return c;
@@ -76,7 +79,7 @@ export default function WelcomePromo() {
         {state !== 'card' && (<>
           <p className="text-terra text-xs tracking-[0.3em] uppercase mb-3">Добро пожаловать</p>
           <h2 className="text-3xl font-semibold mb-3">Рады видеть вас в «Истории Вкуса»!</h2>
-          <p className="text-graphite/70 mb-6">Дарим −10% на первый визит в любой ресторан сети. Оставьте телефон — пришлём персональный промокод.</p>
+          <p className="text-graphite/70 mb-6">Дарим −10% на первый визит в любой ресторан сети. Оставьте телефон — пришлём персональный промокод. Код действует через 6 часов после получения — это защита от случайных скидок.</p>
           {state === 'used' && <p className="text-terra font-medium mb-4">Ваш промокод уже использован. Повторно коды не выдаём.</p>}
           {state === 'err' && <p className="text-terra font-medium mb-4">{errText}</p>}
           <form onSubmit={submit} className="space-y-4">
